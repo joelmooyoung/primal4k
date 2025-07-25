@@ -22,7 +22,7 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
   const stations: Station[] = [
     {
       id: 'radio',
-      name: 'Radio',
+      name: 'Radio 1',
       type: 'radio',
       icon: Radio,
       isLive: true,
@@ -31,7 +31,7 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
     },
     {
       id: 'backup',
-      name: 'Backup',
+      name: 'Radio 2',
       type: 'radio2',
       icon: Music,
       isLive: true,

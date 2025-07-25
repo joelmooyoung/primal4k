@@ -24,7 +24,7 @@ interface Station {
 const Index = () => {
   const [selectedStation, setSelectedStation] = useState<Station>({
     id: 'radio',
-    name: 'Radio',
+    name: 'Radio 1',
     type: 'radio',
     icon: Music,
     isLive: true,
@@ -34,7 +34,7 @@ const Index = () => {
   const getStreamUrl = (stationId: string) => {
     const streamUrls = {
       'radio': 'https://fast.citrus3.com:2020/AudioPlayer/djgadaffiandfriends?mount=&',
-      'backup': 'https://s6.yesstreaming.net:7152/stream',
+      'backup': 'https://s1.citrus3.com:2000/AudioPlayer/primal4k?mount=&',
       'livestream': '' // Twitch uses iframe embed
     };
     return streamUrls[stationId as keyof typeof streamUrls] || streamUrls.radio;
@@ -49,9 +49,9 @@ const Index = () => {
       };
     }
     return {
-      winamp: 'https://s6.yesstreaming.net:7152/stream',
-      vlc: 'https://s6.yesstreaming.net:7152/stream',
-      itunes: 'https://s6.yesstreaming.net:7152/stream'
+      winamp: 'https://s1.citrus3.com:2000/AudioPlayer/primal4k?mount=&',
+      vlc: 'https://s1.citrus3.com:2000/AudioPlayer/primal4k?mount=&',
+      itunes: 'https://s1.citrus3.com:2000/AudioPlayer/primal4k?mount=&'
     };
   };
 
