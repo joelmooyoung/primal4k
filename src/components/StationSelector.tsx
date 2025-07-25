@@ -121,7 +121,10 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
       {selectedStation && (
         <div className="mt-6">
           <Button
-            className="w-full bg-gradient-primary hover:bg-gradient-primary/90 text-white"
+            className="w-full text-white hover:opacity-90 transition-opacity"
+            style={{ 
+              background: 'linear-gradient(180deg, hsl(60 100% 50%), hsl(120 100% 40%))',
+            }}
             size="lg"
           >
             Listen to {selectedStation.name}
