@@ -9,6 +9,8 @@ const PrimalText3D = ({ size = 'large', animate = true }: PrimalText3DProps) => 
   const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    console.log('PrimalText3D mounted, animate:', animate);
+    
     if (!textRef.current || !animate) return;
     
     const element = textRef.current;
@@ -16,10 +18,10 @@ const PrimalText3D = ({ size = 'large', animate = true }: PrimalText3DProps) => 
     
     const animateText = () => {
       const time = Date.now() * 0.001;
-      const rotationY = Math.sin(time * 0.5) * 15;
-      const translateY = Math.sin(time * 2) * 5;
+      const rotationY = Math.sin(time * 0.5) * 25; // Increased rotation
+      const translateY = Math.sin(time * 2) * 8; // Increased movement
       
-      element.style.transform = `perspective(1000px) rotateY(${rotationY}deg) translateY(${translateY}px)`;
+      element.style.transform = `perspective(1000px) rotateY(${rotationY}deg) translateY(${translateY}px) translateZ(0)`;
       animationId = requestAnimationFrame(animateText);
     };
     
@@ -41,18 +43,21 @@ const PrimalText3D = ({ size = 'large', animate = true }: PrimalText3DProps) => 
         ref={textRef}
         className={`${fontSize} font-bold text-3d-effect ${animate ? '' : 'hover:text-3d-hover'} transition-transform duration-300`}
         style={{
+          color: 'hsl(60 100% 50%)', // Fallback color
           background: 'linear-gradient(180deg, hsl(60 100% 50%) 0%, hsl(120 40% 30%) 70%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
           textShadow: `
-            2px 2px 0px hsl(120 40% 20%),
-            4px 4px 0px hsl(120 40% 15%),
-            6px 6px 0px hsl(120 40% 10%),
-            8px 8px 0px hsl(120 40% 5%),
-            10px 10px 20px hsl(0 0% 0% / 0.5)
+            1px 1px 0px hsl(120 40% 20%),
+            2px 2px 0px hsl(120 40% 15%),
+            3px 3px 0px hsl(120 40% 10%),
+            4px 4px 0px hsl(120 40% 5%),
+            5px 5px 10px hsl(0 0% 0% / 0.8),
+            0 0 20px hsl(60 100% 50% / 0.5)
           `,
           transform: 'perspective(1000px) rotateY(0deg)',
+          filter: 'drop-shadow(0 0 10px hsl(60 100% 50% / 0.3))',
         }}
       >
         PRIMAL
