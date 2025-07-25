@@ -170,4 +170,13 @@ All colors MUST be HSL.
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--primary-glow));
   }
+
+  /* 3D Text Effects */
+  .text-3d-effect {
+    transform-style: preserve-3d;
+  }
+
+  .text-3d-hover:hover {
+    transform: perspective(1000px) rotateY(-10deg) rotateX(5deg) !important;
+  }
 }

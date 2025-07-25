@@ -1,69 +1,62 @@
-import { Canvas } from '@react-three/fiber';
-import { Text3D, Center, OrbitControls } from '@react-three/drei';
-import { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
+import { useEffect, useRef } from 'react';
 
 interface PrimalText3DProps {
   size?: 'large' | 'small';
   animate?: boolean;
 }
 
-const AnimatedText = ({ size, animate }: { size: 'large' | 'small'; animate: boolean }) => {
-  const textRef = useRef<THREE.Mesh>(null);
-  
-  useFrame((state, delta) => {
-    if (textRef.current && animate) {
-      textRef.current.rotation.y += delta * 0.2;
-      textRef.current.position.y = Math.sin(state.clock.elapsedTime) * 0.1;
-    }
-  });
+const PrimalText3D = ({ size = 'large', animate = true }: PrimalText3DProps) => {
+  const textRef = useRef<HTMLDivElement>(null);
 
-  const fontSize = size === 'large' ? 1 : 0.3;
-  
+  useEffect(() => {
+    if (!textRef.current || !animate) return;
+    
+    const element = textRef.current;
+    let animationId: number;
+    
+    const animateText = () => {
+      const time = Date.now() * 0.001;
+      const rotationY = Math.sin(time * 0.5) * 15;
+      const translateY = Math.sin(time * 2) * 5;
+      
+      element.style.transform = `perspective(1000px) rotateY(${rotationY}deg) translateY(${translateY}px)`;
+      animationId = requestAnimationFrame(animateText);
+    };
+    
+    animateText();
+    
+    return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    };
+  }, [animate]);
+
+  const fontSize = size === 'large' ? 'text-6xl md:text-8xl' : 'text-xl';
+  const containerHeight = size === 'large' ? 'h-32 md:h-48' : 'h-12';
+
   return (
-    <Center>
-      <Text3D
+    <div className={`flex items-center justify-center ${containerHeight}`}>
+      <div
         ref={textRef}
-        font="/fonts/helvetiker_regular.typeface.json"
-        size={fontSize}
-        height={0.2}
-        curveSegments={12}
-        bevelEnabled
-        bevelThickness={0.02}
-        bevelSize={0.02}
-        bevelOffset={0}
-        bevelSegments={5}
+        className={`${fontSize} font-bold text-3d-effect ${animate ? '' : 'hover:text-3d-hover'} transition-transform duration-300`}
+        style={{
+          background: 'linear-gradient(180deg, hsl(60 100% 50%) 0%, hsl(120 40% 30%) 70%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+          textShadow: `
+            2px 2px 0px hsl(120 40% 20%),
+            4px 4px 0px hsl(120 40% 15%),
+            6px 6px 0px hsl(120 40% 10%),
+            8px 8px 0px hsl(120 40% 5%),
+            10px 10px 20px hsl(0 0% 0% / 0.5)
+          `,
+          transform: 'perspective(1000px) rotateY(0deg)',
+        }}
       >
         PRIMAL
-        <meshStandardMaterial 
-          attach="material" 
-          color="#FFFF00"
-          emissive="#228B22"
-          emissiveIntensity={0.3}
-          metalness={0.8}
-          roughness={0.2}
-        />
-      </Text3D>
-    </Center>
-  );
-};
-
-const PrimalText3D = ({ size = 'large', animate = true }: PrimalText3DProps) => {
-  const height = size === 'large' ? '150px' : '60px';
-  
-  return (
-    <div style={{ height, width: '100%' }}>
-      <Canvas
-        camera={{ position: [0, 0, size === 'large' ? 5 : 3], fov: 75 }}
-        style={{ background: 'transparent' }}
-      >
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} intensity={1} />
-        <directionalLight position={[-10, 10, 5]} intensity={0.5} />
-        <AnimatedText size={size} animate={animate} />
-        {!animate && <OrbitControls enableZoom={false} enablePan={false} />}
-      </Canvas>
+      </div>
     </div>
   );
 };
