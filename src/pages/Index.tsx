@@ -93,15 +93,15 @@ const Index = () => {
         <section className="mb-12 animate-fade-in-up">
           {selectedStation.type === 'livestream' ? (
             <TwitchEmbed />
-          ) : selectedStation.id !== 'radio' ? (
+          ) : (
             <AudioPlayer
-              title={selectedStation.name}
-              description={selectedStation.currentTrack || "No track info available"}
+              title={selectedStation.id === 'radio' ? '' : selectedStation.name}
+              description={selectedStation.id === 'radio' ? '' : (selectedStation.currentTrack || "No track info available")}
               streamUrl={getStreamUrl(selectedStation.id)}
               isLive={selectedStation.isLive}
               externalLinks={getExternalLinks(selectedStation.id)}
             />
-          ) : null}
+          )}
         </section>
 
         {/* Chat Section */}
