@@ -15,6 +15,8 @@ import jeanMarie from "@/assets/jean-marie-original.jpeg";
 import theMatrix from "@/assets/the-matrix-original.jpeg";
 import docImanBlak from "@/assets/doc-iman-blak-original.jpeg";
 import professorX from "@/assets/professor-x-original.jpg";
+import djScreench from "@/assets/dj-screech-original.jpeg";
+import dlcLioncore from "@/assets/dlc-lioncore-original.jpeg";
 const djSmoothDaddy = "/lovable-uploads/0dff8266-ab20-4e95-8173-8e6383bad650.png";
 
 interface DJSlide {
@@ -97,6 +99,18 @@ const DJCarousel = () => {
       image: professorX,
       title: "Professor X",
       description: "The Kool Runnings Show"
+    },
+    {
+      id: "dj-screech",
+      image: djScreench,
+      title: "DJ Screech",
+      description: "Screech At Night"
+    },
+    {
+      id: "dlc-lioncore",
+      image: dlcLioncore,
+      title: "DLC (Daddy Lion Chandell)",
+      description: "Lioncore & Multiple Shows"
     },
     {
       id: "dj-smooth-daddy",
