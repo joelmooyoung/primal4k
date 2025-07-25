@@ -44,7 +44,7 @@ All colors MUST be HSL.
     /* Music-themed gradients */
     --gradient-primary: linear-gradient(135deg, hsl(120 100% 40%), hsl(120 100% 30%));
     --gradient-accent: linear-gradient(45deg, hsl(60 100% 50%), hsl(60 100% 40%));
-    --gradient-background: linear-gradient(180deg, hsl(60 100% 50%), hsl(120 100% 40%));
+    --gradient-background: linear-gradient(180deg, hsl(0 0% 5%), hsl(0 0% 3%));
     --gradient-card: linear-gradient(145deg, hsl(0 0% 8%), hsl(0 0% 5%));
 
     /* Audio visualization colors */
