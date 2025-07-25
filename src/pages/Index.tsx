@@ -7,6 +7,7 @@ import EventsCarousel from "@/components/EventsCarousel";
 import ChatRoom from "@/components/ChatRoom";
 import TwitchEmbed from "@/components/TwitchEmbed";
 import PrimalText3D from "@/components/PrimalText3D";
+import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Music, Calendar, Users } from "lucide-react";
@@ -190,6 +191,8 @@ const Index = () => {
           <EventsCarousel />
         </section>
       </main>
+      
+      <Footer />
     </div>
   );
 };
