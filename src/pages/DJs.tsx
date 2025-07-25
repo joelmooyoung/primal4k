@@ -8,50 +8,218 @@ import { Radio, Clock, Music } from "lucide-react";
 const DJs = () => {
   const djs = [
     {
-      name: "DJ Gadaffi",
-      show: "Soul2Soul",
-      time: "Tuesday 8:00 PM - 10:00 PM",
-      description: "Bringing you the best soul and R&B classics",
+      id: "imaara",
+      name: "Imaara",
+      show: "The Community Buzz",
+      time: "Monday 4:00 PM - 6:00 PM",
+      description: "Bringing the community together with buzz-worthy conversations and music",
       image: "/placeholder.svg",
       isLive: false
     },
     {
-      name: "DJ 77",
-      show: "Urban Honeys / Linen & Lace",
-      time: "Wednesday 6:00 PM - 8:00 PM", 
-      description: "Urban beats and straight jazz odyssey",
+      id: "neiima-poets",
+      name: "Neiima & Poets",
+      show: "Primally Poetic",
+      time: "Monday 8:30 PM - 9:30 PM",
+      description: "Poetry meets music in this inspiring weekly show",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "andre-keitt",
+      name: "Andre Keitt",
+      show: "Kings Korner",
+      time: "Tuesday 6:00 PM - 7:00 PM",
+      description: "Royal treatment of music and conversation",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "cheryl-shaw",
+      name: "Cheryl Shaw",
+      show: "Sweet Life Solutions",
+      time: "Tuesday 6:00 PM - 7:00 PM",
+      description: "Solutions for living your sweetest life",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "jean-marie",
+      name: "Jean Marie",
+      show: "Level Up",
+      time: "Tuesday 7:00 PM - 8:00 PM & Sunday 12:00 PM - 1:00 PM",
+      description: "Motivational content to help you level up your life",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "dj-77-gadaffi",
+      name: "DJ 77 & DJ Gadaffi",
+      show: "Soul2Soul",
+      time: "Tuesday 8:00 PM - 10:00 PM",
+      description: "Bringing you the best soul and R&B classics",
       image: "/placeholder.svg",
       isLive: true
     },
     {
+      id: "doc-iman-blak",
+      name: "Doc Iman Blak",
+      show: "MetaMorphosis",
+      time: "Tuesday 10:00 PM - 12:00 AM",
+      description: "Transformative music and conversation",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "kyle-tunez",
+      name: "Kyle Tunez",
+      show: "Turn Up Tuesday / Hype Thursdays",
+      time: "Tuesday 10:00 PM - 12:00 AM & Thursday 7:00 PM - 9:00 PM",
+      description: "High energy music to turn up your week",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "singing-melody",
+      name: "Singing Melody",
+      show: "Hold a Reasoning",
+      time: "Wednesday 1:00 PM - 3:00 PM",
+      description: "Reggae vibes and conscious reasoning",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "dj-77",
+      name: "DJ 77",
+      show: "Urban Honeys / Linen & Lace",
+      time: "Wednesday 6:00 PM - 8:00 PM",
+      description: "Urban beats and straight jazz odyssey",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "dj-dede",
       name: "DJ DeDe",
       show: "The Wednesday Workout / Sunday Serenade",
-      time: "Wednesday & Sunday",
+      time: "Wednesday 8:00 PM - 10:00 PM & Sunday 10:00 AM - 12:00 PM",
       description: "High energy workouts and Sunday chill vibes",
       image: "/placeholder.svg",
       isLive: false
     },
     {
-      name: "DJ Kyle Tunez",
-      show: "Hype Thursdays",
-      time: "Thursday 7:00 PM - 9:00 PM",
-      description: "Thursday night energy and hype music",
+      id: "dj-tony-g",
+      name: "DJ Tony G",
+      show: "The Tony G Show",
+      time: "Wednesday 10:00 PM - 12:00 AM",
+      description: "Late night vibes with Tony G",
       image: "/placeholder.svg",
       isLive: false
     },
     {
+      id: "daddy-lion-chandell",
+      name: "Daddy Lion Chandell",
+      show: "Lioncore",
+      time: "Thursday 3:00 PM - 5:00 PM",
+      description: "Lionheart music and motivation",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "neiima-dede",
+      name: "Neiima & DeDe",
+      show: "The Matrix",
+      time: "Thursday 6:00 PM - 7:00 PM",
+      description: "Unplugging from the ordinary",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "dlc",
+      name: "DLC",
+      show: "The Heart of Soul / Afternoon Delight / The Roots Dynamic Experience",
+      time: "Multiple Shows - Various Times",
+      description: "Heart of Soul, Roots Dynamic Experience, Afternoon Delight and more",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "dj-teachdem",
       name: "DJ Teachdem",
       show: "The Traffic Jam Mix / Amapiano & more",
-      time: "Friday & Saturday",
+      time: "Friday 6:00 PM - 8:00 PM & Saturday 5:00/5:30 PM - 7:30 PM",
       description: "Traffic jam mixes and Amapiano vibes",
       image: "/placeholder.svg",
       isLive: false
     },
     {
-      name: "DLC",
-      show: "Multiple Shows",
-      time: "Various times",
-      description: "Heart of Soul, Roots Dynamic Experience, and more",
+      id: "dj-screech",
+      name: "DJ Screech",
+      show: "Screech At Night",
+      time: "Friday 8:00 PM - 10:00 PM",
+      description: "Late night entertainment with DJ Screech",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "dj-migrane",
+      name: "DJ Migrane",
+      show: "Deja Vu / The Cookie Jar",
+      time: "Friday 10:00 PM - 12:00 AM & Sunday 6:00 PM - 9:00 PM",
+      description: "Nostalgic vibes and sweet Sunday sounds",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "primal-sports-team",
+      name: "Dale, Kane, Froggy & The Controversial Boss",
+      show: "Primal Sports",
+      time: "Saturday 4:00 PM - 5:00/5:30 PM",
+      description: "Sports talk and controversial takes",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "dj-keu",
+      name: "DJ Keu",
+      show: "Di Drive / Grown Folks Music",
+      time: "Saturday 7:30 PM - 9:30 PM & Sunday 1:00 PM - 3:00 PM",
+      description: "Driving beats and grown folks music",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "dj-badbin",
+      name: "DJ Badbin",
+      show: "Outside We Deh",
+      time: "Saturday 9:30 PM - 12:00 AM",
+      description: "Saturday night party vibes",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "alopex-dr-dawkins",
+      name: "Alopex/Dr Dawkins",
+      show: "Answers from The Word",
+      time: "Sunday 9:00 AM - 10:00 AM",
+      description: "Spiritual guidance and inspiration",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "professor-x",
+      name: "Professor X",
+      show: "The Kool Runnings Show",
+      time: "Sunday 3:00 PM - 6:00 PM",
+      description: "Kool vibes and runnings",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "dj-smooth-daddy",
+      name: "DJ Smooth Daddy",
+      show: "The Quiet Storm Show",
+      time: "Sunday 9:00 PM - 11:00 PM",
+      description: "Smooth sounds for Sunday nights",
       image: "/placeholder.svg",
       isLive: false
     }
@@ -101,7 +269,12 @@ const DJs = () => {
                     {dj.description}
                   </p>
                   
-                  <Button variant="outline" size="sm" className="w-full mt-4">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full mt-4"
+                    onClick={() => window.location.href = `/dj/${dj.id}`}
+                  >
                     View Profile
                   </Button>
                 </div>
