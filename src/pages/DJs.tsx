@@ -26,24 +26,6 @@ const DJs = () => {
       isLive: false
     },
     {
-      id: "andre-keitt",
-      name: "Andre Keitt",
-      show: "Kings Korner",
-      time: "Tuesday 6:00 PM - 7:00 PM",
-      description: "Royal treatment of music and conversation",
-      image: "/placeholder.svg",
-      isLive: false
-    },
-    {
-      id: "cheryl-shaw",
-      name: "Cheryl Shaw",
-      show: "Sweet Life Solutions",
-      time: "Tuesday 6:00 PM - 7:00 PM",
-      description: "Solutions for living your sweetest life",
-      image: "/placeholder.svg",
-      isLive: false
-    },
-    {
       id: "jean-marie",
       name: "Jean Marie",
       show: "Level Up",
@@ -116,15 +98,6 @@ const DJs = () => {
       isLive: false
     },
     {
-      id: "daddy-lion-chandell",
-      name: "Daddy Lion Chandell",
-      show: "Lioncore",
-      time: "Thursday 3:00 PM - 5:00 PM",
-      description: "Lionheart music and motivation",
-      image: "/placeholder.svg",
-      isLive: false
-    },
-    {
       id: "neiima-dede",
       name: "Neiima & DeDe",
       show: "The Matrix",
@@ -134,11 +107,29 @@ const DJs = () => {
       isLive: false
     },
     {
-      id: "dlc",
-      name: "DLC",
-      show: "The Heart of Soul / Afternoon Delight / The Roots Dynamic Experience",
-      time: "Multiple Shows - Various Times",
-      description: "Heart of Soul, Roots Dynamic Experience, Afternoon Delight and more",
+      id: "dlc-daddy-lion",
+      name: "DLC (Daddy Lion Chandell)",
+      show: "The Heart of Soul / Afternoon Delight / The Roots Dynamic Experience / Lioncore",
+      time: "Multiple Shows - Various Times Including Thursday 3:00 PM - 5:00 PM",
+      description: "Heart of Soul, Roots Dynamic Experience, Afternoon Delight, Lioncore and more",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "dj-keu",
+      name: "DJ Keu",
+      show: "Di Drive / Grown Folks Music",
+      time: "Saturday 7:30 PM - 9:30 PM & Sunday 1:00 PM - 3:00 PM",
+      description: "Driving beats and grown folks music",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
+      id: "dj-tracy",
+      name: "DJ Tracy",
+      show: "The Tracy Show",
+      time: "Various Times",
+      description: "Bringing you the best music and entertainment",
       image: "/placeholder.svg",
       isLive: false
     },
@@ -175,15 +166,6 @@ const DJs = () => {
       show: "Primal Sports",
       time: "Saturday 4:00 PM - 5:00/5:30 PM",
       description: "Sports talk and controversial takes",
-      image: "/placeholder.svg",
-      isLive: false
-    },
-    {
-      id: "dj-keu",
-      name: "DJ Keu",
-      show: "Di Drive / Grown Folks Music",
-      time: "Saturday 7:30 PM - 9:30 PM & Sunday 1:00 PM - 3:00 PM",
-      description: "Driving beats and grown folks music",
       image: "/placeholder.svg",
       isLive: false
     },

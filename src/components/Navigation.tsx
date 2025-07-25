@@ -11,6 +11,7 @@ const Navigation = () => {
     { icon: MessageCircle, label: "Chat", href: "#chat" },
     { icon: Calendar, label: "Schedule", href: "#schedule" },
     { icon: Music, label: "Events", href: "#events" },
+    { icon: Radio, label: "DJ/Shows", href: "/djs" },
   ];
 
   return (
@@ -42,7 +43,13 @@ const Navigation = () => {
                 variant="ghost"
                 size="sm"
                 className="text-foreground hover:text-primary hover:bg-primary/10"
-                onClick={() => document.querySelector(item.href)?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => {
+                  if (item.href.startsWith('/')) {
+                    window.location.href = item.href;
+                  } else {
+                    document.querySelector(item.href)?.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
               >
                 <item.icon className="w-4 h-4 mr-2" />
                 {item.label}
@@ -71,7 +78,11 @@ const Navigation = () => {
                   variant="ghost"
                   className="justify-start text-foreground hover:text-primary hover:bg-primary/10"
                   onClick={() => {
-                    document.querySelector(item.href)?.scrollIntoView({ behavior: 'smooth' });
+                    if (item.href.startsWith('/')) {
+                      window.location.href = item.href;
+                    } else {
+                      document.querySelector(item.href)?.scrollIntoView({ behavior: 'smooth' });
+                    }
                     setIsOpen(false);
                   }}
                 >
