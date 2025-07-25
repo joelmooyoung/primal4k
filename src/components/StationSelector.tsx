@@ -123,7 +123,7 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
           <Button
             className="w-full text-white hover:opacity-90 transition-opacity"
             style={{ 
-              background: 'linear-gradient(180deg, hsl(60 100% 50%) 0%, hsl(60 60% 35%) 15%)',
+              background: 'linear-gradient(180deg, hsl(60 100% 50%) 0%, hsl(60 60% 25%) 15%)',
             }}
             size="lg"
           >
