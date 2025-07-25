@@ -2,6 +2,8 @@ import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import StationSelector from "@/components/StationSelector";
 import AudioPlayer from "@/components/AudioPlayer";
+import DJCarousel from "@/components/DJCarousel";
+import EventsCarousel from "@/components/EventsCarousel";
 import ChatRoom from "@/components/ChatRoom";
 import TwitchEmbed from "@/components/TwitchEmbed";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -179,23 +181,14 @@ const Index = () => {
           </Card>
         </section>
 
-        {/* Events Section */}
+        {/* DJ Carousel Section */}
+        <section className="mb-12 animate-fade-in-up">
+          <DJCarousel />
+        </section>
+
+        {/* Events Carousel Section */}
         <section id="events" className="animate-fade-in-up">
-          <Card className="bg-gradient-card border-border/50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Music className="w-5 h-5" />
-                Upcoming Events
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8">
-                <p className="text-muted-foreground">
-                  No upcoming events scheduled. Stay tuned for exciting announcements!
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <EventsCarousel />
         </section>
       </main>
     </div>
