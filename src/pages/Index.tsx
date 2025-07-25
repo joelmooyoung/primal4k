@@ -75,7 +75,7 @@ const Index = () => {
             </Badge>
             <Badge variant="outline">
               <Users className="w-3 h-3 mr-1" />
-              1,081 Listeners
+              40K Listeners
             </Badge>
             <Badge variant="outline">
               <Music className="w-3 h-3 mr-1" />
