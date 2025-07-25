@@ -15,7 +15,7 @@ import jeanMarie from "@/assets/jean-marie-original.jpeg";
 import theMatrix from "@/assets/the-matrix-original.jpeg";
 import docImanBlak from "@/assets/doc-iman-blak-original.jpeg";
 import professorX from "@/assets/professor-x-original.jpg";
-import djSmoothDaddy from "@/assets/dj-smooth-daddy.png";
+const djSmoothDaddy = "/lovable-uploads/0dff8266-ab20-4e95-8173-8e6383bad650.png";
 
 interface DJSlide {
   id: string;

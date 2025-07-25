@@ -23,7 +23,7 @@ import djScreench from "@/assets/dj-screech-original.jpeg";
 import djBadbin from "@/assets/dj-badbin-original.jpeg";
 import alopex from "@/assets/alopex-original.jpeg";
 import dlcLioncore from "@/assets/dlc-lioncore-original.jpeg";
-import djSmoothDaddy from "@/assets/dj-smooth-daddy.png";
+const djSmoothDaddy = "/lovable-uploads/0dff8266-ab20-4e95-8173-8e6383bad650.png";
 
 const DJs = () => {
   const djs = [
