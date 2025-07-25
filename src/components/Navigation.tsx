@@ -18,9 +18,11 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <Radio className="w-5 h-5 text-white" />
-            </div>
+            <img 
+              src="/src/assets/primal-logo.jpeg" 
+              alt="Primal Logo" 
+              className="w-8 h-8 rounded-lg object-cover" 
+            />
             <div>
               <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
                 PRIMAL

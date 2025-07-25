@@ -26,26 +26,26 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
       type: 'radio',
       icon: Radio,
       isLive: true,
-      currentTrack: 'Taking over the World - JA male accent',
+      currentTrack: 'DJ Gadaffi & Friends - Live',
       listeners: 847
     },
     {
-      id: 'radio2',
-      name: 'Radio 2',
+      id: 'backup',
+      name: 'Backup',
       type: 'radio2',
       icon: Music,
-      isLive: false,
-      currentTrack: 'Station Offline',
-      listeners: 0
+      isLive: true,
+      currentTrack: 'Alternative Stream',
+      listeners: 234
     },
     {
       id: 'livestream',
       name: 'Livestream',
       type: 'livestream',
       icon: Tv,
-      isLive: true,
-      currentTrack: 'Live DJ Set - Mixed Vibes',
-      listeners: 234
+      isLive: false,
+      currentTrack: 'Twitch: joelgadaffi',
+      listeners: 0
     }
   ];
 

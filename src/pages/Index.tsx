@@ -31,9 +31,9 @@ const Index = () => {
 
   const getStreamUrl = (stationId: string) => {
     const streamUrls = {
-      'radio': 'https://fast.citrus3.com:2020/8014/stream',
-      'radio2': 'https://s1.citrus3.com:2000/8000/stream',
-      'livestream': 'https://fast.citrus3.com:2020/8014/stream'
+      'radio': 'https://fast.citrus3.com:2020/AudioPlayer/djgadaffiandfriends?mount=&',
+      'backup': 'https://s6.yesstreaming.net:7152/stream',
+      'livestream': '' // Twitch uses iframe embed
     };
     return streamUrls[stationId as keyof typeof streamUrls] || streamUrls.radio;
   };
@@ -47,9 +47,9 @@ const Index = () => {
       };
     }
     return {
-      winamp: 'https://s1.citrus3.com:2000/tunein/primal4k/stream/pls',
-      vlc: 'https://s1.citrus3.com:2000/tunein/primal4k/stream/pls',
-      itunes: 'https://s1.citrus3.com:2000/tunein/primal4k/stream/pls'
+      winamp: 'https://s6.yesstreaming.net:7152/stream',
+      vlc: 'https://s6.yesstreaming.net:7152/stream',
+      itunes: 'https://s6.yesstreaming.net:7152/stream'
     };
   };
 
@@ -110,38 +110,70 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Schedule Section */}
         <section id="schedule" className="mb-12 animate-fade-in-up">
           <Card className="bg-gradient-card border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Calendar className="w-5 h-5" />
-                Upcoming Schedule
+                Weekly Program Schedule
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                  <div>
-                    <h4 className="font-semibold">DJ Gadaffi & Friends</h4>
-                    <p className="text-sm text-muted-foreground">Reggae & Dancehall Vibes</p>
-                  </div>
-                  <Badge variant="outline">8:00 PM - 12:00 AM</Badge>
-                </div>
-                <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                  <div>
-                    <h4 className="font-semibold">Late Night Mix</h4>
-                    <p className="text-sm text-muted-foreground">Smooth Jazz & R&B</p>
-                  </div>
-                  <Badge variant="outline">12:00 AM - 4:00 AM</Badge>
-                </div>
-                <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                  <div>
-                    <h4 className="font-semibold">Morning Energy</h4>
-                    <p className="text-sm text-muted-foreground">High Energy Dancehall</p>
-                  </div>
-                  <Badge variant="outline">6:00 AM - 10:00 AM</Badge>
-                </div>
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="border-b border-border">
+                      <th className="text-left p-3 font-semibold">Day</th>
+                      <th className="text-left p-3 font-semibold">Show</th>
+                      <th className="text-left p-3 font-semibold">Host</th>
+                      <th className="text-left p-3 font-semibold">Time (Eastern)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { day: "Monday", show: "The Community Buzz", host: "Imaara", time: "4:00 PM - 6:00 PM" },
+                      { day: "Monday", show: "Primally Poetic", host: "Neiima & Poets", time: "8:30 PM - 9:30 PM" },
+                      { day: "Tuesday", show: "Kings Korner/Sweet Life Solutions", host: "Andre Keitt/Cheryl Shaw", time: "6:00 PM - 7:00 PM" },
+                      { day: "Tuesday", show: "Level Up", host: "Jean Marie", time: "7:00 PM - 8:00 PM" },
+                      { day: "Tuesday", show: "Soul2Soul", host: "DJ 77 & DJ Gadaffi", time: "8:00 PM - 10:00 PM" },
+                      { day: "Tuesday", show: "MetaMorphosis/Turn Up Tuesday", host: "Doc Iman Blak/Kyle Tunez", time: "10:00 PM - 12:00 AM" },
+                      { day: "Wednesday", show: "Hold a Reasoning", host: "Singing Melody", time: "1:00 PM - 3:00 PM" },
+                      { day: "Wednesday", show: "Urban Honeys", host: "DJ 77", time: "6:00 PM - 7:00 PM" },
+                      { day: "Wednesday", show: "Linen & Lace - A Straight Jazz Odyssey", host: "DJ 77", time: "7:00 PM - 8:00 PM" },
+                      { day: "Wednesday", show: "The Wednesday Workout", host: "DJ DeDe", time: "8:00 PM - 10:00 PM" },
+                      { day: "Wednesday", show: "The Tony G Show", host: "DJ Tony G", time: "10:00 PM - 12:00 AM" },
+                      { day: "Thursday", show: "Lioncore", host: "Daddy Lion Chandell", time: "3:00 PM - 5:00 PM" },
+                      { day: "Thursday", show: "The Matrix", host: "Neiima & DeDe", time: "6:00 PM - 7:00 PM" },
+                      { day: "Thursday", show: "Hype Thursdays", host: "DJ Kyle Tunez", time: "7:00 PM - 9:00 PM" },
+                      { day: "Thursday", show: "The Heart of Soul", host: "DLC", time: "9:00 PM - 11:00 PM" },
+                      { day: "Friday", show: "Afternoon Delight", host: "DLC", time: "11:00 AM - 3:00 PM" },
+                      { day: "Friday", show: "The Heart of Soul", host: "DLC", time: "3:00 PM - 6:00 PM" },
+                      { day: "Friday", show: "The Traffic Jam Mix", host: "DJ Teachdem", time: "6:00 PM - 8:00 PM" },
+                      { day: "Friday", show: "Screech At Night", host: "DJ Screech", time: "8:00 PM - 10:00 PM" },
+                      { day: "Friday", show: "Deja Vu", host: "DJ Migrane", time: "10:00 PM - 12:00 AM" },
+                      { day: "Saturday", show: "The Roots Dynamic Experience", host: "DLC", time: "10:00 AM - 1:00 PM" },
+                      { day: "Saturday", show: "The Skaturday Bang", host: "DLC", time: "1:00 PM - 4:00 PM" },
+                      { day: "Saturday", show: "Primal Sports", host: "Dale, Kane, Froggy & The Controversial Boss", time: "4:00 PM - 5:00/5:30 PM" },
+                      { day: "Saturday", show: "Amapiano & more", host: "DJ Teachdem", time: "5:00/5:30 PM - 7:30 PM" },
+                      { day: "Saturday", show: "Di Drive", host: "DJ Keu", time: "7:30 PM - 9:30 PM" },
+                      { day: "Saturday", show: "Outside We Deh", host: "DJ Badbin", time: "9:30 PM - 12:00 AM" },
+                      { day: "Sunday", show: "Answers from The Word", host: "Alopex/Dr Dawkins", time: "9:00 AM - 10:00 AM" },
+                      { day: "Sunday", show: "Sunday Serenade", host: "DJ DeDe", time: "10:00 AM - 12:00 PM" },
+                      { day: "Sunday", show: "Level Up", host: "Jean Marie", time: "12:00 PM - 1:00 PM" },
+                      { day: "Sunday", show: "Grown Folks Music", host: "DJ Keu", time: "1:00 PM - 3:00 PM" },
+                      { day: "Sunday", show: "The Kool Runnings Show", host: "Professor X", time: "3:00 PM - 6:00 PM" },
+                      { day: "Sunday", show: "The Cookie Jar", host: "DJ Migrane", time: "6:00 PM - 9:00 PM" },
+                      { day: "Sunday", show: "The Quiet Storm Show", host: "DJ Smooth Daddy", time: "9:00 PM - 11:00 PM" }
+                    ].map((schedule, index) => (
+                      <tr key={index} className="border-b border-border/30 hover:bg-muted/20">
+                        <td className="p-3 font-medium">{schedule.day}</td>
+                        <td className="p-3">{schedule.show}</td>
+                        <td className="p-3 text-muted-foreground">{schedule.host}</td>
+                        <td className="p-3 text-accent">{schedule.time}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </CardContent>
           </Card>
