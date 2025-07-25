@@ -25,12 +25,12 @@ const Footer = () => {
   ];
 
   const quickLinks = [
-    { label: "Home", href: "#" },
-    { label: "Schedule", href: "#schedule" },
-    { label: "DJs", href: "#" },
-    { label: "Events", href: "#events" },
-    { label: "Chat", href: "#chat" },
-    { label: "Contact", href: "#contact" }
+    { label: "Home", href: "/" },
+    { label: "Schedule", href: "/#schedule" },
+    { label: "DJs", href: "/djs" },
+    { label: "Events", href: "/#events" },
+    { label: "Chat", href: "/#chat" },
+    { label: "Contact", href: "/contact" }
   ];
 
   return (
@@ -136,11 +136,11 @@ const Footer = () => {
             </div>
             
             <div className="flex items-center gap-4 text-sm">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
                 Privacy Policy
               </a>
               <span className="text-border">|</span>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="/terms" className="text-muted-foreground hover:text-primary transition-colors">
                 Terms of Service
               </a>
               <span className="text-border">|</span>
