@@ -43,21 +43,22 @@ const PrimalText3D = ({ size = 'large', animate = true }: PrimalText3DProps) => 
         ref={textRef}
         className={`${fontSize} font-bold text-3d-effect ${animate ? '' : 'hover:text-3d-hover'} transition-transform duration-300`}
         style={{
-          color: 'hsl(60 100% 50%)', // Fallback color
-          background: 'linear-gradient(180deg, hsl(60 100% 50%) 0%, hsl(120 40% 30%) 70%)',
+          color: 'hsl(60 100% 70%)', // Brighter fallback color
+          background: 'linear-gradient(180deg, hsl(60 100% 70%) 0%, hsl(120 60% 50%) 70%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
           textShadow: `
-            1px 1px 0px hsl(120 40% 20%),
-            2px 2px 0px hsl(120 40% 15%),
-            3px 3px 0px hsl(120 40% 10%),
-            4px 4px 0px hsl(120 40% 5%),
-            5px 5px 10px hsl(0 0% 0% / 0.8),
-            0 0 20px hsl(60 100% 50% / 0.5)
+            1px 1px 0px hsl(120 60% 40%),
+            2px 2px 0px hsl(120 60% 35%),
+            3px 3px 0px hsl(120 60% 30%),
+            4px 4px 0px hsl(120 60% 25%),
+            5px 5px 15px hsl(0 0% 0% / 0.8),
+            0 0 30px hsl(60 100% 70% / 0.8),
+            0 0 50px hsl(60 100% 60% / 0.6)
           `,
           transform: 'perspective(1000px) rotateY(0deg)',
-          filter: 'drop-shadow(0 0 10px hsl(60 100% 50% / 0.3))',
+          filter: 'drop-shadow(0 0 20px hsl(60 100% 60% / 0.6)) brightness(1.2)',
         }}
       >
         PRIMAL
