@@ -161,6 +161,15 @@ const DJs = () => {
       isLive: false
     },
     {
+      id: "dj-craig",
+      name: "DJ Craig",
+      show: "The Craig Show",
+      time: "Various Times",
+      description: "Bringing you the best music and entertainment",
+      image: "/placeholder.svg",
+      isLive: false
+    },
+    {
       id: "primal-sports-team",
       name: "Dale, Kane, Froggy & The Controversial Boss",
       show: "Primal Sports",
