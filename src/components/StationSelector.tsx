@@ -26,7 +26,7 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
       type: 'radio',
       icon: Radio,
       isLive: true,
-      currentTrack: 'DJ Gadaffi & Friends - Live',
+      currentTrack: 'Primal4K - Live',
       
     },
     {
