@@ -120,6 +120,12 @@ const DJCarousel = () => {
       description: "Deja Vu / The Cookie Jar"
     },
     {
+      id: "dj-tracy",
+      image: "/placeholder.svg",
+      title: "DJ Tracy",
+      description: "The Tracy Show"
+    },
+    {
       id: "dj-smooth-daddy",
       image: djSmoothDaddy,
       title: "The Smooth Daddy",
