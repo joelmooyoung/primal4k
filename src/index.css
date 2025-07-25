@@ -9,58 +9,58 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Dark theme base */
-    --background: 222 25% 8%;
+    --background: 0 0% 5%;
     --foreground: 0 0% 98%;
 
-    --card: 222 25% 10%;
+    --card: 0 0% 8%;
     --card-foreground: 0 0% 95%;
 
-    --popover: 222 25% 12%;
+    --popover: 0 0% 10%;
     --popover-foreground: 0 0% 98%;
 
     /* Radio brand colors */
-    --primary: 280 100% 60%;
+    --primary: 120 100% 40%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 280 100% 70%;
+    --primary-glow: 120 100% 50%;
 
-    --secondary: 222 25% 15%;
+    --secondary: 0 0% 10%;
     --secondary-foreground: 0 0% 90%;
 
-    --muted: 222 25% 12%;
+    --muted: 0 0% 15%;
     --muted-foreground: 0 0% 60%;
 
-    --accent: 45 100% 55%;
-    --accent-foreground: 222 25% 8%;
+    --accent: 60 100% 50%;
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 222 25% 20%;
-    --input: 222 25% 15%;
-    --ring: 280 100% 60%;
+    --border: 0 0% 20%;
+    --input: 0 0% 15%;
+    --ring: 120 100% 40%;
 
     --radius: 0.75rem;
 
     /* Music-themed gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(280 100% 60%), hsl(320 100% 50%));
-    --gradient-accent: linear-gradient(45deg, hsl(45 100% 55%), hsl(60 100% 45%));
-    --gradient-background: linear-gradient(180deg, hsl(222 25% 8%), hsl(222 25% 6%));
-    --gradient-card: linear-gradient(145deg, hsl(222 25% 12%), hsl(222 25% 8%));
+    --gradient-primary: linear-gradient(135deg, hsl(120 100% 40%), hsl(120 100% 30%));
+    --gradient-accent: linear-gradient(45deg, hsl(60 100% 50%), hsl(60 100% 40%));
+    --gradient-background: linear-gradient(180deg, hsl(0 0% 5%), hsl(0 0% 3%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 8%), hsl(0 0% 5%));
 
     /* Audio visualization colors */
-    --audio-primary: 280 100% 60%;
-    --audio-secondary: 320 100% 50%;
-    --audio-accent: 45 100% 55%;
+    --audio-primary: 120 100% 40%;
+    --audio-secondary: 120 100% 50%;
+    --audio-accent: 60 100% 50%;
 
     /* Chat colors */
-    --chat-bubble: 280 50% 15%;
-    --chat-bubble-own: 280 100% 20%;
+    --chat-bubble: 0 0% 15%;
+    --chat-bubble-own: 120 50% 20%;
     --chat-online: 120 100% 50%;
     --chat-offline: 0 0% 40%;
 
     /* Shadows and effects */
-    --shadow-glow: 0 0 30px hsl(280 100% 60% / 0.3);
-    --shadow-strong: 0 10px 40px hsl(222 25% 4% / 0.5);
+    --shadow-glow: 0 0 30px hsl(120 100% 40% / 0.3);
+    --shadow-strong: 0 10px 40px hsl(0 0% 2% / 0.5);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     /* Animation durations */
