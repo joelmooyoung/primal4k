@@ -6,6 +6,7 @@ import DJCarousel from "@/components/DJCarousel";
 import EventsCarousel from "@/components/EventsCarousel";
 import ChatRoom from "@/components/ChatRoom";
 import TwitchEmbed from "@/components/TwitchEmbed";
+import PrimalText3D from "@/components/PrimalText3D";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Music, Calendar, Users } from "lucide-react";
@@ -61,11 +62,9 @@ const Index = () => {
       <main className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <section className="text-center mb-12 animate-fade-in-up">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            <span className="bg-gradient-primary bg-clip-text text-transparent inline-block animate-[primalGlow_4s_ease-in-out_infinite,subtlePulse_2s_ease-in-out_infinite] relative">
-              PRIMAL
-            </span>
-          </h1>
+          <div className="mb-4">
+            <PrimalText3D size="large" animate={true} />
+          </div>
           <p className="text-xl text-muted-foreground mb-8">
             ...where it all starts
           </p>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Music, Radio, MessageCircle, Calendar, Menu, X } from "lucide-react";
+import PrimalText3D from "@/components/PrimalText3D";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,11 +24,13 @@ const Navigation = () => {
               alt="Primal Logo" 
               className="w-8 h-8 rounded-lg object-cover" 
             />
-            <div>
-              <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent hover:animate-[subtlePulse_1s_ease-in-out] transition-all duration-300">
-                PRIMAL
-              </h1>
-              <p className="text-xs text-muted-foreground">...where it all starts</p>
+            <div className="flex items-center">
+              <div style={{ width: '120px', height: '40px' }}>
+                <PrimalText3D size="small" animate={false} />
+              </div>
+              <div className="ml-2">
+                <p className="text-xs text-muted-foreground">...where it all starts</p>
+              </div>
             </div>
           </div>
 
