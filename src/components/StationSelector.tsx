@@ -35,7 +35,7 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
       type: 'radio2',
       icon: Music,
       isLive: true,
-      currentTrack: 'Alternative Stream',
+      currentTrack: 'Primal Media Group',
       
     },
     {
