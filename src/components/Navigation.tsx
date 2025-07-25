@@ -24,7 +24,7 @@ const Navigation = () => {
               className="w-8 h-8 rounded-lg object-cover" 
             />
             <div>
-              <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+              <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent hover:animate-[subtlePulse_1s_ease-in-out] transition-all duration-300">
                 PRIMAL
               </h1>
               <p className="text-xs text-muted-foreground">...where it all starts</p>

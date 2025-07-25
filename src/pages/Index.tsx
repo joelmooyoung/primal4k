@@ -62,7 +62,7 @@ const Index = () => {
         {/* Hero Section */}
         <section className="text-center mb-12 animate-fade-in-up">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            <span className="bg-gradient-primary bg-clip-text text-transparent inline-block relative">
+            <span className="bg-gradient-primary bg-clip-text text-transparent inline-block animate-[primalGlow_4s_ease-in-out_infinite,subtlePulse_2s_ease-in-out_infinite] relative">
               PRIMAL
             </span>
           </h1>
