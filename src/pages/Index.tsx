@@ -17,7 +17,7 @@ interface Station {
   icon: React.ElementType;
   isLive: boolean;
   currentTrack?: string;
-  listeners?: number;
+  
 }
 
 const Index = () => {
@@ -27,8 +27,7 @@ const Index = () => {
     type: 'radio',
     icon: Music,
     isLive: true,
-    currentTrack: 'Taking over the World - JA male accent',
-    listeners: 847
+    currentTrack: 'Taking over the World - JA male accent'
   });
 
   const getStreamUrl = (stationId: string) => {
@@ -91,24 +90,25 @@ const Index = () => {
           <StationSelector onStationChange={setSelectedStation} />
         </section>
 
-        {/* Audio Player */}
+        {/* Audio Player / Twitch Toggle */}
         <section className="mb-12 animate-fade-in-up">
-          <AudioPlayer
-            title={selectedStation.name}
-            description={selectedStation.currentTrack || "No track info available"}
-            streamUrl={getStreamUrl(selectedStation.id)}
-            isLive={selectedStation.isLive}
-            externalLinks={getExternalLinks(selectedStation.id)}
-          />
+          {selectedStation.type === 'livestream' ? (
+            <TwitchEmbed />
+          ) : (
+            <AudioPlayer
+              title={selectedStation.name}
+              description={selectedStation.currentTrack || "No track info available"}
+              streamUrl={getStreamUrl(selectedStation.id)}
+              isLive={selectedStation.isLive}
+              externalLinks={getExternalLinks(selectedStation.id)}
+            />
+          )}
         </section>
 
-        {/* Chat and Twitch Grid */}
-        <section id="chat" className="grid lg:grid-cols-2 gap-8 mb-12">
+        {/* Chat Section */}
+        <section id="chat" className="mb-12">
           <div className="animate-fade-in-up">
             <ChatRoom />
-          </div>
-          <div className="animate-fade-in-up">
-            <TwitchEmbed />
           </div>
         </section>
 
