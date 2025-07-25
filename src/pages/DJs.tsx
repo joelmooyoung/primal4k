@@ -53,8 +53,8 @@ const DJs = () => {
       isLive: false
     },
     {
-      id: "kyle-tunez",
-      name: "Kyle Tunez",
+      id: "dj-jermaine-hard-drive",
+      name: "DJ Jermaine Hard Drive",
       show: "Turn Up Tuesday / Hype Thursdays",
       time: "Tuesday 10:00 PM - 12:00 AM & Thursday 7:00 PM - 9:00 PM",
       description: "High energy music to turn up your week",
