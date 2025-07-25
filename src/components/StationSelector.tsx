@@ -44,7 +44,7 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
       type: 'livestream',
       icon: Tv,
       isLive: false,
-      currentTrack: 'Twitch: joelgadaffi',
+      currentTrack: 'Primal4k',
       
     }
   ];
