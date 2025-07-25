@@ -11,7 +11,7 @@ interface Station {
   icon: React.ElementType;
   isLive: boolean;
   currentTrack?: string;
-  listeners?: number;
+  
 }
 
 interface StationSelectorProps {
@@ -27,7 +27,7 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
       icon: Radio,
       isLive: true,
       currentTrack: 'DJ Gadaffi & Friends - Live',
-      listeners: 847
+      
     },
     {
       id: 'backup',
@@ -36,7 +36,7 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
       icon: Music,
       isLive: true,
       currentTrack: 'Alternative Stream',
-      listeners: 234
+      
     },
     {
       id: 'livestream',
@@ -45,7 +45,7 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
       icon: Tv,
       isLive: false,
       currentTrack: 'Twitch: joelgadaffi',
-      listeners: 0
+      
     }
   ];
 
@@ -105,14 +105,13 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
                   {station.currentTrack}
                 </p>
                 
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{station.listeners} listeners</span>
-                  {selectedStation.id === station.id && (
+                {selectedStation.id === station.id && (
+                  <div className="flex justify-end">
                     <Badge variant="outline" className="text-xs">
                       Selected
                     </Badge>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
