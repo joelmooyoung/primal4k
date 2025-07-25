@@ -19,7 +19,10 @@ const Navigation = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <div 
+            className="flex items-center space-x-2 cursor-pointer" 
+            onClick={() => window.location.href = '/'}
+          >
             <img 
               src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" 
               alt="Primal4K Logo" 
