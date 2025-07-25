@@ -21,8 +21,8 @@ const Navigation = () => {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <img 
-              src="/src/assets/primal-logo.jpeg" 
-              alt="Primal Logo" 
+              src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" 
+              alt="Primal4K Logo" 
               className="w-8 h-8 rounded-lg object-cover" 
             />
             <div className="flex items-center">
