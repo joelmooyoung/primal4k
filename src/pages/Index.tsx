@@ -65,7 +65,7 @@ const Index = () => {
           <div className="mb-4">
             <PrimalText3D size="large" animate={true} />
           </div>
-          <p className="text-xl text-muted-foreground mb-8">
+          <p className="text-xl text-foreground mb-8">
             ...where it all starts
           </p>
           <div className="flex flex-wrap justify-center gap-4 mb-8">
