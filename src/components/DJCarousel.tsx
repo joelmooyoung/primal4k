@@ -15,6 +15,7 @@ import jeanMarie from "@/assets/jean-marie-original.jpeg";
 import theMatrix from "@/assets/the-matrix-original.jpeg";
 import docImanBlak from "@/assets/doc-iman-blak-original.jpeg";
 import professorX from "@/assets/professor-x-original.jpg";
+import djSmoothDaddy from "@/assets/dj-smooth-daddy.png";
 
 interface DJSlide {
   id: string;
@@ -96,6 +97,12 @@ const DJCarousel = () => {
       image: professorX,
       title: "Professor X",
       description: "The Kool Runnings Show"
+    },
+    {
+      id: "dj-smooth-daddy",
+      image: djSmoothDaddy,
+      title: "The Smooth Daddy",
+      description: "The Quiet Storm"
     }
   ];
 

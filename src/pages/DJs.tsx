@@ -23,6 +23,7 @@ import djScreench from "@/assets/dj-screech-original.jpeg";
 import djBadbin from "@/assets/dj-badbin-original.jpeg";
 import alopex from "@/assets/alopex-original.jpeg";
 import dlcLioncore from "@/assets/dlc-lioncore-original.jpeg";
+import djSmoothDaddy from "@/assets/dj-smooth-daddy.png";
 
 const DJs = () => {
   const djs = [
@@ -230,7 +231,7 @@ const DJs = () => {
       show: "The Quiet Storm Show",
       time: "Sunday 9:00 PM - 11:00 PM",
       description: "Smooth sounds for Sunday nights",
-      image: "/placeholder.svg",
+      image: djSmoothDaddy,
       isLive: false
     }
   ];
