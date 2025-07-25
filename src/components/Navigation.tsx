@@ -24,8 +24,10 @@ const Navigation = () => {
               className="w-8 h-8 rounded-lg object-cover" 
             />
             <div>
-              <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                PRIMAL
+              <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent relative group">
+                <span className="transition-all duration-300 group-hover:animate-[primalGlow_1s_ease-in-out] inline-block">
+                  PRIMAL
+                </span>
               </h1>
               <p className="text-xs text-muted-foreground">...where it all starts</p>
             </div>

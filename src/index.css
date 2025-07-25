@@ -137,6 +137,27 @@ All colors MUST be HSL.
     to { transform: translateY(0); opacity: 1; }
   }
 
+  @keyframes primalGlow {
+    0%, 100% { 
+      text-shadow: 0 0 20px hsl(60 100% 50% / 0.6),
+                   0 0 40px hsl(120 40% 30% / 0.4),
+                   0 0 60px hsl(60 100% 50% / 0.2);
+      transform: scale(1);
+    }
+    50% { 
+      text-shadow: 0 0 30px hsl(60 100% 50% / 0.8),
+                   0 0 60px hsl(120 40% 30% / 0.6),
+                   0 0 80px hsl(60 100% 50% / 0.4);
+      transform: scale(1.02);
+    }
+  }
+
+  @keyframes letterFloat {
+    0%, 100% { transform: translateY(0px); }
+    25% { transform: translateY(-5px); }
+    75% { transform: translateY(-2px); }
+  }
+
   /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
