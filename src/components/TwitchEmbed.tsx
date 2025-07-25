@@ -74,7 +74,7 @@ const TwitchEmbed = () => {
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
             <Tv className="w-5 h-5 text-purple-500" />
-            Twitch Stream
+            LiveStream
           </CardTitle>
           <Badge 
             variant="secondary" 
