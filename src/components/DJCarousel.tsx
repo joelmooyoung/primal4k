@@ -15,6 +15,7 @@ import jeanMarie from "@/assets/jean-marie-original.jpeg";
 import theMatrix from "@/assets/the-matrix-original.jpeg";
 import docImanBlak from "@/assets/doc-iman-blak-original.jpeg";
 import professorX from "@/assets/professor-x-original.jpg";
+import djMigrane from "@/assets/dj-migrane-original.jpeg";
 import djScreench from "@/assets/dj-screech-original.jpeg";
 import dlcLioncore from "@/assets/dlc-lioncore-original.jpeg";
 const djSmoothDaddy = "/lovable-uploads/0dff8266-ab20-4e95-8173-8e6383bad650.png";
@@ -111,6 +112,12 @@ const DJCarousel = () => {
       image: dlcLioncore,
       title: "DLC (Daddy Lion Chandell)",
       description: "Lioncore & Multiple Shows"
+    },
+    {
+      id: "dj-migrane",
+      image: djMigrane,
+      title: "DJ Migrane",
+      description: "Deja Vu / The Cookie Jar"
     },
     {
       id: "dj-smooth-daddy",
