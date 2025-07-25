@@ -41,7 +41,7 @@ const DJs = () => {
       time: "Tuesday 8:00 PM - 10:00 PM",
       description: "Bringing you the best soul and R&B classics",
       image: "/placeholder.svg",
-      isLive: true
+      isLive: false
     },
     {
       id: "doc-iman-blak",
@@ -140,7 +140,7 @@ const DJs = () => {
       time: "Friday 6:00 PM - 8:00 PM & Saturday 5:00/5:30 PM - 7:30 PM",
       description: "Traffic jam mixes and Amapiano vibes",
       image: "/placeholder.svg",
-      isLive: false
+      isLive: true
     },
     {
       id: "dj-screech",
