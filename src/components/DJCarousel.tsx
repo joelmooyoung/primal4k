@@ -3,14 +3,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import djGadaffi from "@/assets/dj-gadaffi.jpg";
-import dj77 from "@/assets/dj-77.jpg";
-import djDede from "@/assets/dj-dede.jpg";
-import djJermaine from "@/assets/dj-jermaine.jpg";
-import djTonyG from "@/assets/dj-tony-g.jpg";
-import djKeu from "@/assets/dj-keu.jpg";
-import djTeachdem from "@/assets/dj-teachdem.jpg";
-import djCraig from "@/assets/dj-craig.jpg";
+import djGadaffi from "@/assets/dj-gadaffi-original.jpeg";
+import dj77 from "@/assets/dj-77-original.jpeg";
+import djDede from "@/assets/dj-dede-original.jpeg";
+import djJermaine from "@/assets/dj-jermaine-original.jpeg";
+import djTonyG from "@/assets/dj-tony-g-original.jpeg";
+import djKeu from "@/assets/dj-keu-original.jpeg";
+import djTeachdem from "@/assets/dj-teachdem-original.jpeg";
+import djCraig from "@/assets/dj-craig-original.jpeg";
+import jeanMarie from "@/assets/jean-marie-original.jpeg";
+import theMatrix from "@/assets/the-matrix-original.jpeg";
+import docImanBlak from "@/assets/doc-iman-blak-original.jpeg";
+import professorX from "@/assets/professor-x-original.jpg";
 
 interface DJSlide {
   id: string;
@@ -68,6 +72,30 @@ const DJCarousel = () => {
       image: djCraig,
       title: "DJ Craig",
       description: "The Craig Show"
+    },
+    {
+      id: "jean-marie",
+      image: jeanMarie,
+      title: "Jean Marie",
+      description: "Level Up"
+    },
+    {
+      id: "the-matrix",
+      image: theMatrix,
+      title: "The Matrix",
+      description: "Neiima & DeDe"
+    },
+    {
+      id: "doc-iman-blak",
+      image: docImanBlak,
+      title: "Doc Iman Blak",
+      description: "MetaMorphosis"
+    },
+    {
+      id: "professor-x",
+      image: professorX,
+      title: "Professor X",
+      description: "The Kool Runnings Show"
     }
   ];
 

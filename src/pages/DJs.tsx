@@ -6,14 +6,23 @@ import { Button } from "@/components/ui/button";
 import { Radio, Clock, Music } from "lucide-react";
 
 // Import DJ images
-import djGadaffi from "@/assets/dj-gadaffi.jpg";
-import dj77 from "@/assets/dj-77.jpg";
-import djDede from "@/assets/dj-dede.jpg";
-import djJermaine from "@/assets/dj-jermaine.jpg";
-import djTonyG from "@/assets/dj-tony-g.jpg";
-import djKeu from "@/assets/dj-keu.jpg";
-import djTeachdem from "@/assets/dj-teachdem.jpg";
-import djCraig from "@/assets/dj-craig.jpg";
+import djGadaffi from "@/assets/dj-gadaffi-original.jpeg";
+import dj77 from "@/assets/dj-77-original.jpeg";
+import djDede from "@/assets/dj-dede-original.jpeg";
+import djJermaine from "@/assets/dj-jermaine-original.jpeg";
+import djTonyG from "@/assets/dj-tony-g-original.jpeg";
+import djKeu from "@/assets/dj-keu-original.jpeg";
+import djTeachdem from "@/assets/dj-teachdem-original.jpeg";
+import djCraig from "@/assets/dj-craig-original.jpeg";
+import jeanMarie from "@/assets/jean-marie-original.jpeg";
+import theMatrix from "@/assets/the-matrix-original.jpeg";
+import docImanBlak from "@/assets/doc-iman-blak-original.jpeg";
+import professorX from "@/assets/professor-x-original.jpg";
+import djMigrane from "@/assets/dj-migrane-original.jpeg";
+import djScreench from "@/assets/dj-screech-original.jpeg";
+import djBadbin from "@/assets/dj-badbin-original.jpeg";
+import alopex from "@/assets/alopex-original.jpeg";
+import dlcLioncore from "@/assets/dlc-lioncore-original.jpeg";
 
 const DJs = () => {
   const djs = [
@@ -41,7 +50,7 @@ const DJs = () => {
       show: "Level Up",
       time: "Tuesday 7:00 PM - 8:00 PM & Sunday 12:00 PM - 1:00 PM",
       description: "Motivational content to help you level up your life",
-      image: "/placeholder.svg",
+      image: jeanMarie,
       isLive: false
     },
     {
@@ -59,7 +68,7 @@ const DJs = () => {
       show: "MetaMorphosis",
       time: "Tuesday 10:00 PM - 12:00 AM",
       description: "Transformative music and conversation",
-      image: "/placeholder.svg",
+      image: docImanBlak,
       isLive: false
     },
     {
@@ -113,7 +122,7 @@ const DJs = () => {
       show: "The Matrix",
       time: "Thursday 6:00 PM - 7:00 PM",
       description: "Unplugging from the ordinary",
-      image: "/placeholder.svg",
+      image: theMatrix,
       isLive: false
     },
     {
@@ -122,7 +131,7 @@ const DJs = () => {
       show: "The Heart of Soul / Afternoon Delight / The Roots Dynamic Experience / Lioncore",
       time: "Multiple Shows - Various Times Including Thursday 3:00 PM - 5:00 PM",
       description: "Heart of Soul, Roots Dynamic Experience, Afternoon Delight, Lioncore and more",
-      image: "/placeholder.svg",
+      image: dlcLioncore,
       isLive: false
     },
     {
@@ -158,7 +167,7 @@ const DJs = () => {
       show: "Screech At Night",
       time: "Friday 8:00 PM - 10:00 PM",
       description: "Late night entertainment with DJ Screech",
-      image: "/placeholder.svg",
+      image: djScreench,
       isLive: false
     },
     {
@@ -167,7 +176,7 @@ const DJs = () => {
       show: "Deja Vu / The Cookie Jar",
       time: "Friday 10:00 PM - 12:00 AM & Sunday 6:00 PM - 9:00 PM",
       description: "Nostalgic vibes and sweet Sunday sounds",
-      image: "/placeholder.svg",
+      image: djMigrane,
       isLive: false
     },
     {
@@ -194,7 +203,7 @@ const DJs = () => {
       show: "Outside We Deh",
       time: "Saturday 9:30 PM - 12:00 AM",
       description: "Saturday night party vibes",
-      image: "/placeholder.svg",
+      image: djBadbin,
       isLive: false
     },
     {
@@ -203,7 +212,7 @@ const DJs = () => {
       show: "Answers from The Word",
       time: "Sunday 9:00 AM - 10:00 AM",
       description: "Spiritual guidance and inspiration",
-      image: "/placeholder.svg",
+      image: alopex,
       isLive: false
     },
     {
@@ -212,7 +221,7 @@ const DJs = () => {
       show: "The Kool Runnings Show",
       time: "Sunday 3:00 PM - 6:00 PM",
       description: "Kool vibes and runnings",
-      image: "/placeholder.svg",
+      image: professorX,
       isLive: false
     },
     {
