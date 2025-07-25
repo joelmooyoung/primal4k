@@ -5,6 +5,16 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Radio, Clock, Music } from "lucide-react";
 
+// Import DJ images
+import djGadaffi from "@/assets/dj-gadaffi.jpg";
+import dj77 from "@/assets/dj-77.jpg";
+import djDede from "@/assets/dj-dede.jpg";
+import djJermaine from "@/assets/dj-jermaine.jpg";
+import djTonyG from "@/assets/dj-tony-g.jpg";
+import djKeu from "@/assets/dj-keu.jpg";
+import djTeachdem from "@/assets/dj-teachdem.jpg";
+import djCraig from "@/assets/dj-craig.jpg";
+
 const DJs = () => {
   const djs = [
     {
@@ -40,7 +50,7 @@ const DJs = () => {
       show: "Soul2Soul",
       time: "Tuesday 8:00 PM - 10:00 PM",
       description: "Bringing you the best soul and R&B classics",
-      image: "/placeholder.svg",
+      image: djGadaffi,
       isLive: false
     },
     {
@@ -58,7 +68,7 @@ const DJs = () => {
       show: "Turn Up Tuesday / Hype Thursdays",
       time: "Tuesday 10:00 PM - 12:00 AM & Thursday 7:00 PM - 9:00 PM",
       description: "High energy music to turn up your week",
-      image: "/placeholder.svg",
+      image: djJermaine,
       isLive: false
     },
     {
@@ -76,7 +86,7 @@ const DJs = () => {
       show: "Urban Honeys / Linen & Lace",
       time: "Wednesday 6:00 PM - 8:00 PM",
       description: "Urban beats and straight jazz odyssey",
-      image: "/placeholder.svg",
+      image: dj77,
       isLive: false
     },
     {
@@ -85,7 +95,7 @@ const DJs = () => {
       show: "The Wednesday Workout / Sunday Serenade",
       time: "Wednesday 8:00 PM - 10:00 PM & Sunday 10:00 AM - 12:00 PM",
       description: "High energy workouts and Sunday chill vibes",
-      image: "/placeholder.svg",
+      image: djDede,
       isLive: false
     },
     {
@@ -94,7 +104,7 @@ const DJs = () => {
       show: "The Tony G Show",
       time: "Wednesday 10:00 PM - 12:00 AM",
       description: "Late night vibes with Tony G",
-      image: "/placeholder.svg",
+      image: djTonyG,
       isLive: false
     },
     {
@@ -121,7 +131,7 @@ const DJs = () => {
       show: "Di Drive / Grown Folks Music",
       time: "Saturday 7:30 PM - 9:30 PM & Sunday 1:00 PM - 3:00 PM",
       description: "Driving beats and grown folks music",
-      image: "/placeholder.svg",
+      image: djKeu,
       isLive: false
     },
     {
@@ -139,7 +149,7 @@ const DJs = () => {
       show: "The Traffic Jam Mix / Amapiano & more",
       time: "Friday 6:00 PM - 8:00 PM & Saturday 5:00/5:30 PM - 7:30 PM",
       description: "Traffic jam mixes and Amapiano vibes",
-      image: "/placeholder.svg",
+      image: djTeachdem,
       isLive: true
     },
     {
@@ -166,7 +176,7 @@ const DJs = () => {
       show: "The Craig Show",
       time: "Various Times",
       description: "Bringing you the best music and entertainment",
-      image: "/placeholder.svg",
+      image: djCraig,
       isLive: false
     },
     {
@@ -232,6 +242,15 @@ const DJs = () => {
           {djs.map((dj, index) => (
             <Card key={index} className="bg-gradient-card border-border/50 hover:shadow-lg transition-all duration-300">
               <CardContent className="p-6">
+                {/* DJ Image */}
+                <div className="flex justify-center mb-4">
+                  <img 
+                    src={dj.image} 
+                    alt={dj.name}
+                    className="w-20 h-20 rounded-full object-cover border-2 border-primary/20"
+                  />
+                </div>
+                
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <Radio className="w-5 h-5 text-primary" />

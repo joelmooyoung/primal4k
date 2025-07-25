@@ -3,8 +3,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import djPlaceholder1 from "@/assets/dj-placeholder-1.jpg";
-import djPlaceholder2 from "@/assets/dj-placeholder-2.jpg";
+import djGadaffi from "@/assets/dj-gadaffi.jpg";
+import dj77 from "@/assets/dj-77.jpg";
+import djDede from "@/assets/dj-dede.jpg";
+import djJermaine from "@/assets/dj-jermaine.jpg";
+import djTonyG from "@/assets/dj-tony-g.jpg";
+import djKeu from "@/assets/dj-keu.jpg";
+import djTeachdem from "@/assets/dj-teachdem.jpg";
+import djCraig from "@/assets/dj-craig.jpg";
 
 interface DJSlide {
   id: string;
@@ -16,52 +22,52 @@ interface DJSlide {
 const DJCarousel = () => {
   const slides: DJSlide[] = [
     {
-      id: "dj-craig",
-      image: djPlaceholder1,
-      title: "DJ Craig",
-      description: "Urban beats and classic hits"
-    },
-    {
-      id: "dj-77",
-      image: djPlaceholder2,
-      title: "DJ 77",
-      description: "Urban Honeys & Linen & Lace"
-    },
-    {
-      id: "dj-kyle",
-      image: djPlaceholder1,
-      title: "DJ Kyle Tunez",
-      description: "Hype Thursdays & Turn Up Tuesday"
-    },
-    {
       id: "dj-gadaffi",
-      image: djPlaceholder2,
+      image: djGadaffi,
       title: "DJ Gadaffi",
       description: "Taking over the World"
     },
     {
-      id: "the-matrix",
-      image: djPlaceholder1,
-      title: "The Matrix",
-      description: "Neiima & DeDe"
+      id: "dj-77",
+      image: dj77,
+      title: "DJ 77",
+      description: "Urban Honeys & Linen & Lace"
     },
     {
-      id: "kings-korner",
-      image: djPlaceholder2,
-      title: "Kings Korner",
-      description: "Andre Keitt"
+      id: "dj-jermaine",
+      image: djJermaine,
+      title: "DJ Jermaine Hard Drive",
+      description: "Hype Thursdays"
     },
     {
-      id: "jean-marie",
-      image: djPlaceholder1,
-      title: "Jean Marie",
-      description: "Level Up"
+      id: "dj-dede",
+      image: djDede,
+      title: "DJ DeDe",
+      description: "Wednesday Workout & Sunday Serenade"
+    },
+    {
+      id: "dj-tony-g",
+      image: djTonyG,
+      title: "DJ Tony G",
+      description: "The Tony G Show"
+    },
+    {
+      id: "dj-keu",
+      image: djKeu,
+      title: "DJ Keu",
+      description: "Di Drive & Grown Folks Music"
     },
     {
       id: "dj-teachdem",
-      image: djPlaceholder2,
+      image: djTeachdem,
       title: "DJ Teachdem",
       description: "Traffic Jam Mix & Amapiano"
+    },
+    {
+      id: "dj-craig",
+      image: djCraig,
+      title: "DJ Craig",
+      description: "The Craig Show"
     }
   ];
 
