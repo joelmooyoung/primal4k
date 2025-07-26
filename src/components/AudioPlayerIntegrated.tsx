@@ -171,148 +171,154 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
   console.log('🎯 RENDER - station:', station.id, 'metadata:', metadata);
   
   return (
-    <Card className="bg-gradient-card border-border/50 overflow-hidden">
-      <CardContent className="p-6">
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Album Art & Visualizer */}
-          <div className="flex-shrink-0">
-            <div className="relative w-full lg:w-64 h-64 rounded-lg overflow-hidden bg-gradient-primary/20">
-              {/* Show album art based on station */}
-              <img 
-                src={
-                  station.id === 'primal-radio' 
-                    ? '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
-                    : station.id === 'primal-radio-2'
-                    ? '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png' 
-                    : '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
-                }
-                alt={`${station.name} Album Art`}
-                className="w-full h-full object-cover"
-              />
-              
-              {/* Visualizer overlay when playing */}
-              {isCurrentlyPlaying && metadata?.albumArt && (
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-4">
-                  <div className="flex items-end space-x-1 h-12 opacity-80">
-                    {visualizerBars.slice(0, 10)}
+    <div>
+      {/* Debug indicator */}
+      <div style={{background: 'red', color: 'white', padding: '10px', margin: '10px'}}>
+        🔴 AUDIO PLAYER INTEGRATED COMPONENT RENDERED - Station: {station.id}
+      </div>
+      <Card className="bg-gradient-card border-border/50 overflow-hidden">
+        <CardContent className="p-6">
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Album Art & Visualizer */}
+            <div className="flex-shrink-0">
+              <div className="relative w-full lg:w-64 h-64 rounded-lg overflow-hidden bg-gradient-primary/20">
+                {/* Show album art based on station */}
+                <img 
+                  src={
+                    station.id === 'primal-radio' 
+                      ? '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
+                      : station.id === 'primal-radio-2'
+                      ? '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png' 
+                      : '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
+                  }
+                  alt={`${station.name} Album Art`}
+                  className="w-full h-full object-cover"
+                />
+                
+                {/* Visualizer overlay when playing */}
+                {isCurrentlyPlaying && metadata?.albumArt && (
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-4">
+                    <div className="flex items-end space-x-1 h-12 opacity-80">
+                      {visualizerBars.slice(0, 10)}
+                    </div>
                   </div>
-                </div>
-              )}
-              
-              {station.isLive && (
-                <div className="absolute top-2 right-2 bg-destructive text-destructive-foreground px-2 py-1 rounded text-xs font-semibold animate-pulse">
-                  LIVE
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Player Controls */}
-          <div className="flex-1">
-            <div className="mb-4">
-              <h3 className="text-xl font-bold mb-1">
-                {metadata?.title || station.name}
-              </h3>
-              <p className="text-muted-foreground">
-                {metadata?.artist || station.currentTrack || 'Now Playing'}
-              </p>
-              {metadata?.album && (
-                <p className="text-sm text-muted-foreground/70">
-                  {metadata.album}
-                </p>
-              )}
-            </div>
-
-            {/* Main Controls */}
-            <div className="flex items-center gap-4 mb-6">
-              <Button
-                size="lg"
-                onClick={handlePlay}
-                className="bg-gradient-primary hover:bg-gradient-primary/90 text-white w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-              >
-                {isCurrentlyPlaying ? (
-                  <Pause className="w-6 h-6" />
-                ) : (
-                  <Play className="w-6 h-6 ml-1" />
                 )}
-              </Button>
+                
+                {station.isLive && (
+                  <div className="absolute top-2 right-2 bg-destructive text-destructive-foreground px-2 py-1 rounded text-xs font-semibold animate-pulse">
+                    LIVE
+                  </div>
+                )}
+              </div>
+            </div>
 
-              {/* Volume Control */}
-              <div className="flex items-center gap-2 flex-1 max-w-xs">
+            {/* Player Controls */}
+            <div className="flex-1">
+              <div className="mb-4">
+                <h3 className="text-xl font-bold mb-1">
+                  {metadata?.title || station.name}
+                </h3>
+                <p className="text-muted-foreground">
+                  {metadata?.artist || station.currentTrack || 'Now Playing'}
+                </p>
+                {metadata?.album && (
+                  <p className="text-sm text-muted-foreground/70">
+                    {metadata.album}
+                  </p>
+                )}
+              </div>
+
+              {/* Main Controls */}
+              <div className="flex items-center gap-4 mb-6">
                 <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={toggleMute}
-                  className="p-2"
+                  size="lg"
+                  onClick={handlePlay}
+                  className="bg-gradient-primary hover:bg-gradient-primary/90 text-white w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                 >
-                  {isMuted || volume === 0 ? (
-                    <VolumeX className="w-4 h-4" />
+                  {isCurrentlyPlaying ? (
+                    <Pause className="w-6 h-6" />
                   ) : (
-                    <Volume2 className="w-4 h-4" />
+                    <Play className="w-6 h-6 ml-1" />
                   )}
                 </Button>
-                <Slider
-                  value={[volume]}
-                  onValueChange={(value) => setVolume(value[0])}
-                  max={100}
-                  step={1}
-                  className="flex-1"
-                />
-                <span className="text-sm text-muted-foreground w-8">
-                  {volume}
-                </span>
-              </div>
-            </div>
 
-            {/* External Player Links */}
-            {externalLinks && (
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="text-sm text-muted-foreground">Open in:</span>
-                {externalLinks.winamp && (
+                {/* Volume Control */}
+                <div className="flex items-center gap-2 flex-1 max-w-xs">
                   <Button
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
-                    asChild
-                    className="h-8"
+                    onClick={toggleMute}
+                    className="p-2"
                   >
-                    <a href={externalLinks.winamp} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="w-3 h-3 mr-1" />
-                      Winamp
-                    </a>
+                    {isMuted || volume === 0 ? (
+                      <VolumeX className="w-4 h-4" />
+                    ) : (
+                      <Volume2 className="w-4 h-4" />
+                    )}
                   </Button>
-                )}
-                {externalLinks.vlc && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    asChild
-                    className="h-8"
-                  >
-                    <a href={externalLinks.vlc} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="w-3 h-3 mr-1" />
-                      VLC
-                    </a>
-                  </Button>
-                )}
-                {externalLinks.itunes && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    asChild
-                    className="h-8"
-                  >
-                    <a href={externalLinks.itunes} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="w-3 h-3 mr-1" />
-                      iTunes
-                    </a>
-                  </Button>
-                )}
+                  <Slider
+                    value={[volume]}
+                    onValueChange={(value) => setVolume(value[0])}
+                    max={100}
+                    step={1}
+                    className="flex-1"
+                  />
+                  <span className="text-sm text-muted-foreground w-8">
+                    {volume}
+                  </span>
+                </div>
               </div>
-            )}
+
+              {/* External Player Links */}
+              {externalLinks && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <span className="text-sm text-muted-foreground">Open in:</span>
+                  {externalLinks.winamp && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      asChild
+                      className="h-8"
+                    >
+                      <a href={externalLinks.winamp} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="w-3 h-3 mr-1" />
+                        Winamp
+                      </a>
+                    </Button>
+                  )}
+                  {externalLinks.vlc && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      asChild
+                      className="h-8"
+                    >
+                      <a href={externalLinks.vlc} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="w-3 h-3 mr-1" />
+                        VLC
+                      </a>
+                    </Button>
+                  )}
+                  {externalLinks.itunes && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      asChild
+                      className="h-8"
+                    >
+                      <a href={externalLinks.itunes} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="w-3 h-3 mr-1" />
+                        iTunes
+                      </a>
+                    </Button>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
