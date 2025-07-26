@@ -20,6 +20,7 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
   ];
 
   const handleNavClick = (section: string) => {
+    console.log('🎯 Navigation: handleNavClick called with section:', section);
     setIsOpen(false);
     
     if (section === 'chat' || section === 'schedule') {
@@ -42,6 +43,7 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
       }
     } else {
       // Navigate to section
+      console.log('🎯 Navigation: Calling onNavigate with section:', section);
       onNavigate?.(section);
     }
   };

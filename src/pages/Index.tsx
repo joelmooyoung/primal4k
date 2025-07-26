@@ -52,6 +52,12 @@ const Index = () => {
   const [activeSection, setActiveSection] = useState<PageSection>('home');
   const [selectedDJId, setSelectedDJId] = useState<string>('');
 
+  // Debug active section changes
+  const handleSectionChange = (section: PageSection) => {
+    console.log('🎯 Index: activeSection changing from', activeSection, 'to', section);
+    setActiveSection(section);
+  };
+
   const getStreamUrl = (stationId: string) => {
     console.log('🎯 getStreamUrl called with stationId:', stationId);
     const streamUrls = {
@@ -804,9 +810,9 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-background">
       <Navigation 
         onNavigate={(section: string) => {
-          if (section === 'home') setActiveSection('home');
-          else if (section === 'djs') setActiveSection('djs');
-          else if (section === 'contact') setActiveSection('contact');
+          if (section === 'home') handleSectionChange('home');
+          else if (section === 'djs') handleSectionChange('djs');
+          else if (section === 'contact') handleSectionChange('contact');
         }}
         activeSection={activeSection}
       />
