@@ -30,6 +30,7 @@ interface AudioProviderProps {
 }
 
 export const AudioProvider = ({ children }: AudioProviderProps) => {
+  const switchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [currentStation, setCurrentStation] = useState<Station | null>(() => {
     try {
       const saved = localStorage.getItem('currentStation');
@@ -101,24 +102,31 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
     }
   };
 
-  const handleStationChange = async (station: Station | null) => {
+  const handleStationChange = (station: Station | null) => {
+    // Clear any pending switch
+    if (switchTimeoutRef.current) {
+      clearTimeout(switchTimeoutRef.current);
+    }
+    
     // Immediate UI feedback
     setIsPlaying(false);
     
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = '';
-      // Don't call load() - it causes resource issues
-      // Instead, give browser time to clean up
-      await new Promise(resolve => setTimeout(resolve, 50));
-    }
-    
-    setCurrentStation(station);
-    if (station) {
-      localStorage.setItem('currentStation', JSON.stringify(station));
-    } else {
-      localStorage.removeItem('currentStation');
-    }
+    // Throttle the actual switching to prevent browser overload
+    switchTimeoutRef.current = setTimeout(async () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+        // Small delay for cleanup
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
+      
+      setCurrentStation(station);
+      if (station) {
+        localStorage.setItem('currentStation', JSON.stringify(station));
+      } else {
+        localStorage.removeItem('currentStation');
+      }
+    }, 100); // Wait 100ms before actually switching
   };
 
   const toggleMute = () => {
