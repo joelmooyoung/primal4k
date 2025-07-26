@@ -121,7 +121,7 @@ const DJCarousel = () => {
     },
     {
       id: "dj-tracy",
-      image: "/placeholder.svg",
+      image: "/lovable-uploads/ed9ae104-9687-4deb-8c5b-dcbbc3ef796d.png",
       title: "DJ Tracy",
       description: "The Tracy Show"
     },
