@@ -54,9 +54,12 @@ const AudioPlayer = ({
 
   // Set current station in AudioContext for PersistentPlayer
   useEffect(() => {
-    console.log('🎯 AudioPlayer: Setting current station:', station);
-    setCurrentStation(station);
-  }, [station.id, setCurrentStation]); // Re-run when station ID changes
+    // Only set station if it's different from current station to avoid resets
+    if (currentStation?.id !== station.id) {
+      console.log('🎯 AudioPlayer: Setting current station:', station);
+      setCurrentStation(station);
+    }
+  }, [station.id, setCurrentStation, currentStation?.id]); // Re-run when station ID changes
 
   const isCurrentlyPlaying = currentStation?.id === station.id && isPlaying;
 
