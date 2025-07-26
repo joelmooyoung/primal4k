@@ -159,18 +159,23 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
 
   const handleStationChange = (station: Station | null) => {
     console.log('🔄 handleStationChange called with station:', station, 'current isPlaying:', isPlaying);
-    console.trace('Station change call stack');
     
-    // Only pause if we're actually changing stations
-    if (audioRef.current && isPlaying && currentStation?.id !== station?.id) {
-      console.log('Pausing current audio before station change');
+    // Stop current audio and reset state completely when changing stations
+    if (audioRef.current && currentStation?.id !== station?.id) {
+      console.log('Stopping current audio and resetting for station change');
       audioRef.current.pause();
+      audioRef.current.src = '';
+      audioRef.current.load(); // Reset the audio element
       setIsPlaying(false);
       localStorage.setItem('isPlaying', 'false');
     }
     
     setCurrentStation(station);
-    localStorage.setItem('currentStation', JSON.stringify(station));
+    if (station) {
+      localStorage.setItem('currentStation', JSON.stringify(station));
+    } else {
+      localStorage.removeItem('currentStation');
+    }
   };
 
   useEffect(() => {
