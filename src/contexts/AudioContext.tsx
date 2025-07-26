@@ -105,6 +105,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = '';
+      audioRef.current.load(); // This properly resets the audio element
     }
     setIsPlaying(false);
     setCurrentStation(station);
