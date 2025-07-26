@@ -27,11 +27,11 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
   } = useAudio();
 
   const isCurrentlyPlaying = currentStation?.id === station.id && isPlaying;
-  // Only get stream URL when actually needed (when playing or for external links)
-  const streamUrl = currentStation?.id === station.id ? getStreamUrl(station) : '';
+  // Only get stream URL when actually playing to avoid CORS errors on selection
+  const streamUrl = isCurrentlyPlaying ? getStreamUrl(station) : '';
   const externalLinks = getExternalLinks(station);
-  // Only fetch metadata when this station is actually selected and playing
-  const { metadata } = useStreamMetadata(currentStation?.id === station.id ? streamUrl : '');
+  // Only fetch metadata when this station is actually playing
+  const { metadata } = useStreamMetadata(streamUrl);
 
   // Update AudioContext when station prop changes
   useEffect(() => {
