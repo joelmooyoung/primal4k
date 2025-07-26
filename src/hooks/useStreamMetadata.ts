@@ -15,6 +15,7 @@ export const useStreamMetadata = (streamUrl: string) => {
     if (!streamUrl) return;
 
     const fetchMetadata = async () => {
+      console.log('🎵 Fetching metadata for stream:', streamUrl);
       setIsLoading(true);
       try {
         // Try to fetch metadata from the stream
@@ -27,31 +28,25 @@ export const useStreamMetadata = (streamUrl: string) => {
 
         // Parse ICY metadata if available
         const icyMetaInt = response.headers.get('icy-metaint');
-        if (icyMetaInt) {
-          // This would require more complex parsing for real implementation
-          // For now, we'll simulate metadata with logo as placeholder
-          setMetadata({
-            title: 'Live Stream',
-            artist: 'Primal Radio',
-            album: 'Now Playing',
-            albumArt: '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
-          });
-        } else {
-          // No metadata available, use logo as placeholder
-          setMetadata({
-            title: 'Live Stream',
-            artist: 'Primal Radio',
-            albumArt: '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
-          });
-        }
+        const metadata = {
+          title: 'Live Stream',
+          artist: 'Primal Radio',
+          album: 'Now Playing',
+          albumArt: '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
+        };
+        
+        console.log('🎵 Setting metadata:', metadata);
+        setMetadata(metadata);
       } catch (error) {
-        console.log('Could not fetch stream metadata:', error);
+        console.log('🎵 Could not fetch stream metadata:', error);
         // Fallback to generic metadata with logo as placeholder
-        setMetadata({
+        const fallbackMetadata = {
           title: 'Live Stream',
           artist: 'Primal Radio',
           albumArt: '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
-        });
+        };
+        console.log('🎵 Using fallback metadata:', fallbackMetadata);
+        setMetadata(fallbackMetadata);
       } finally {
         setIsLoading(false);
       }
