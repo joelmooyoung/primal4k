@@ -31,22 +31,6 @@ const EventsCarousel = () => {
       date: "1 April 2026, 6 pm",
       location: "Jamaica Palace Hotel",
       description: "Grand Gala Dinner - Titchfield 240th Anniversary Homecoming"
-    },
-    {
-      id: "upcoming-event-1",
-      image: eventPlaceholder1,
-      title: "Primal Live Sessions",
-      date: "Coming Soon",
-      location: "TBA",
-      description: "Special live recording sessions with our top DJs"
-    },
-    {
-      id: "upcoming-event-2", 
-      image: eventPlaceholder1,
-      title: "Community Mixer",
-      date: "Stay Tuned",
-      location: "Virtual",
-      description: "Meet and greet with the Primal Radio family"
     }
   ];
 
