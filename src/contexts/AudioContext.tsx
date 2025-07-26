@@ -202,31 +202,50 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   };
 
   const handleStationChange = async (station: Station | null) => {
-    console.log('🔄 handleStationChange called with station:', station, 'current isPlaying:', isPlaying);
+    console.log('🔄 [SWITCH START] handleStationChange called with station:', station?.name, 'current isPlaying:', isPlaying);
+    console.log('🔄 [SWITCH START] audioRef.current exists:', !!audioRef.current);
+    console.log('🔄 [SWITCH START] audioRef.current src:', audioRef.current?.src);
+    console.log('🔄 [SWITCH START] audioRef.current paused:', audioRef.current?.paused);
     
     // Stop current audio completely before switching
     if (audioRef.current) {
-      console.log('🛑 Stopping current audio');
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      audioRef.current.src = '';
-      audioRef.current.removeAttribute('src');
-      audioRef.current.load();
+      console.log('🛑 [CLEANUP] Starting audio cleanup');
+      console.log('🛑 [CLEANUP] Before pause - readyState:', audioRef.current.readyState);
       
-      // Wait for the audio to fully stop
+      audioRef.current.pause();
+      console.log('🛑 [CLEANUP] Audio paused');
+      
+      audioRef.current.currentTime = 0;
+      console.log('🛑 [CLEANUP] Current time reset');
+      
+      audioRef.current.src = '';
+      console.log('🛑 [CLEANUP] Source cleared');
+      
+      audioRef.current.removeAttribute('src');
+      console.log('🛑 [CLEANUP] Source attribute removed');
+      
+      audioRef.current.load();
+      console.log('🛑 [CLEANUP] Audio element loaded/reset');
+      
+      console.log('🛑 [CLEANUP] Waiting 100ms for cleanup...');
       await new Promise(resolve => setTimeout(resolve, 100));
+      console.log('🛑 [CLEANUP] Cleanup complete');
     }
     
     // Always reset playing state when changing stations
+    console.log('🔄 [STATE] Setting isPlaying to false');
     setIsPlaying(false);
     localStorage.setItem('isPlaying', 'false');
     
+    console.log('🔄 [STATE] Setting new station:', station?.name);
     setCurrentStation(station);
     if (station) {
       localStorage.setItem('currentStation', JSON.stringify(station));
     } else {
       localStorage.removeItem('currentStation');
     }
+    
+    console.log('🔄 [SWITCH END] Station change complete');
   };
 
   // Remove the useEffect that sets src immediately on station change
