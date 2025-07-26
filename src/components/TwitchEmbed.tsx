@@ -92,10 +92,12 @@ const TwitchEmbed = () => {
       <CardContent>
         <div className="aspect-video bg-black rounded-lg overflow-hidden">
           <iframe
-            src={`https://player.twitch.tv/?channel=${twitchChannel}&parent=${window.location.hostname}&muted=true&autoplay=false`}
-            className="w-full h-full border-0"
-            allowFullScreen
-            title={`${twitchChannel} Twitch Stream`}
+            src="https://player.twitch.tv/?channel=joelgadaffi&parent=lovableproject.com&parent=localhost&muted=true"
+            height="100%"
+            width="100%"
+            allowFullScreen={true}
+            onLoad={() => console.log('Twitch iframe loaded')}
+            onError={() => console.log('Twitch iframe error')}
           />
         </div>
         
