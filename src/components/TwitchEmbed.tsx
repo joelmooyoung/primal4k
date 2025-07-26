@@ -11,9 +11,12 @@ declare global {
 }
 
 const TwitchEmbed = () => {
+  console.log('🎥 TwitchEmbed component rendered');
   const twitchChannel = "joelgadaffi";
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
+  
+  console.log('🎥 TwitchEmbed - Channel:', twitchChannel, 'Script loaded:', isScriptLoaded, 'Offline:', isOffline);
 
   useEffect(() => {
     // Load Twitch embed script
