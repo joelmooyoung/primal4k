@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from "react";
+import { useEffect } from "react";
+import { useAudio } from "@/contexts/AudioContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
@@ -25,50 +26,45 @@ const AudioPlayer = ({
   coverImage,
   externalLinks 
 }: AudioPlayerProps) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState([80]);
-  const [isMuted, setIsMuted] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  // Use global audio context
+  const { 
+    isPlaying, 
+    volume, 
+    isMuted, 
+    togglePlay, 
+    setVolume, 
+    toggleMute,
+    currentStation,
+    setCurrentStation 
+  } = useAudio();
+  
+  // Create a station object for this player
+  const station = {
+    id: streamUrl.includes('djgadaffiandfriends') ? 'primal-radio' : 'primal-radio-2',
+    name: title,
+    type: 'radio' as const,
+    icon: 'radio',
+    isLive,
+    currentTrack: description
+  };
 
+  // Set this as current station when component mounts
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume[0] / 100;
-    }
-  }, [volume]);
+    setCurrentStation(station);
+  }, [title, streamUrl]);
 
-  const togglePlay = async () => {
-    if (!audioRef.current) return;
-
-    try {
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        await audioRef.current.play();
-        setIsPlaying(true);
-      }
-    } catch (error) {
-      console.error('Error playing audio:', error);
-    }
-  };
-
-  const toggleMute = () => {
-    if (audioRef.current) {
-      audioRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
-  };
+  const isCurrentlyPlaying = currentStation?.id === station.id && isPlaying;
 
   // Audio visualization bars
   const visualizerBars = Array.from({ length: 20 }, (_, i) => (
     <div
       key={i}
       className={`w-1 bg-gradient-to-t from-primary to-primary-glow rounded-full ${
-        isPlaying ? 'animate-audio-wave' : 'h-2'
+        isCurrentlyPlaying ? 'animate-audio-wave' : 'h-2'
       }`}
       style={{
         animationDelay: `${i * 0.1}s`,
-        height: isPlaying ? 'auto' : '8px'
+        height: isCurrentlyPlaying ? 'auto' : '8px'
       }}
     />
   ));
@@ -195,7 +191,7 @@ const AudioPlayer = ({
                 onClick={togglePlay}
                 className="bg-gradient-primary hover:bg-gradient-primary/90 text-white w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
               >
-                {isPlaying ? (
+                {isCurrentlyPlaying ? (
                   <Pause className="w-6 h-6" />
                 ) : (
                   <Play className="w-6 h-6 ml-1" />
@@ -210,21 +206,21 @@ const AudioPlayer = ({
                   onClick={toggleMute}
                   className="p-2"
                 >
-                  {isMuted || volume[0] === 0 ? (
+                  {isMuted || volume === 0 ? (
                     <VolumeX className="w-4 h-4" />
                   ) : (
                     <Volume2 className="w-4 h-4" />
                   )}
                 </Button>
                 <Slider
-                  value={volume}
-                  onValueChange={setVolume}
+                  value={[volume]}
+                  onValueChange={(value) => setVolume(value[0])}
                   max={100}
                   step={1}
                   className="flex-1"
                 />
                 <span className="text-sm text-muted-foreground w-8">
-                  {volume[0]}
+                  {volume}
                 </span>
               </div>
             </div>
@@ -276,14 +272,6 @@ const AudioPlayer = ({
             )}
           </div>
         </div>
-
-        {/* Hidden Audio Element */}
-        <audio
-          ref={audioRef}
-          src={streamUrl}
-          onEnded={() => setIsPlaying(false)}
-          onError={() => setIsPlaying(false)}
-        />
       </CardContent>
     </Card>
   );
