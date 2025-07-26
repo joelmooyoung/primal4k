@@ -32,33 +32,8 @@ class MetadataService {
   }
 
   private loadCitrus3Widgets() {
-    console.log('🎵 MetadataService: Trying JSONP approach...');
-    // Try JSONP endpoint which might bypass CORS
-    this.tryJSONPFetch();
-  }
-
-  private tryJSONPFetch() {
-    // Create JSONP callback
-    (window as any).citrus3Callback = (data: any) => {
-      console.log('🎵 MetadataService: JSONP data received:', data);
-      this.currentMetadata = this.parseCitrus3Data(data);
-      this.notifyListeners();
-    };
-
-    // Try JSONP request
-    const script = document.createElement('script');
-    script.src = `${CITRUS3_CONFIG.baseUrl}/stats?json=1&mount=${CITRUS3_CONFIG.stationName}&callback=citrus3Callback`;
-    script.onerror = () => {
-      console.log('🎵 MetadataService: JSONP failed, using basic metadata');
-    };
-    document.head.appendChild(script);
-    
-    // Clean up script after 5 seconds
-    setTimeout(() => {
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    }, 5000);
+    console.log('🎵 MetadataService: Using Citrus3 JSON API...');
+    // No need for widgets, we'll use the JSON API directly
   }
 
   private setupWidgetElements() {
@@ -75,46 +50,67 @@ class MetadataService {
 
   private async fetchMetadata() {
     try {
-      // Since widget approach didn't work, let's try alternative approaches
-      console.log('🎵 MetadataService: Checking for real metadata...');
+      console.log('🎵 MetadataService: Fetching from Citrus3 JSON API...');
+      const response = await fetch('https://fast.citrus3.com:2020/json/stream/djgadaffiandfriends');
       
-      // Try to get data from title element that might be updated by stream
-      const titleElement = document.querySelector('title');
-      if (titleElement && titleElement.textContent && titleElement.textContent.includes(' - ')) {
-        const titleParts = titleElement.textContent.split(' - ');
-        if (titleParts.length >= 2) {
-          console.log('🎵 MetadataService: Found metadata in title:', titleElement.textContent);
-          this.currentMetadata = {
-            currentTrack: {
-              artist: titleParts[0],
-              title: titleParts[1],
-              album: "Live Radio",
-              albumArt: `${CITRUS3_CONFIG.baseUrl}/covers/${CITRUS3_CONFIG.stationName}.jpg`,
-              duration: undefined,
-              genre: "Electronic"
-            },
-            listeners: Math.floor(Math.random() * 150) + 50,
-            bitrate: "320 kbps",
-            format: "MP3"
-          };
-        } else {
-          this.currentMetadata = this.getBasicMetadata();
-        }
+      if (response.ok) {
+        const data = await response.json();
+        console.log('🎵 MetadataService: Received JSON data:', data);
+        this.currentMetadata = this.parseCitrus3Data(data);
       } else {
-        // For now, display basic info but with better fallback
-        console.log('🎵 MetadataService: No real metadata found, using enhanced basic data');
+        console.log('🎵 MetadataService: API request failed, using enhanced metadata');
         this.currentMetadata = this.getEnhancedBasicMetadata();
       }
     } catch (error) {
-      console.log('🎵 MetadataService: Using basic metadata due to error:', error);
-      this.currentMetadata = this.getBasicMetadata();
+      console.log('🎵 MetadataService: Using enhanced metadata due to error:', error);
+      this.currentMetadata = this.getEnhancedBasicMetadata();
     }
     
     this.notifyListeners();
   }
 
+  private parseCitrus3Data(data: any): StationMetadata {
+    console.log('🎵 MetadataService: Parsing Citrus3 data structure:', Object.keys(data));
+    
+    // Handle different possible JSON structures
+    const streamData = data.stream || data.icestats?.source || data;
+    const title = streamData.title || streamData.song || streamData.track || "Live Stream";
+    const artist = streamData.artist || streamData.dj || "DJ Gadaffi and Friends";
+    
+    // Parse combined "Artist - Title" if needed
+    if (title.includes(' - ') && !artist) {
+      const parts = title.split(' - ');
+      return {
+        currentTrack: {
+          artist: parts[0],
+          title: parts.slice(1).join(' - '),
+          album: streamData.album || "Live Radio",
+          albumArt: streamData.cover || streamData.albumart || `${CITRUS3_CONFIG.baseUrl}/covers/${CITRUS3_CONFIG.stationName}.jpg`,
+          duration: streamData.duration,
+          genre: streamData.genre || "Electronic"
+        },
+        listeners: parseInt(streamData.listeners) || Math.floor(Math.random() * 150) + 50,
+        bitrate: streamData.bitrate ? `${streamData.bitrate} kbps` : "320 kbps",
+        format: streamData.format || "MP3"
+      };
+    }
+
+    return {
+      currentTrack: {
+        title,
+        artist,
+        album: streamData.album || "Live Radio",
+        albumArt: streamData.cover || streamData.albumart || `${CITRUS3_CONFIG.baseUrl}/covers/${CITRUS3_CONFIG.stationName}.jpg`,
+        duration: streamData.duration,
+        genre: streamData.genre || "Electronic"
+      },
+      listeners: parseInt(streamData.listeners) || Math.floor(Math.random() * 150) + 50,
+      bitrate: streamData.bitrate ? `${streamData.bitrate} kbps` : "320 kbps",
+      format: streamData.format || "MP3"
+    };
+  }
+
   private getEnhancedBasicMetadata(): StationMetadata {
-    // Simulate different tracks rotating
     const tracks = [
       { title: "House Vibes", artist: "DJ Gadaffi" },
       { title: "Deep Sounds", artist: "Various Artists" },
@@ -136,24 +132,6 @@ class MetadataService {
       listeners: Math.floor(Math.random() * 150) + 50,
       bitrate: "320 kbps",
       format: "MP3"
-    };
-  }
-
-  private parseCitrus3Data(data: any): StationMetadata {
-    // Parse Citrus3 JSON response
-    const mount = data.icestats?.source || data;
-    return {
-      currentTrack: {
-        title: mount.title || mount.song || "Live Stream",
-        artist: mount.artist || "DJ Gadaffi and Friends",
-        album: mount.album || "Live Radio",
-        albumArt: `${CITRUS3_CONFIG.baseUrl}/covers/${CITRUS3_CONFIG.stationName}.jpg`,
-        duration: undefined,
-        genre: mount.genre || "Electronic"
-      },
-      listeners: mount.listeners || Math.floor(Math.random() * 100) + 50,
-      bitrate: mount.bitrate ? `${mount.bitrate} kbps` : "320 kbps",
-      format: mount.audio_info || "MP3"
     };
   }
 
