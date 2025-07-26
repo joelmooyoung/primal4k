@@ -103,6 +103,14 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   };
 
   const handleStationChange = (station: Station | null) => {
+    // Don't switch if it's the same station
+    if (currentStation && station && currentStation.id === station.id) {
+      console.log('🎯 AudioContext: Same station, not switching:', station.id);
+      return;
+    }
+    
+    console.log('🎯 AudioContext: Switching from', currentStation?.id, 'to', station?.id);
+    
     // Clear any pending switch
     if (switchTimeoutRef.current) {
       clearTimeout(switchTimeoutRef.current);
