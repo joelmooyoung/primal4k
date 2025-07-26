@@ -139,8 +139,15 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   const handleVolumeChange = (newVolume: number) => {
     setVolume(newVolume);
     localStorage.setItem('volume', newVolume.toString());
+    // Apply volume immediately and also after a delay to ensure audio is ready
     if (audioRef.current) {
       audioRef.current.volume = newVolume / 100;
+      // Also set volume after a brief delay in case the audio element needs time to initialize
+      setTimeout(() => {
+        if (audioRef.current) {
+          audioRef.current.volume = newVolume / 100;
+        }
+      }, 100);
     }
   };
 
@@ -209,8 +216,20 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
             setIsPlaying(false);
           }}
           onLoadStart={() => console.log('Audio load started')}
-          onCanPlay={() => console.log('Audio can play')}
-          onLoadedData={() => console.log('Audio data loaded')}
+          onCanPlay={() => {
+            console.log('Audio can play');
+            // Ensure volume is applied when audio is ready
+            if (audioRef.current) {
+              audioRef.current.volume = volume / 100;
+            }
+          }}
+          onLoadedData={() => {
+            console.log('Audio data loaded');
+            // Also apply volume when data is loaded
+            if (audioRef.current) {
+              audioRef.current.volume = volume / 100;
+            }
+          }}
         />
       )}
     </AudioContext.Provider>
