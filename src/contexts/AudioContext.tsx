@@ -85,23 +85,28 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   };
 
   const togglePlay = async () => {
+    console.log('🎯 AudioContext: togglePlay called - currentStation:', currentStation, 'isPlaying:', isPlaying);
     if (!audioRef.current || !currentStation) return;
     
     try {
       if (isPlaying) {
+        console.log('🎯 AudioContext: Pausing audio');
         audioRef.current.pause();
         setIsPlaying(false);
       } else {
+        console.log('🎯 AudioContext: Starting audio playback');
         const streamUrl = getStreamUrl(currentStation);
+        console.log('🎯 AudioContext: Stream URL:', streamUrl);
         if (audioRef.current.src !== streamUrl) {
           audioRef.current.src = streamUrl;
           audioRef.current.load();
         }
         await audioRef.current.play();
         setIsPlaying(true);
+        console.log('🎯 AudioContext: Audio started successfully');
       }
     } catch (error) {
-      console.error('Audio error:', error);
+      console.error('🎯 AudioContext: Audio error:', error);
       setIsPlaying(false);
     }
   };
