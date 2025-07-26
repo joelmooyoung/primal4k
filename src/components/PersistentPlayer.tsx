@@ -47,7 +47,7 @@ const PersistentPlayer = () => {
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3 flex-1 min-w-0">
-              {metadata?.albumArt && !metadata.useLogoFallback ? (
+              {metadata?.albumArt ? (
                 <img 
                   src={metadata.albumArt} 
                   alt="Album art"

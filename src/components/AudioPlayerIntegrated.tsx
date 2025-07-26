@@ -172,20 +172,17 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
           {/* Album Art & Visualizer */}
           <div className="flex-shrink-0">
             <div className="relative w-full lg:w-64 h-64 rounded-lg overflow-hidden bg-gradient-primary/20">
-              {metadata?.albumArt && !metadata.useLogoFallback ? (
+              {metadata?.albumArt ? (
                 <img 
                   src={metadata.albumArt} 
                   alt={`${metadata.title} by ${metadata.artist}`}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    // Hide failed album art and show logo background
+                    // Fallback to logo background if album art fails to load
                     e.currentTarget.style.display = 'none';
                   }}
                 />
-              ) : null}
-              
-              {/* Logo background - show when no album art or when useLogoFallback is true */}
-              {(!metadata?.albumArt || metadata?.useLogoFallback) && (
+              ) : (
                 <div 
                   className="w-full h-full flex flex-col items-center justify-center gap-4 p-8 relative overflow-hidden"
                   style={{

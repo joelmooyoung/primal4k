@@ -5,7 +5,6 @@ interface TrackMetadata {
   artist: string;
   album?: string;
   albumArt?: string;
-  useLogoFallback: boolean;
 }
 
 export const useStreamMetadata = (streamUrl: string) => {
@@ -30,31 +29,28 @@ export const useStreamMetadata = (streamUrl: string) => {
         const icyMetaInt = response.headers.get('icy-metaint');
         if (icyMetaInt) {
           // This would require more complex parsing for real implementation
-          // For now, we'll simulate metadata with logo fallback
+          // For now, we'll simulate metadata with logo as placeholder
           setMetadata({
             title: 'Live Stream',
             artist: 'Primal Radio',
             album: 'Now Playing',
-            albumArt: undefined, // No album art available
-            useLogoFallback: true
+            albumArt: '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
           });
         } else {
-          // No metadata available, use logo fallback
+          // No metadata available, use logo as placeholder
           setMetadata({
             title: 'Live Stream',
             artist: 'Primal Radio',
-            albumArt: undefined,
-            useLogoFallback: true
+            albumArt: '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
           });
         }
       } catch (error) {
         console.log('Could not fetch stream metadata:', error);
-        // Fallback to generic metadata with logo
+        // Fallback to generic metadata with logo as placeholder
         setMetadata({
           title: 'Live Stream',
           artist: 'Primal Radio',
-          albumArt: undefined,
-          useLogoFallback: true
+          albumArt: '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
         });
       } finally {
         setIsLoading(false);
