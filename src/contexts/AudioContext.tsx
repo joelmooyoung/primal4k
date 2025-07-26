@@ -251,31 +251,29 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       }}
     >
       {children}
-      {/* Global audio element - always create when station selected, but don't load source until playing */}
-      {currentStation && (
-        <audio
-          ref={audioRef}
-          crossOrigin="anonymous"
-          preload="none"
-          onEnded={() => setIsPlaying(false)}
-          onError={(e) => {
-            console.error('🚨 Audio element error:', e);
-            console.error('🚨 Audio element error type:', e.type);
-            console.error('🚨 Audio element error target:', e.target);
-            console.error('🚨 Audio element error code:', (e.target as HTMLAudioElement)?.error?.code);
-            console.error('🚨 Audio element error message:', (e.target as HTMLAudioElement)?.error?.message);
-            console.error('🚨 Audio element src when error occurred:', (e.target as HTMLAudioElement)?.src);
-            console.error('🚨 Current station when error occurred:', currentStation);
-            setIsPlaying(false);
-          }}
-          onLoadStart={() => {
-            console.log('🎵 Audio load started, src:', audioRef.current?.src);
-            console.log('🎵 Current station:', currentStation);
-          }}
-          onCanPlay={() => console.log('🎵 Audio can play')}
-          onLoadedData={() => console.log('🎵 Audio data loaded')}
-        />
-      )}
+      {/* Single persistent audio element - never recreated */}
+      <audio
+        ref={audioRef}
+        crossOrigin="anonymous"
+        preload="none"
+        onEnded={() => setIsPlaying(false)}
+        onError={(e) => {
+          console.error('🚨 Audio element error:', e);
+          console.error('🚨 Audio element error type:', e.type);
+          console.error('🚨 Audio element error target:', e.target);
+          console.error('🚨 Audio element error code:', (e.target as HTMLAudioElement)?.error?.code);
+          console.error('🚨 Audio element error message:', (e.target as HTMLAudioElement)?.error?.message);
+          console.error('🚨 Audio element src when error occurred:', (e.target as HTMLAudioElement)?.src);
+          console.error('🚨 Current station when error occurred:', currentStation);
+          setIsPlaying(false);
+        }}
+        onLoadStart={() => {
+          console.log('🎵 Audio load started, src:', audioRef.current?.src);
+          console.log('🎵 Current station:', currentStation);
+        }}
+        onCanPlay={() => console.log('🎵 Audio can play')}
+        onLoadedData={() => console.log('🎵 Audio data loaded')}
+      />
     </AudioContext.Provider>
   );
 };
