@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Radio, Clock, Music } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // Import DJ images
 import djGadaffi from "@/assets/dj-gadaffi-original.jpeg";
@@ -26,6 +27,8 @@ import dlcLioncore from "@/assets/dlc-lioncore-original.jpeg";
 const djSmoothDaddy = "/lovable-uploads/0dff8266-ab20-4e95-8173-8e6383bad650.png";
 
 const DJs = () => {
+  const navigate = useNavigate();
+  
   const djs = [
     {
       id: "imaara",
@@ -289,14 +292,14 @@ const DJs = () => {
                     {dj.description}
                   </p>
                   
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="w-full mt-4"
-                    onClick={() => window.location.href = `/dj/${dj.id}`}
-                  >
-                    View Profile
-                  </Button>
+                   <Button 
+                     variant="outline" 
+                     size="sm" 
+                     className="w-full mt-4"
+                     onClick={() => navigate(`/dj/${dj.id}`)}
+                   >
+                     View Profile
+                   </Button>
                 </div>
               </CardContent>
             </Card>
