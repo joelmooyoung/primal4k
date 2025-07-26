@@ -229,8 +229,11 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
               </button>
               
               <button
-                onClick={handlePlay}
-                className="bg-gradient-primary hover:bg-gradient-primary/90 text-white w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 relative z-10 cursor-pointer flex items-center justify-center"
+                onClick={() => {
+                  console.log('🔥 DIRECT BUTTON CLICK');
+                  handlePlay();
+                }}
+                className="bg-blue-500 hover:bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center"
               >
                 {isCurrentlyPlaying ? (
                   <Pause className="w-6 h-6" />
