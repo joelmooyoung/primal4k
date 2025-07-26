@@ -31,13 +31,9 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
   const { metadata } = useStreamMetadata(streamUrl);
 
   const handlePlay = () => {
-    console.log('🎯 handlePlay called in AudioPlayerIntegrated');
-    console.log('Current station:', currentStation?.id, 'Station ID:', station.id);
     if (currentStation?.id !== station.id) {
-      console.log('Setting current station to:', station);
       setCurrentStation(station);
     }
-    console.log('Calling togglePlay...');
     togglePlay();
   };
 
@@ -162,16 +158,14 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
                   }}
                 />
               ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center gap-4 p-6">
+                <div className="w-full h-full flex flex-col items-center justify-center gap-4 p-8">
                   {/* Primal Radio Logo */}
-                  <div className="flex flex-col items-center gap-3">
-                    <div className="relative">
-                      <img 
-                        src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" 
-                        alt="Primal Radio Logo" 
-                        className="w-32 h-20 object-contain rounded-lg shadow-lg"
-                      />
-                    </div>
+                  <div className="flex flex-col items-center gap-2">
+                    <img 
+                      src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" 
+                      alt="Primal Radio Logo" 
+                      className="w-16 h-16 rounded-lg object-cover shadow-lg"
+                    />
                     <div className="text-center">
                       <h4 className="text-lg font-bold text-white">Primal Radio</h4>
                       <p className="text-xs text-white/70">...where it all starts</p>
@@ -179,7 +173,7 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
                   </div>
                   
                   {/* Visualizer */}
-                  <div className="flex items-end space-x-1 h-12">
+                  <div className="flex items-end space-x-1 h-16">
                     {visualizerBars}
                   </div>
                 </div>
@@ -220,22 +214,17 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
 
             {/* Main Controls */}
             <div className="flex items-center gap-4 mb-6">
-              <button
-                onClick={() => {
-                  console.log('🎯 Simple click handler');
-                  if (currentStation?.id !== station.id) {
-                    setCurrentStation(station);
-                  }
-                  togglePlay();
-                }}
-                className="bg-gradient-primary hover:bg-gradient-primary/90 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+              <Button
+                size="lg"
+                onClick={handlePlay}
+                className="bg-gradient-primary hover:bg-gradient-primary/90 text-white w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
               >
                 {isCurrentlyPlaying ? (
                   <Pause className="w-6 h-6" />
                 ) : (
                   <Play className="w-6 h-6 ml-1" />
                 )}
-              </button>
+              </Button>
 
               {/* Volume Control */}
               <div className="flex items-center gap-2 flex-1 max-w-xs">

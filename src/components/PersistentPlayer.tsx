@@ -54,13 +54,11 @@ const PersistentPlayer = () => {
                   className="w-10 h-10 rounded object-cover flex-shrink-0"
                 />
               ) : (
-                <div className="w-12 h-10 bg-gradient-primary/20 rounded flex items-center justify-center overflow-hidden">
-                  <img 
-                    src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" 
-                    alt="Primal Radio Logo"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
+                <img 
+                  src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" 
+                  alt="Primal Radio Logo"
+                  className="w-10 h-10 rounded object-cover flex-shrink-0"
+                />
               )}
               <div className="flex-1 min-w-0">
                 <h4 className="font-semibold text-sm truncate">
