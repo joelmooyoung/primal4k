@@ -34,14 +34,8 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
   // Only fetch metadata when this station is actually playing and stream URL is available
   const { metadata } = useStreamMetadata(isCurrentlyPlaying ? streamUrl : '');
 
-  // Update AudioContext when station prop changes
-  useEffect(() => {
-    console.log('🎯 AudioPlayerIntegrated: station prop changed to:', station);
-    if (station && station.id !== currentStation?.id) {
-      console.log('🎯 AudioPlayerIntegrated: updating AudioContext currentStation');
-      setCurrentStation(station);
-    }
-  }, [station, currentStation?.id, setCurrentStation]);
+  // Don't automatically switch stations - only switch when user presses play
+  // This prevents the freeze issue with rapid station changes
 
   const handlePlay = () => {
     console.log('🎯 AudioPlayerIntegrated handlePlay called');
