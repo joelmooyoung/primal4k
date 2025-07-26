@@ -369,15 +369,17 @@ const Index = () => {
               return <TwitchEmbed />;
             } else {
               return (
-                <AudioPlayer
-                  title={selectedStation.name}
-                  description={selectedStation.currentTrack || "Now Playing"}
-                  streamUrl={getStreamUrl(selectedStation.id)}
-                  isLive={selectedStation.isLive}
-                  coverImage="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"
-                  station={selectedStation}
-                  externalLinks={getExternalLinks(selectedStation.id)}
-                />
+                <div className="space-y-4">
+                  <AudioPlayer
+                    title={selectedStation.name}
+                    description={selectedStation.currentTrack || "Now Playing"}
+                    streamUrl={getStreamUrl(selectedStation.id)}
+                    isLive={selectedStation.isLive}
+                    coverImage="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"
+                    station={selectedStation}
+                    externalLinks={getExternalLinks(selectedStation.id)}
+                  />
+                </div>
               );
             }
           })()}
