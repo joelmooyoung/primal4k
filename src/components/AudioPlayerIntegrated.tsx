@@ -220,10 +220,19 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
 
             {/* Main Controls */}
             <div className="flex items-center gap-4 mb-6">
+              {/* Test Button */}
+              <button 
+                onClick={() => alert('Test button works!')}
+                className="bg-red-500 text-white px-2 py-1 text-xs rounded"
+              >
+                TEST
+              </button>
+              
               <Button
                 size="lg"
                 onClick={handlePlay}
-                className="bg-gradient-primary hover:bg-gradient-primary/90 text-white w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                className="bg-gradient-primary hover:bg-gradient-primary/90 text-white w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 relative z-10 cursor-pointer"
+                style={{ pointerEvents: 'auto' }}
               >
                 {isCurrentlyPlaying ? (
                   <Pause className="w-6 h-6" />
