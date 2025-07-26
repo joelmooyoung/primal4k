@@ -139,12 +139,15 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   const handleStationChange = (station: Station | null) => {
     console.log('🔄 handleStationChange called with station:', station, 'current isPlaying:', isPlaying);
     console.trace('Station change call stack');
-    if (audioRef.current && isPlaying) {
+    
+    // Only pause if we're actually changing stations
+    if (audioRef.current && isPlaying && currentStation?.id !== station?.id) {
       console.log('Pausing current audio before station change');
       audioRef.current.pause();
       setIsPlaying(false);
       localStorage.setItem('isPlaying', 'false');
     }
+    
     setCurrentStation(station);
     localStorage.setItem('currentStation', JSON.stringify(station));
   };
@@ -154,20 +157,23 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
     if (currentStation && audioRef.current) {
       const streamUrl = getStreamUrl(currentStation);
       console.log('Setting audio src to:', streamUrl);
-      audioRef.current.src = streamUrl;
-      audioRef.current.load();
       
-      // If state says we should be playing, actually start playing
-      if (isPlaying) {
-        console.log('Resuming audio playback after navigation');
-        audioRef.current.play().catch(error => {
-          console.error('Failed to resume audio:', error);
-          setIsPlaying(false);
-          localStorage.setItem('isPlaying', 'false');
-        });
+      // Only reload if the source is different
+      if (audioRef.current.src !== streamUrl) {
+        audioRef.current.src = streamUrl;
+        audioRef.current.load();
+        
+        // Only try to autoplay if we're not already playing
+        if (isPlaying && audioRef.current.paused) {
+          console.log('Resuming audio playback after navigation');
+          audioRef.current.play().catch(error => {
+            console.error('Failed to resume audio:', error);
+            // Don't set isPlaying to false here - let user manually restart
+          });
+        }
       }
     }
-  }, [currentStation, isPlaying]);
+  }, [currentStation]);
 
   return (
     <AudioContext.Provider
