@@ -204,7 +204,13 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         <audio
           ref={audioRef}
           onEnded={() => setIsPlaying(false)}
-          onError={() => setIsPlaying(false)}
+          onError={(e) => {
+            console.error('Audio error:', e);
+            setIsPlaying(false);
+          }}
+          onLoadStart={() => console.log('Audio load started')}
+          onCanPlay={() => console.log('Audio can play')}
+          onLoadedData={() => console.log('Audio data loaded')}
         />
       )}
     </AudioContext.Provider>
