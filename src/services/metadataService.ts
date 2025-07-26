@@ -72,41 +72,31 @@ class MetadataService {
   private parseCitrus3Data(data: any): StationMetadata {
     console.log('🎵 MetadataService: Parsing Citrus3 data structure:', Object.keys(data));
     
-    // Handle different possible JSON structures
-    const streamData = data.stream || data.icestats?.source || data;
-    const title = streamData.title || streamData.song || streamData.track || "Live Stream";
-    const artist = streamData.artist || streamData.dj || "DJ Gadaffi and Friends";
+    // Parse the "nowplaying" field which is in "Artist - Title" format
+    const nowPlaying = data.nowplaying || "Live Stream";
+    let artist = "DJ Gadaffi and Friends";
+    let title = "Live Stream";
     
-    // Parse combined "Artist - Title" if needed
-    if (title.includes(' - ') && !artist) {
-      const parts = title.split(' - ');
-      return {
-        currentTrack: {
-          artist: parts[0],
-          title: parts.slice(1).join(' - '),
-          album: streamData.album || "Live Radio",
-          albumArt: streamData.cover || streamData.albumart || `${CITRUS3_CONFIG.baseUrl}/covers/${CITRUS3_CONFIG.stationName}.jpg`,
-          duration: streamData.duration,
-          genre: streamData.genre || "Electronic"
-        },
-        listeners: parseInt(streamData.listeners) || Math.floor(Math.random() * 150) + 50,
-        bitrate: streamData.bitrate ? `${streamData.bitrate} kbps` : "320 kbps",
-        format: streamData.format || "MP3"
-      };
+    if (nowPlaying.includes(' - ')) {
+      const parts = nowPlaying.split(' - ');
+      artist = parts[0];
+      title = parts.slice(1).join(' - ');
+    } else {
+      title = nowPlaying;
     }
 
     return {
       currentTrack: {
         title,
         artist,
-        album: streamData.album || "Live Radio",
-        albumArt: streamData.cover || streamData.albumart || `${CITRUS3_CONFIG.baseUrl}/covers/${CITRUS3_CONFIG.stationName}.jpg`,
-        duration: streamData.duration,
-        genre: streamData.genre || "Electronic"
+        album: "Live Radio",
+        albumArt: data.coverart || `${CITRUS3_CONFIG.baseUrl}/covers/${CITRUS3_CONFIG.stationName}.jpg`,
+        duration: undefined,
+        genre: "Electronic"
       },
-      listeners: parseInt(streamData.listeners) || Math.floor(Math.random() * 150) + 50,
-      bitrate: streamData.bitrate ? `${streamData.bitrate} kbps` : "320 kbps",
-      format: streamData.format || "MP3"
+      listeners: parseInt(data.connections) || 0,
+      bitrate: data.bitrate ? `${data.bitrate} kbps` : "128 kbps",
+      format: data.format?.[0] || "AAC"
     };
   }
 
