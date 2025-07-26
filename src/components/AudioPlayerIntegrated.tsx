@@ -153,28 +153,34 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
                   alt={`${metadata.title} by ${metadata.artist}`}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    // Fallback to visualizer if album art fails to load
+                    // Fallback to logo background if album art fails to load
                     e.currentTarget.style.display = 'none';
                   }}
                 />
               ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center gap-4 p-8">
-                  {/* Primal Radio Logo */}
-                  <div className="flex flex-col items-center gap-2">
-                    <img 
-                      src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" 
-                      alt="Primal Radio Logo" 
-                      className="w-16 h-16 rounded-lg object-cover shadow-lg"
-                    />
-                    <div className="text-center">
-                      <h4 className="text-lg font-bold text-white">Primal Radio</h4>
-                      <p className="text-xs text-white/70">...where it all starts</p>
-                    </div>
-                  </div>
+                <div 
+                  className="w-full h-full flex flex-col items-center justify-center gap-4 p-8 relative"
+                  style={{
+                    backgroundImage: `url('/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png')`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat'
+                  }}
+                >
+                  {/* Dark overlay for better text readability */}
+                  <div className="absolute inset-0 bg-black/40 rounded-lg" />
                   
-                  {/* Visualizer */}
-                  <div className="flex items-end space-x-1 h-16">
-                    {visualizerBars}
+                  {/* Content overlay */}
+                  <div className="relative z-10 flex flex-col items-center gap-4">
+                    <div className="text-center">
+                      <h4 className="text-lg font-bold text-white drop-shadow-lg">Primal Radio</h4>
+                      <p className="text-xs text-white/90 drop-shadow-md">...where it all starts</p>
+                    </div>
+                    
+                    {/* Visualizer */}
+                    <div className="flex items-end space-x-1 h-16">
+                      {visualizerBars}
+                    </div>
                   </div>
                 </div>
               )}
