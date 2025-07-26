@@ -10,7 +10,8 @@ const PersistentPlayer = () => {
   const { currentStation, isPlaying, volume, isMuted, togglePlay, setVolume, toggleMute, getExternalLinks, getStreamUrl } = useAudio();
   const [isMinimized, setIsMinimized] = useState(false);
   // Only fetch metadata when actually playing to avoid CORS errors
-  const { metadata } = useStreamMetadata(currentStation && isPlaying ? getStreamUrl(currentStation) : '');
+  const streamUrl = currentStation && isPlaying ? getStreamUrl(currentStation) : '';
+  const { metadata } = useStreamMetadata(streamUrl);
 
   console.log('PersistentPlayer render - currentStation:', currentStation, 'isPlaying:', isPlaying);
 
