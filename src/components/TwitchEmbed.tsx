@@ -7,6 +7,7 @@ import { ExternalLink, Tv } from "lucide-react";
 declare global {
   interface Window {
     Twitch: any;
+    twitchPlayer: any;
   }
 }
 
@@ -34,33 +35,33 @@ const TwitchEmbed = () => {
   }, []);
 
   const initializeTwitchPlayer = () => {
-    if (window.Twitch) {
+    if (window.Twitch && !window.twitchPlayer) {
       try {
         const options = {
           width: '100%',
           height: '100%',
           channel: twitchChannel,
-          parent: [window.location.hostname, 'localhost'],
-          muted: true
+          parent: [window.location.hostname]
         };
 
-        const player = new window.Twitch.Player('twitch-embed', options);
+        // Use the container div directly as the player target
+        window.twitchPlayer = new window.Twitch.Player('twitch-livestream-container', options);
         
-        player.addEventListener(window.Twitch.Player.READY, () => {
-          player.setVolume(1);
-          player.setMuted(true);
+        window.twitchPlayer.addEventListener(window.Twitch.Player.READY, () => {
+          window.twitchPlayer.setVolume(1);
+          window.twitchPlayer.setMuted(true);
           console.log('Twitch player ready');
         });
 
-        player.addEventListener(window.Twitch.Player.OFFLINE, () => {
+        window.twitchPlayer.addEventListener(window.Twitch.Player.OFFLINE, () => {
           setIsOffline(true);
         });
 
-        player.addEventListener(window.Twitch.Player.ONLINE, () => {
+        window.twitchPlayer.addEventListener(window.Twitch.Player.ONLINE, () => {
           setIsOffline(false);
         });
 
-        player.addEventListener(window.Twitch.Player.ERROR, (error: any) => {
+        window.twitchPlayer.addEventListener(window.Twitch.Player.ERROR, (error: any) => {
           console.error('Twitch player error:', error);
           setIsOffline(true);
         });
@@ -91,16 +92,11 @@ const TwitchEmbed = () => {
       
       <CardContent>
         <div className="aspect-video bg-black rounded-lg overflow-hidden">
-          {isScriptLoaded ? (
-            <div id="twitch-embed" className="w-full h-full" />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <div className="text-center">
-                <Tv className="w-8 h-8 text-purple-500 mx-auto mb-2" />
-                <p className="text-muted-foreground">Loading Twitch player...</p>
-              </div>
-            </div>
-          )}
+          {/* Use the container div directly as Twitch player target */}
+          <div 
+            id="twitch-livestream-container" 
+            className="w-full h-full"
+          />
         </div>
         
         <div className="mt-4 text-center space-y-2">
