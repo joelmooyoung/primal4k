@@ -204,21 +204,17 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   const handleStationChange = async (station: Station | null) => {
     console.log('🔄 handleStationChange called with station:', station, 'current isPlaying:', isPlaying);
     
-    // Completely destroy and recreate the audio element to prevent browser issues
+    // Stop current audio completely before switching
     if (audioRef.current) {
-      console.log('🗑️ Destroying old audio element');
+      console.log('🛑 Stopping current audio');
       audioRef.current.pause();
+      audioRef.current.currentTime = 0;
       audioRef.current.src = '';
       audioRef.current.removeAttribute('src');
       audioRef.current.load();
       
-      // Remove all event listeners and destroy the element
-      audioRef.current.removeEventListener('error', () => {});
-      audioRef.current.removeEventListener('loadstart', () => {});
-      audioRef.current = null;
-      
-      // Wait for cleanup
-      await new Promise(resolve => setTimeout(resolve, 200));
+      // Wait for the audio to fully stop
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
     
     // Always reset playing state when changing stations
