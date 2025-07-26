@@ -201,35 +201,26 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
     }
   };
 
-  const handleStationChange = async (station: Station | null) => {
-    console.log('🔄 [SWITCH START] handleStationChange called with station:', station?.name, 'current isPlaying:', isPlaying);
+  const handleStationChange = (station: Station | null) => {
+    console.log('🔄 Station change to:', station?.name);
     
-    // Immediately stop playing state to prevent conflicts
+    // Immediately stop playing
     setIsPlaying(false);
     localStorage.setItem('isPlaying', 'false');
     
-    // Stop current audio and wait for complete cleanup
+    // Simple cleanup - just stop and clear
     if (audioRef.current) {
-      console.log('🛑 [CLEANUP] Stopping current audio');
-      
-      // Force immediate stop
       audioRef.current.pause();
       audioRef.current.src = '';
-      audioRef.current.load();
-      
-      // Wait longer for browser to fully release the stream
-      await new Promise(resolve => setTimeout(resolve, 300));
     }
     
-    console.log('🔄 [STATE] Setting new station:', station?.name);
+    // Set new station
     setCurrentStation(station);
     if (station) {
       localStorage.setItem('currentStation', JSON.stringify(station));
     } else {
       localStorage.removeItem('currentStation');
     }
-    
-    console.log('🔄 [SWITCH END] Station change complete');
   };
 
   // Remove the useEffect that sets src immediately on station change
