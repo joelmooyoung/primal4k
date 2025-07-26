@@ -365,32 +365,30 @@ const Index = () => {
         }} />
       </section>
 
-      {/* Audio Player / Twitch Toggle - Only show on home */}
-      {activeSection === 'home' && (
-        <section className="mb-12 animate-fade-in-up">
-          {(() => {
-            console.log('🎯 Index: Rendering with selectedStation:', selectedStation);
-            
-            if (selectedStation.type === 'twitch') {
-              return <TwitchEmbed />;
-            } else {
-              return (
-                <div className="space-y-4">
-                  <AudioPlayer
-                    title={selectedStation.name}
-                    description={selectedStation.currentTrack || "Now Playing"}
-                    streamUrl={getStreamUrl(selectedStation.id)}
-                    isLive={selectedStation.isLive}
-                    coverImage="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"
-                    station={selectedStation}
-                    externalLinks={getExternalLinks(selectedStation.id)}
-                  />
-                </div>
-              );
-            }
-          })()}
-        </section>
-      )}
+      {/* Audio Player / Twitch Toggle - Always available for station setup */}
+      <section className="mb-12 animate-fade-in-up" style={{ display: 'none' }}>
+        {(() => {
+          console.log('🎯 Index: Rendering with selectedStation:', selectedStation);
+          
+          if (selectedStation.type === 'twitch') {
+            return <TwitchEmbed />;
+          } else {
+            return (
+              <div className="space-y-4">
+                <AudioPlayer
+                  title={selectedStation.name}
+                  description={selectedStation.currentTrack || "Now Playing"}
+                  streamUrl={getStreamUrl(selectedStation.id)}
+                  isLive={selectedStation.isLive}
+                  coverImage="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"
+                  station={selectedStation}
+                  externalLinks={getExternalLinks(selectedStation.id)}
+                />
+              </div>
+            );
+          }
+        })()}
+      </section>
 
       {/* Chat Section */}
       <section id="chat" className="mb-12">
