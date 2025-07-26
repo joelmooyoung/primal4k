@@ -810,6 +810,8 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-background">
       <Navigation 
         onNavigate={(section: string) => {
+          console.log('🎯 Index: Navigation onNavigate called with:', section);
+          console.trace('🎯 Index: Call stack for navigation:');
           if (section === 'home') handleSectionChange('home');
           else if (section === 'djs') handleSectionChange('djs');
           else if (section === 'contact') handleSectionChange('contact');
