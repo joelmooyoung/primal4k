@@ -9,7 +9,8 @@ import { useStreamMetadata } from '@/hooks/useStreamMetadata';
 const PersistentPlayer = () => {
   const { currentStation, isPlaying, volume, isMuted, togglePlay, setVolume, toggleMute, getExternalLinks, getStreamUrl } = useAudio();
   const [isMinimized, setIsMinimized] = useState(false);
-  const { metadata } = useStreamMetadata(currentStation ? getStreamUrl(currentStation) : '');
+  // Only fetch metadata when actually playing to avoid CORS errors
+  const { metadata } = useStreamMetadata(currentStation && isPlaying ? getStreamUrl(currentStation) : '');
 
   console.log('PersistentPlayer render - currentStation:', currentStation, 'isPlaying:', isPlaying);
 
