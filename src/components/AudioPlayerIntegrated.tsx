@@ -27,12 +27,14 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
   } = useAudio();
 
   const isCurrentlyPlaying = currentStation?.id === station.id && isPlaying;
-  // Always get stream URL for this station to fetch metadata
+  // Get stream URL for this station - the audio element can play it even if fetch() can't
   const streamUrl = getStreamUrl(station);
   // Only get external links when needed (they don't cause CORS issues as they're just URLs)
   const externalLinks = station.type !== 'twitch' ? getExternalLinks(station) : undefined;
   // Always fetch metadata for the current station to show album art
   const { metadata } = useStreamMetadata(streamUrl);
+
+  console.log('🎯 AudioPlayerIntegrated render - metadata:', metadata);
 
   // Switch station when prop changes, but don't auto-play
   useEffect(() => {
