@@ -65,7 +65,6 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume / 100;
-      console.log('🔊 Volume updated to:', volume, 'Audio element volume:', audioRef.current.volume);
     }
   }, [volume]);
 
@@ -138,12 +137,10 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   };
 
   const handleVolumeChange = (newVolume: number) => {
-    console.log('🔊 handleVolumeChange called with:', newVolume);
     setVolume(newVolume);
     localStorage.setItem('volume', newVolume.toString());
     if (audioRef.current) {
       audioRef.current.volume = newVolume / 100;
-      console.log('🔊 Audio element volume set to:', audioRef.current.volume);
     }
   };
 
