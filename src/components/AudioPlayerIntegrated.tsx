@@ -34,13 +34,19 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
     console.log('🎯 AudioPlayerIntegrated handlePlay called');
     console.log('🎯 Current station:', currentStation?.id, 'Target station:', station.id);
     console.log('🎯 Is playing:', isPlaying);
+    console.log('🎯 Audio context functions available:', { setCurrentStation: !!setCurrentStation, togglePlay: !!togglePlay });
     
-    if (currentStation?.id !== station.id) {
-      console.log('🎯 Setting new station:', station);
-      setCurrentStation(station);
+    try {
+      if (currentStation?.id !== station.id) {
+        console.log('🎯 Setting new station:', station);
+        setCurrentStation(station);
+      }
+      console.log('🎯 About to call togglePlay');
+      togglePlay();
+      console.log('🎯 togglePlay completed');
+    } catch (error) {
+      console.error('🎯 Error in handlePlay:', error);
     }
-    console.log('🎯 Calling togglePlay');
-    togglePlay();
   };
 
   // Audio visualization bars
@@ -228,10 +234,7 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
             <div className="flex items-center gap-4 mb-6">
               <Button
                 size="lg"
-                onClick={() => {
-                  alert('Button clicked!');
-                  handlePlay();
-                }}
+                onClick={handlePlay}
                 className="bg-gradient-primary hover:bg-gradient-primary/90 text-white w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
               >
                 {isCurrentlyPlaying ? (
