@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Play, Pause, Volume2, VolumeX, ExternalLink } from "lucide-react";
+import { Station } from "@/types/station";
 
 interface AudioPlayerProps {
   title: string;
@@ -11,6 +12,7 @@ interface AudioPlayerProps {
   streamUrl: string;
   isLive?: boolean;
   coverImage?: string;
+  station?: Station; // Add station prop
   externalLinks?: {
     winamp?: string;
     vlc?: string;
@@ -24,6 +26,7 @@ const AudioPlayer = ({
   streamUrl, 
   isLive = false, 
   coverImage,
+  station: stationProp,
   externalLinks 
 }: AudioPlayerProps) => {
   // Use global audio context
@@ -38,8 +41,8 @@ const AudioPlayer = ({
     setCurrentStation 
   } = useAudio();
   
-  // Create a station object for this player
-  const station = {
+  // Use the station prop if provided, otherwise create one
+  const station = stationProp || {
     id: streamUrl.includes('djgadaffiandfriends') ? 'primal-radio' : 'primal-radio-2',
     name: title,
     type: 'radio' as const,
@@ -48,10 +51,10 @@ const AudioPlayer = ({
     currentTrack: description
   };
 
-  // Set this as current station when component mounts
+  // Set this as current station when component mounts or station changes
   useEffect(() => {
     setCurrentStation(station);
-  }, [title, streamUrl]);
+  }, [station?.id, title, streamUrl]);
 
   const isCurrentlyPlaying = currentStation?.id === station.id && isPlaying;
 
