@@ -218,12 +218,26 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
               )}
             </div>
 
+            {/* Debug: Move button to top */}
+            <div className="mb-4">
+              <button
+                onClick={() => {
+                  console.log('🔥 MOVED BUTTON CLICK');
+                  handlePlay();
+                }}
+                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+              >
+                TEST PLAY BUTTON HERE
+              </button>
+            </div>
+
             {/* Main Controls */}
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center gap-4 mb-6" style={{ pointerEvents: 'none' }}>
               {/* Test Button */}
               <button 
                 onClick={() => alert('Test button works!')}
                 className="bg-red-500 text-white px-2 py-1 text-xs rounded"
+                style={{ pointerEvents: 'auto' }}
               >
                 TEST
               </button>
@@ -234,6 +248,7 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
                   handlePlay();
                 }}
                 className="bg-blue-500 hover:bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center"
+                style={{ pointerEvents: 'auto' }}
               >
                 {isCurrentlyPlaying ? (
                   <Pause className="w-6 h-6" />
