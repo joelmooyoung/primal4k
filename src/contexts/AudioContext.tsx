@@ -69,14 +69,19 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   }, [volume]);
 
   const getStreamUrl = (station: Station): string => {
+    console.log('🎵 getStreamUrl called with station:', station);
     switch (station.id) {
       case 'primal-radio':
+        console.log('🎵 Returning Primal Radio URL');
         return 'https://fast.citrus3.com:2020/stream/djgadaffiandfriends';
       case 'primal-radio-2':
+        console.log('🎵 Returning Primal Radio 2 URL');
         return 'https://s1.citrus3.com:2000/AudioPlayer/primal4k?mount=&';
       case 'twitch-stream':
+        console.log('🎵 Returning Twitch URL');
         return 'https://twitch.tv/primalradio';
       default:
+        console.log('🎵 Using default Primal Radio URL for unknown station:', station.id);
         return 'https://fast.citrus3.com:2020/stream/djgadaffiandfriends';
     }
   };
