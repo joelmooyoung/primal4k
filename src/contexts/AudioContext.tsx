@@ -70,6 +70,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
 
   const getStreamUrl = (station: Station): string => {
     console.log('🎵 getStreamUrl called with station:', station);
+    console.log('🎵 Call stack:', new Error().stack);
     switch (station.id) {
       case 'primal-radio':
         console.log('🎵 Returning Primal Radio URL');
