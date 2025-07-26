@@ -34,6 +34,8 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
   // Always fetch metadata for the current station to show album art
   const { metadata } = useStreamMetadata(streamUrl);
 
+  console.log('🎯 AudioPlayerIntegrated render - station:', station.id);
+  console.log('🎯 AudioPlayerIntegrated render - streamUrl:', streamUrl);
   console.log('🎯 AudioPlayerIntegrated render - metadata:', metadata);
 
   // Switch station when prop changes, but don't auto-play

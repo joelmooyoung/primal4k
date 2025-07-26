@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useAudio } from "@/contexts/AudioContext";
+import { useStreamMetadata } from "@/hooks/useStreamMetadata";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
@@ -63,6 +64,9 @@ const AudioPlayer = ({
 
   const isCurrentlyPlaying = currentStation?.id === station.id && isPlaying;
 
+  // Get metadata for this station
+  const { metadata } = useStreamMetadata(streamUrl);
+
   // Audio visualization bars
   const visualizerBars = Array.from({ length: 20 }, (_, i) => (
     <div
@@ -85,10 +89,11 @@ const AudioPlayer = ({
           {/* Cover Image & Visualizer */}
           <div className="flex-shrink-0">
             <div className="relative w-full lg:w-64 h-64 rounded-lg overflow-hidden bg-gradient-primary/20">
-              {coverImage ? (
+              {/* Use metadata cover art or fallback to prop */}
+              {(metadata?.currentTrack?.albumArt || coverImage) ? (
                 <img 
-                  src={coverImage} 
-                  alt={title}
+                  src={metadata?.currentTrack?.albumArt || coverImage} 
+                  alt={metadata?.currentTrack ? `${metadata.currentTrack.artist} - ${metadata.currentTrack.title}` : title}
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -110,8 +115,23 @@ const AudioPlayer = ({
           {/* Player Controls */}
           <div className="flex-1">
             <div className="mb-4">
-              <h3 className="text-xl font-bold mb-1">{title}</h3>
-              <p className="text-muted-foreground">{description}</p>
+              <h3 className="text-xl font-bold mb-1">
+                {metadata?.currentTrack?.title || title}
+              </h3>
+              <p className="text-muted-foreground">
+                {metadata?.currentTrack?.artist || description}
+              </p>
+              {metadata?.currentTrack?.album && (
+                <p className="text-sm text-muted-foreground/70">
+                  {metadata.currentTrack.album}
+                </p>
+              )}
+              {isLive && (
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="w-2 h-2 bg-destructive rounded-full animate-pulse"></div>
+                  <span className="text-sm text-destructive font-medium">LIVE</span>
+                </div>
+              )}
             </div>
 
             {/* Main Controls */}
@@ -197,6 +217,24 @@ const AudioPlayer = ({
                       iTunes
                     </a>
                   </Button>
+                )}
+              </div>
+            )}
+            
+            {/* Stream Info */}
+            {metadata && (
+              <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                {metadata.listeners && (
+                  <div className="flex items-center gap-1">
+                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    {metadata.listeners} listeners
+                  </div>
+                )}
+                {metadata.bitrate && (
+                  <div>{metadata.bitrate}</div>
+                )}
+                {metadata.format && (
+                  <div>{metadata.format}</div>
                 )}
               </div>
             )}
