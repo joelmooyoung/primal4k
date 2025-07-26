@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import StationSelector from "@/components/StationSelector";
-import AudioPlayer from "@/components/AudioPlayer";
+import AudioPlayerIntegrated from "@/components/AudioPlayerIntegrated";
 import DJCarousel from "@/components/DJCarousel";
 import EventsCarousel from "@/components/EventsCarousel";
 import ChatRoom from "@/components/ChatRoom";
@@ -11,25 +11,16 @@ import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Music, Calendar, Users } from "lucide-react";
-
-interface Station {
-  id: string;
-  name: string;
-  type: 'radio' | 'radio2' | 'livestream';
-  icon: React.ElementType;
-  isLive: boolean;
-  currentTrack?: string;
-  
-}
+import { Station } from "@/types/station";
 
 const Index = () => {
   const [selectedStation, setSelectedStation] = useState<Station>({
-    id: 'radio',
-    name: 'Radio 1',
+    id: 'primal-radio',
+    name: 'Primal Radio',
     type: 'radio',
-    icon: Music,
+    icon: 'music',
     isLive: true,
-    currentTrack: 'Taking over the World - JA male accent'
+    currentTrack: 'Live Stream'
   });
 
   const getStreamUrl = (stationId: string) => {
@@ -92,16 +83,10 @@ const Index = () => {
 
         {/* Audio Player / Twitch Toggle */}
         <section className="mb-12 animate-fade-in-up">
-          {selectedStation.type === 'livestream' ? (
+          {selectedStation.type === 'twitch' ? (
             <TwitchEmbed />
           ) : (
-            <AudioPlayer
-              title={selectedStation.id === 'radio' ? '' : selectedStation.name}
-              description={selectedStation.id === 'radio' ? '' : (selectedStation.currentTrack || "No track info available")}
-              streamUrl={getStreamUrl(selectedStation.id)}
-              isLive={selectedStation.isLive}
-              externalLinks={getExternalLinks(selectedStation.id)}
-            />
+            <AudioPlayerIntegrated station={selectedStation} />
           )}
         </section>
 

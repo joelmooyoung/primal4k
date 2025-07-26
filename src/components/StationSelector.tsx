@@ -3,16 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Radio, Tv, Music } from "lucide-react";
-
-interface Station {
-  id: string;
-  name: string;
-  type: 'radio' | 'radio2' | 'livestream';
-  icon: React.ElementType;
-  isLive: boolean;
-  currentTrack?: string;
-  
-}
+import { Station } from "@/types/station";
 
 interface StationSelectorProps {
   onStationChange: (station: Station) => void;
@@ -21,31 +12,28 @@ interface StationSelectorProps {
 const StationSelector = ({ onStationChange }: StationSelectorProps) => {
   const stations: Station[] = [
     {
-      id: 'radio',
-      name: 'Radio 1',
+      id: 'primal-radio',
+      name: 'Primal Radio',
       type: 'radio',
-      icon: Radio,
+      icon: 'radio',
       isLive: true,
-      currentTrack: 'Primal4K - Live',
-      
+      currentTrack: 'Live Stream'
     },
     {
-      id: 'backup',
-      name: 'Radio 2',
-      type: 'radio2',
-      icon: Music,
-      isLive: true,
-      currentTrack: 'Primal Media Group',
-      
-    },
-    {
-      id: 'livestream',
-      name: 'Livestream',
-      type: 'livestream',
-      icon: Tv,
+      id: 'dj-live',
+      name: 'DJ Live',
+      type: 'radio',
+      icon: 'music',
       isLive: false,
-      currentTrack: 'Primal4k',
-      
+      currentTrack: 'DJ Sessions'
+    },
+    {
+      id: 'twitch-stream',
+      name: 'Live on Twitch',
+      type: 'twitch',
+      icon: 'tv',
+      isLive: true,
+      currentTrack: 'Live Stream'
     }
   ];
 
@@ -73,8 +61,12 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
           >
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <station.icon className="w-5 h-5" />
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-primary/10">
+                    {station.icon === 'radio' && <Radio className="w-6 h-6 text-primary" />}
+                    {station.icon === 'music' && <Music className="w-6 h-6 text-primary" />}
+                    {station.icon === 'tv' && <Tv className="w-6 h-6 text-primary" />}
+                  </div>
                   <h3 className="font-semibold">{station.name}</h3>
                 </div>
                 
