@@ -165,7 +165,7 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
                 />
               ) : (
                 <div 
-                  className="w-full h-full flex flex-col items-center justify-center gap-4 p-8 relative"
+                  className="w-full h-full flex flex-col items-center justify-center gap-4 p-8 relative overflow-hidden"
                   style={{
                     backgroundImage: `url('/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png')`,
                     backgroundSize: 'cover',
@@ -173,11 +173,11 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
                     backgroundRepeat: 'no-repeat'
                   }}
                 >
-                  {/* Dark overlay for better text readability */}
-                  <div className="absolute inset-0 bg-black/40 rounded-lg" />
+                  {/* Dark overlay for better text readability - ensure it doesn't interfere with other elements */}
+                  <div className="absolute inset-0 bg-black/40 pointer-events-none" />
                   
-                  {/* Content overlay */}
-                  <div className="relative z-10 flex flex-col items-center gap-4">
+                  {/* Content overlay - ensure it doesn't block interaction */}
+                  <div className="relative z-10 flex flex-col items-center gap-4 pointer-events-none">
                     <div className="text-center">
                       <h4 className="text-lg font-bold text-white drop-shadow-lg">Primal Radio</h4>
                       <p className="text-xs text-white/90 drop-shadow-md">...where it all starts</p>
