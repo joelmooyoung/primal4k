@@ -40,17 +40,29 @@ class MetadataService {
 
   private async fetchMetadata() {
     try {
-      // Try to fetch from Citrus3 JSON API endpoint
-      const response = await fetch(`${CITRUS3_CONFIG.baseUrl}/stats?json=1&mount=${CITRUS3_CONFIG.stationName}`);
-      if (response.ok) {
-        const data = await response.json();
-        this.currentMetadata = this.parseCitrus3Data(data);
-      } else {
-        // Fallback to basic metadata
-        this.currentMetadata = this.getBasicMetadata();
+      console.log('🎵 MetadataService: Attempting to fetch metadata...');
+      // Try alternative endpoints for Citrus3
+      const endpoints = [
+        `${CITRUS3_CONFIG.baseUrl}/stats?json=1&mount=${CITRUS3_CONFIG.stationName}`,
+        `${CITRUS3_CONFIG.baseUrl}/json.xsl?mount=/${CITRUS3_CONFIG.stationName}`,
+        `${CITRUS3_CONFIG.baseUrl}/status-json.xsl`
+      ];
+      
+      for (const endpoint of endpoints) {
+        try {
+          console.log('🎵 MetadataService: Trying endpoint:', endpoint);
+          const response = await fetch(endpoint, { mode: 'no-cors' });
+          console.log('🎵 MetadataService: Response status:', response.status);
+          break; // If we get here, at least the request didn't fail immediately
+        } catch (err) {
+          console.log('🎵 MetadataService: Endpoint failed:', endpoint, err);
+        }
       }
+      
+      // For now, use basic metadata since CORS is blocking the API
+      this.currentMetadata = this.getBasicMetadata();
     } catch (error) {
-      console.log('Using basic metadata due to fetch error:', error);
+      console.log('🎵 MetadataService: Using basic metadata due to fetch error:', error);
       this.currentMetadata = this.getBasicMetadata();
     }
     

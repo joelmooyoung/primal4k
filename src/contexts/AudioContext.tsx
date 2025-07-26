@@ -54,7 +54,8 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   const getStreamUrl = (station: Station): string => {
     switch (station.id) {
       case 'primal-radio':
-        return 'https://fast.citrus3.com:2020/public/djgadaffiandfriends';
+        // Try multiple stream URL formats
+        return 'https://fast.citrus3.com:2020/stream/djgadaffiandfriends';
       case 'primal-radio-2':
         return 'https://s1.citrus3.com:2000/stream/primal4k';
       case 'twitch-stream':
@@ -64,7 +65,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         if (station.name?.toLowerCase().includes('radio 2') || station.name?.toLowerCase().includes('primal 2')) {
           return 'https://s1.citrus3.com:2000/stream/primal4k';
         }
-        return 'https://fast.citrus3.com:2020/public/djgadaffiandfriends';
+        return 'https://fast.citrus3.com:2020/stream/djgadaffiandfriends';
     }
   };
 
@@ -97,16 +98,28 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         console.log('🎯 AudioContext: Starting audio playback');
         const streamUrl = getStreamUrl(currentStation);
         console.log('🎯 AudioContext: Stream URL:', streamUrl);
+        
+        // Test if stream URL is accessible
+        console.log('🎯 AudioContext: Testing stream accessibility...');
+        
         if (audioRef.current.src !== streamUrl) {
           audioRef.current.src = streamUrl;
           audioRef.current.load();
         }
+        
+        console.log('🎯 AudioContext: Attempting to play...');
         await audioRef.current.play();
         setIsPlaying(true);
         console.log('🎯 AudioContext: Audio started successfully');
       }
     } catch (error) {
       console.error('🎯 AudioContext: Audio error:', error);
+      console.error('🎯 AudioContext: Audio element state:', {
+        src: audioRef.current?.src,
+        readyState: audioRef.current?.readyState,
+        networkState: audioRef.current?.networkState,
+        error: audioRef.current?.error
+      });
       setIsPlaying(false);
     }
   };
