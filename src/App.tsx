@@ -25,7 +25,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <AudioProvider>
+        <AudioProvider key="persistent-audio">
           <Toaster />
           <Sonner />
           <BrowserRouter>

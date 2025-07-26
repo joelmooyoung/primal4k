@@ -30,9 +30,30 @@ interface AudioProviderProps {
 }
 
 export const AudioProvider = ({ children }: AudioProviderProps) => {
-  const [currentStation, setCurrentStation] = useState<Station | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(80);
+  // Initialize state from localStorage to persist across re-renders
+  const [currentStation, setCurrentStation] = useState<Station | null>(() => {
+    try {
+      const saved = localStorage.getItem('currentStation');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [isPlaying, setIsPlaying] = useState(() => {
+    try {
+      return localStorage.getItem('isPlaying') === 'true';
+    } catch {
+      return false;
+    }
+  });
+  const [volume, setVolume] = useState(() => {
+    try {
+      const saved = localStorage.getItem('volume');
+      return saved ? parseInt(saved, 10) : 80;
+    } catch {
+      return 80;
+    }
+  });
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -83,10 +104,12 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         console.log('Pausing audio');
         audioRef.current.pause();
         setIsPlaying(false);
+        localStorage.setItem('isPlaying', 'false');
       } else {
         console.log('Playing audio, src:', audioRef.current.src);
         await audioRef.current.play();
         setIsPlaying(true);
+        localStorage.setItem('isPlaying', 'true');
       }
     } catch (error) {
       console.error('Error playing audio:', error);
@@ -102,6 +125,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
 
   const handleVolumeChange = (newVolume: number) => {
     setVolume(newVolume);
+    localStorage.setItem('volume', newVolume.toString());
     if (audioRef.current) {
       audioRef.current.volume = newVolume / 100;
     }
@@ -109,13 +133,15 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
 
   const handleStationChange = (station: Station | null) => {
     console.log('🔄 handleStationChange called with station:', station, 'current isPlaying:', isPlaying);
-    console.trace('Station change call stack'); // This will show us exactly where the call came from
+    console.trace('Station change call stack');
     if (audioRef.current && isPlaying) {
       console.log('Pausing current audio before station change');
       audioRef.current.pause();
       setIsPlaying(false);
+      localStorage.setItem('isPlaying', 'false');
     }
     setCurrentStation(station);
+    localStorage.setItem('currentStation', JSON.stringify(station));
   };
 
   useEffect(() => {
