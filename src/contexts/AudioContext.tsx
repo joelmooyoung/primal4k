@@ -107,6 +107,8 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   };
 
   const handleStationChange = (station: Station | null) => {
+    console.log('🚨 AudioContext: handleStationChange called with station:', station);
+    console.trace('🚨 AudioContext: Call stack for station change:');
     // Clear any pending switch
     if (switchTimeoutRef.current) {
       clearTimeout(switchTimeoutRef.current);
