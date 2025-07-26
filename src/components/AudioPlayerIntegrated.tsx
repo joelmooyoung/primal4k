@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useAudio } from '@/contexts/AudioContext';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -29,6 +30,15 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
   const streamUrl = getStreamUrl(station);
   const externalLinks = getExternalLinks(station);
   const { metadata } = useStreamMetadata(streamUrl);
+
+  // Update AudioContext when station prop changes
+  useEffect(() => {
+    console.log('🎯 AudioPlayerIntegrated: station prop changed to:', station);
+    if (station && station.id !== currentStation?.id) {
+      console.log('🎯 AudioPlayerIntegrated: updating AudioContext currentStation');
+      setCurrentStation(station);
+    }
+  }, [station, currentStation?.id, setCurrentStation]);
 
   const handlePlay = () => {
     console.log('🎯 AudioPlayerIntegrated handlePlay called');
