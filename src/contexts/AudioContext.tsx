@@ -201,7 +201,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
     }
   };
 
-  const handleStationChange = (station: Station | null) => {
+  const handleStationChange = async (station: Station | null) => {
     console.log('🔄 handleStationChange called with station:', station, 'current isPlaying:', isPlaying);
     
     // Stop current audio and reset state completely when changing stations
@@ -211,6 +211,9 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       audioRef.current.src = '';
       audioRef.current.removeAttribute('src'); // Ensure src is completely removed
       audioRef.current.load(); // Reset the audio element
+      
+      // Add a small delay to ensure proper cleanup
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
     
     // Always reset playing state when changing stations
