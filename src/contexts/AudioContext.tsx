@@ -60,6 +60,10 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       case 'twitch-stream':
         return 'https://twitch.tv/primalradio';
       default:
+        // Fallback: try to detect from station name or use default
+        if (station.name?.toLowerCase().includes('radio 2') || station.name?.toLowerCase().includes('primal 2')) {
+          return 'https://s1.citrus3.com:2000/stream/primal4k';
+        }
         return 'https://fast.citrus3.com:2020/stream/djgadaffiandfriends';
     }
   };
