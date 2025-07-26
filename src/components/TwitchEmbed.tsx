@@ -30,6 +30,15 @@ const TwitchEmbed = () => {
     document.head.appendChild(script);
 
     return () => {
+      // Clean up Twitch player when component unmounts
+      if (window.twitchPlayer) {
+        try {
+          window.twitchPlayer.destroy();
+          window.twitchPlayer = null;
+        } catch (error) {
+          console.log('Error destroying Twitch player:', error);
+        }
+      }
       document.head.removeChild(script);
     };
   }, []);
@@ -37,11 +46,23 @@ const TwitchEmbed = () => {
   const initializeTwitchPlayer = () => {
     if (window.Twitch && !window.twitchPlayer) {
       try {
+        const hostname = window.location.hostname;
+        const parentDomains = [
+          hostname,
+          'localhost',
+          '93d33477-c474-4a2d-8760-2925f3e19bcc.lovableproject.com'
+        ];
+        
+        // Add lovableproject.com for any Lovable preview
+        if (hostname.includes('lovableproject.com')) {
+          parentDomains.push('lovableproject.com');
+        }
+        
         const options = {
           width: '100%',
           height: '100%',
           channel: twitchChannel,
-          parent: [window.location.hostname, 'localhost', '93d33477-c474-4a2d-8760-2925f3e19bcc.lovableproject.com']
+          parent: parentDomains
         };
 
         // Use the container div directly as the player target
