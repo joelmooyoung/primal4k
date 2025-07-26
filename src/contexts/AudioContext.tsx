@@ -72,8 +72,8 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
     switch (station.id) {
       case 'primal-radio':
         return 'https://fast.citrus3.com:2020/stream/djgadaffiandfriends';
-      case 'dj-live':
-        return 'https://s1.citrus3.com:2000/stream/primal4k';
+      case 'primal-radio-2':
+        return 'https://s1.citrus3.com:2000/AudioPlayer/primal4k?mount=&';
       case 'twitch-stream':
         return 'https://twitch.tv/primalradio';
       default:
@@ -87,7 +87,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
     // Use the .pls playlist files for external players
     const playlistUrls = {
       'primal-radio': 'https://fast.citrus3.com:2020/tunein/djgadaffiandfriends/stream/pls',
-      'dj-live': 'https://s1.citrus3.com:2000/tunein/primal4k/stream/pls'
+      'primal-radio-2': 'https://s1.citrus3.com:2000/tunein/primal4k/stream/pls'
     };
     
     const playlistUrl = playlistUrls[station.id as keyof typeof playlistUrls] || playlistUrls['primal-radio'];

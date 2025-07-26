@@ -20,16 +20,16 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
       currentTrack: 'Live Stream'
     },
     {
-      id: 'dj-live',
-      name: 'DJ Live',
+      id: 'primal-radio-2',
+      name: 'Primal Radio 2',
       type: 'radio',
       icon: 'music',
-      isLive: false,
-      currentTrack: 'DJ Sessions'
+      isLive: true,
+      currentTrack: 'Live Stream'
     },
     {
       id: 'twitch-stream',
-      name: 'Live on Twitch',
+      name: 'LiveStream',
       type: 'twitch',
       icon: 'tv',
       isLive: true,
