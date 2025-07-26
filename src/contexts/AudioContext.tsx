@@ -203,39 +203,23 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
 
   const handleStationChange = async (station: Station | null) => {
     console.log('🔄 [SWITCH START] handleStationChange called with station:', station?.name, 'current isPlaying:', isPlaying);
-    console.log('🔄 [SWITCH START] audioRef.current exists:', !!audioRef.current);
-    console.log('🔄 [SWITCH START] audioRef.current src:', audioRef.current?.src);
-    console.log('🔄 [SWITCH START] audioRef.current paused:', audioRef.current?.paused);
     
-    // Stop current audio completely before switching
-    if (audioRef.current) {
-      console.log('🛑 [CLEANUP] Starting audio cleanup');
-      console.log('🛑 [CLEANUP] Before pause - readyState:', audioRef.current.readyState);
-      
-      audioRef.current.pause();
-      console.log('🛑 [CLEANUP] Audio paused');
-      
-      audioRef.current.currentTime = 0;
-      console.log('🛑 [CLEANUP] Current time reset');
-      
-      audioRef.current.src = '';
-      console.log('🛑 [CLEANUP] Source cleared');
-      
-      audioRef.current.removeAttribute('src');
-      console.log('🛑 [CLEANUP] Source attribute removed');
-      
-      audioRef.current.load();
-      console.log('🛑 [CLEANUP] Audio element loaded/reset');
-      
-      console.log('🛑 [CLEANUP] Waiting 100ms for cleanup...');
-      await new Promise(resolve => setTimeout(resolve, 100));
-      console.log('🛑 [CLEANUP] Cleanup complete');
-    }
-    
-    // Always reset playing state when changing stations
-    console.log('🔄 [STATE] Setting isPlaying to false');
+    // Immediately stop playing state to prevent conflicts
     setIsPlaying(false);
     localStorage.setItem('isPlaying', 'false');
+    
+    // Stop current audio and wait for complete cleanup
+    if (audioRef.current) {
+      console.log('🛑 [CLEANUP] Stopping current audio');
+      
+      // Force immediate stop
+      audioRef.current.pause();
+      audioRef.current.src = '';
+      audioRef.current.load();
+      
+      // Wait longer for browser to fully release the stream
+      await new Promise(resolve => setTimeout(resolve, 300));
+    }
     
     console.log('🔄 [STATE] Setting new station:', station?.name);
     setCurrentStation(station);
