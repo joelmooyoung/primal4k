@@ -24,16 +24,20 @@ const Index = () => {
   });
 
   const getStreamUrl = (stationId: string) => {
+    console.log('🎯 getStreamUrl called with stationId:', stationId);
     const streamUrls = {
-      'radio': 'https://fast.citrus3.com:2020/AudioPlayer/djgadaffiandfriends?mount=&',
-      'backup': 'https://s1.citrus3.com:2000/AudioPlayer/primal4k?mount=&',
-      'livestream': '' // Twitch uses iframe embed
+      'primal-radio': 'https://fast.citrus3.com:2020/AudioPlayer/djgadaffiandfriends?mount=&',
+      'primal-radio-2': 'https://s1.citrus3.com:2000/AudioPlayer/primal4k?mount=&',
+      'twitch-stream': '' // Twitch uses iframe embed
     };
-    return streamUrls[stationId as keyof typeof streamUrls] || streamUrls.radio;
+    const url = streamUrls[stationId as keyof typeof streamUrls] || streamUrls['primal-radio'];
+    console.log('🎯 Returning streamUrl:', url);
+    return url;
   };
 
   const getExternalLinks = (stationId: string) => {
-    if (stationId === 'radio') {
+    console.log('🎯 getExternalLinks called with stationId:', stationId);
+    if (stationId === 'primal-radio') {
       return {
         winamp: 'https://fast.citrus3.com:2020/tunein/djgadaffiandfriends/stream/pls',
         vlc: 'https://fast.citrus3.com:2020/tunein/djgadaffiandfriends/stream/pls',
