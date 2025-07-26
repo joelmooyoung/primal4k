@@ -204,8 +204,8 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       }}
     >
       {children}
-      {/* Global audio element - only create when actively playing to avoid CORS errors */}
-      {currentStation && isPlaying && (
+      {/* Global audio element - always create when station selected, but don't load source until playing */}
+      {currentStation && (
         <audio
           ref={audioRef}
           crossOrigin="anonymous"
