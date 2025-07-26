@@ -2,9 +2,12 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Music, Radio, MessageCircle, Calendar, Menu, X } from "lucide-react";
 import PrimalText3D from "@/components/PrimalText3D";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const navItems = [
     { icon: Radio, label: "Radio", href: "#radio" },
@@ -21,7 +24,7 @@ const Navigation = () => {
           {/* Logo */}
           <div 
             className="flex items-center space-x-2 cursor-pointer" 
-            onClick={() => window.location.href = '/'}
+            onClick={() => navigate('/')}
           >
             <img 
               src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" 
@@ -48,9 +51,13 @@ const Navigation = () => {
                 className="text-foreground hover:text-primary hover:bg-primary/10"
                 onClick={() => {
                   if (item.href.startsWith('/')) {
-                    window.location.href = item.href;
-                  } else {
+                    navigate(item.href);
+                  } else if (location.pathname === '/') {
+                    // Only scroll to section if we're on the home page
                     document.querySelector(item.href)?.scrollIntoView({ behavior: 'smooth' });
+                  } else {
+                    // Navigate to home page first, then scroll to section
+                    navigate('/' + item.href);
                   }
                 }}
               >
@@ -82,9 +89,13 @@ const Navigation = () => {
                   className="justify-start text-foreground hover:text-primary hover:bg-primary/10"
                   onClick={() => {
                     if (item.href.startsWith('/')) {
-                      window.location.href = item.href;
-                    } else {
+                      navigate(item.href);
+                    } else if (location.pathname === '/') {
+                      // Only scroll to section if we're on the home page
                       document.querySelector(item.href)?.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      // Navigate to home page first, then scroll to section
+                      navigate('/' + item.href);
                     }
                     setIsOpen(false);
                   }}

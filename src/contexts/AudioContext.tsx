@@ -111,6 +111,12 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         console.log('🔇 Set isPlaying to false in localStorage');
       } else {
         console.log('🔊 Playing audio, src:', audioRef.current.src);
+        // Ensure the audio source is set correctly
+        const streamUrl = getStreamUrl(currentStation);
+        if (audioRef.current.src !== streamUrl) {
+          audioRef.current.src = streamUrl;
+          audioRef.current.load();
+        }
         await audioRef.current.play();
         setIsPlaying(true);
         localStorage.setItem('isPlaying', 'true');
@@ -118,6 +124,8 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       }
     } catch (error) {
       console.error('Error playing audio:', error);
+      setIsPlaying(false);
+      localStorage.setItem('isPlaying', 'false');
     }
   };
 
