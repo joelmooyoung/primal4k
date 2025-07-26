@@ -151,8 +151,18 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       console.log('Setting audio src to:', streamUrl);
       audioRef.current.src = streamUrl;
       audioRef.current.load();
+      
+      // If state says we should be playing, actually start playing
+      if (isPlaying) {
+        console.log('Resuming audio playback after navigation');
+        audioRef.current.play().catch(error => {
+          console.error('Failed to resume audio:', error);
+          setIsPlaying(false);
+          localStorage.setItem('isPlaying', 'false');
+        });
+      }
     }
-  }, [currentStation]);
+  }, [currentStation, isPlaying]);
 
   return (
     <AudioContext.Provider
