@@ -32,18 +32,31 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
 
   const handlePlay = () => {
     console.log('🎯 AudioPlayerIntegrated handlePlay called');
-    console.log('🎯 Current station:', currentStation?.id, 'Target station:', station.id);
+    console.log('🎯 Station prop:', station);
+    console.log('🎯 Station prop keys:', station ? Object.keys(station) : 'station is null');
+    console.log('🎯 Current station:', currentStation?.id, 'Target station:', station?.id);
     console.log('🎯 Is playing:', isPlaying);
     console.log('🎯 Audio context functions available:', { setCurrentStation: !!setCurrentStation, togglePlay: !!togglePlay });
     
     try {
+      if (!station) {
+        console.error('🎯 ERROR: station prop is null/undefined!');
+        return;
+      }
+      
       if (currentStation?.id !== station.id) {
         console.log('🎯 Setting new station:', station);
         setCurrentStation(station);
+        // Wait a bit for state to update then call togglePlay
+        setTimeout(() => {
+          console.log('🎯 About to call togglePlay after station change');
+          togglePlay();
+        }, 100);
+      } else {
+        console.log('🎯 Station already set, calling togglePlay directly');
+        togglePlay();
       }
-      console.log('🎯 About to call togglePlay');
-      togglePlay();
-      console.log('🎯 togglePlay completed');
+      console.log('🎯 handlePlay completed');
     } catch (error) {
       console.error('🎯 Error in handlePlay:', error);
     }
