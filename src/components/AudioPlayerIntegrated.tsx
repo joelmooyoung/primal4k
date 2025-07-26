@@ -228,7 +228,10 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
             <div className="flex items-center gap-4 mb-6">
               <Button
                 size="lg"
-                onClick={handlePlay}
+                onClick={() => {
+                  alert('Button clicked!');
+                  handlePlay();
+                }}
                 className="bg-gradient-primary hover:bg-gradient-primary/90 text-white w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
               >
                 {isCurrentlyPlaying ? (
