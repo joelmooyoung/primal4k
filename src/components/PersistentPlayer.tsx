@@ -9,12 +9,9 @@ const PersistentPlayer = () => {
   const { currentStation, isPlaying, volume, isMuted, togglePlay, setVolume, toggleMute, getExternalLinks } = useAudio();
   const [isMinimized, setIsMinimized] = useState(false);
 
-  if (!currentStation) return null;
+  console.log('PersistentPlayer render - currentStation:', currentStation, 'isPlaying:', isPlaying);
 
-  // For iframe-based players (citrus3.com), don't show persistent player
-  if (currentStation && currentStation.id === 'primal-radio') {
-    return null;
-  }
+  if (!currentStation) return null;
 
   if (isMinimized) {
     return (

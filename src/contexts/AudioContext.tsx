@@ -73,13 +73,16 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   };
 
   const togglePlay = async () => {
+    console.log('togglePlay called, audioRef.current:', audioRef.current, 'currentStation:', currentStation);
     if (!audioRef.current || !currentStation) return;
 
     try {
       if (isPlaying) {
+        console.log('Pausing audio');
         audioRef.current.pause();
         setIsPlaying(false);
       } else {
+        console.log('Playing audio, src:', audioRef.current.src);
         await audioRef.current.play();
         setIsPlaying(true);
       }
@@ -103,7 +106,9 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   };
 
   const handleStationChange = (station: Station | null) => {
+    console.log('handleStationChange called with station:', station, 'current isPlaying:', isPlaying);
     if (audioRef.current && isPlaying) {
+      console.log('Pausing current audio before station change');
       audioRef.current.pause();
       setIsPlaying(false);
     }
@@ -111,8 +116,10 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   };
 
   useEffect(() => {
+    console.log('useEffect: currentStation changed to:', currentStation);
     if (currentStation && audioRef.current) {
       const streamUrl = getStreamUrl(currentStation);
+      console.log('Setting audio src to:', streamUrl);
       audioRef.current.src = streamUrl;
       audioRef.current.load();
     }
