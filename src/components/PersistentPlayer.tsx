@@ -47,11 +47,15 @@ const PersistentPlayer = () => {
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3 flex-1 min-w-0">
-              {metadata?.albumArt ? (
+              {metadata?.albumArt && !metadata.useLogoFallback ? (
                 <img 
                   src={metadata.albumArt} 
                   alt="Album art"
                   className="w-10 h-10 rounded object-cover flex-shrink-0"
+                  onError={(e) => {
+                    // Fallback to logo if album art fails
+                    e.currentTarget.src = '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png';
+                  }}
                 />
               ) : (
                 <img 
