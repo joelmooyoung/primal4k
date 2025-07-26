@@ -177,17 +177,11 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
           {/* Album Art & Visualizer */}
           <div className="flex-shrink-0">
             <div className="relative w-full lg:w-64 h-64 rounded-lg overflow-hidden bg-gradient-primary/20">
-              {/* Always show album art with fallback */}
+              {/* Force album art to show */}
               <img 
-                src={metadata?.albumArt || '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'} 
-                alt={metadata?.title ? `${metadata.title} by ${metadata.artist}` : 'Primal Radio'}
+                src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"
+                alt="Primal Radio Album Art"
                 className="w-full h-full object-cover"
-                onError={(e) => {
-                  // If image fails to load, try the fallback
-                  if (e.currentTarget.src !== '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png') {
-                    e.currentTarget.src = '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png';
-                  }
-                }}
               />
               
               {/* Visualizer overlay when playing */}
