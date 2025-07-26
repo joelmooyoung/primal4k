@@ -41,7 +41,7 @@ const TwitchEmbed = () => {
           width: '100%',
           height: '100%',
           channel: twitchChannel,
-          parent: [window.location.hostname]
+          parent: [window.location.hostname, 'localhost', '93d33477-c474-4a2d-8760-2925f3e19bcc.lovableproject.com']
         };
 
         // Use the container div directly as the player target
