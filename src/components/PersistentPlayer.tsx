@@ -4,10 +4,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 import { Play, Pause, Volume2, VolumeX, ExternalLink, Minimize2 } from 'lucide-react';
 import { useState } from 'react';
+import { useStreamMetadata } from '@/hooks/useStreamMetadata';
 
 const PersistentPlayer = () => {
-  const { currentStation, isPlaying, volume, isMuted, togglePlay, setVolume, toggleMute, getExternalLinks } = useAudio();
+  const { currentStation, isPlaying, volume, isMuted, togglePlay, setVolume, toggleMute, getExternalLinks, getStreamUrl } = useAudio();
   const [isMinimized, setIsMinimized] = useState(false);
+  const { metadata } = useStreamMetadata(currentStation ? getStreamUrl(currentStation) : '');
 
   console.log('PersistentPlayer render - currentStation:', currentStation, 'isPlaying:', isPlaying);
 
@@ -37,19 +39,28 @@ const PersistentPlayer = () => {
       <Card className="bg-gradient-card border-border/50 shadow-xl">
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-3">
-            <div className="flex-1 min-w-0">
-              <h4 className="font-semibold text-sm truncate">{currentStation.name}</h4>
-              {currentStation.isLive && (
-                <div className="inline-flex bg-destructive text-destructive-foreground px-1.5 py-0.5 rounded text-xs font-semibold animate-pulse-glow">
-                  LIVE
-                </div>
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              {metadata?.albumArt && (
+                <img 
+                  src={metadata.albumArt} 
+                  alt="Album art"
+                  className="w-10 h-10 rounded object-cover flex-shrink-0"
+                />
               )}
+              <div className="flex-1 min-w-0">
+                <h4 className="font-semibold text-sm truncate">
+                  {metadata?.title || currentStation.name}
+                </h4>
+                <p className="text-xs text-muted-foreground truncate">
+                  {metadata?.artist || (currentStation.isLive ? 'LIVE' : 'Now Playing')}
+                </p>
+              </div>
             </div>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsMinimized(true)}
-              className="p-1 h-auto"
+              className="p-1 h-auto flex-shrink-0"
             >
               <Minimize2 className="w-4 h-4" />
             </Button>

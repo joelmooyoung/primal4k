@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Play, Pause, Volume2, VolumeX, ExternalLink } from "lucide-react";
+import { useStreamMetadata } from "@/hooks/useStreamMetadata";
 
 import { Station } from "@/types/station";
 
@@ -27,6 +28,7 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
   const isCurrentlyPlaying = currentStation?.id === station.id && isPlaying;
   const streamUrl = getStreamUrl(station);
   const externalLinks = getExternalLinks(station);
+  const { metadata } = useStreamMetadata(streamUrl);
 
   const handlePlay = () => {
     if (currentStation?.id !== station.id) {
@@ -142,14 +144,35 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
     <Card className="bg-gradient-card border-border/50 overflow-hidden">
       <CardContent className="p-6">
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Visualizer */}
+          {/* Album Art & Visualizer */}
           <div className="flex-shrink-0">
             <div className="relative w-full lg:w-64 h-64 rounded-lg overflow-hidden bg-gradient-primary/20">
-              <div className="w-full h-full flex items-center justify-center">
-                <div className="flex items-end space-x-1 h-20">
-                  {visualizerBars}
+              {metadata?.albumArt ? (
+                <img 
+                  src={metadata.albumArt} 
+                  alt={`${metadata.title} by ${metadata.artist}`}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // Fallback to visualizer if album art fails to load
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="flex items-end space-x-1 h-20">
+                    {visualizerBars}
+                  </div>
                 </div>
-              </div>
+              )}
+              
+              {/* Visualizer overlay when playing */}
+              {isCurrentlyPlaying && metadata?.albumArt && (
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-4">
+                  <div className="flex items-end space-x-1 h-12 opacity-80">
+                    {visualizerBars.slice(0, 10)}
+                  </div>
+                </div>
+              )}
               
               {station.isLive && (
                 <div className="absolute top-2 right-2 bg-destructive text-destructive-foreground px-2 py-1 rounded text-xs font-semibold animate-pulse">
@@ -162,8 +185,17 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
           {/* Player Controls */}
           <div className="flex-1">
             <div className="mb-4">
-              <h3 className="text-xl font-bold mb-1">{station.name}</h3>
-              <p className="text-muted-foreground">{station.currentTrack || 'Now Playing'}</p>
+              <h3 className="text-xl font-bold mb-1">
+                {metadata?.title || station.name}
+              </h3>
+              <p className="text-muted-foreground">
+                {metadata?.artist || station.currentTrack || 'Now Playing'}
+              </p>
+              {metadata?.album && (
+                <p className="text-sm text-muted-foreground/70">
+                  {metadata.album}
+                </p>
+              )}
             </div>
 
             {/* Main Controls */}
