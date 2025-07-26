@@ -78,7 +78,10 @@ const Index = () => {
 
         {/* Station Selection */}
         <section id="radio" className="mb-12 animate-fade-in-up">
-          <StationSelector onStationChange={setSelectedStation} />
+          <StationSelector onStationChange={(station) => {
+            console.log('🎯 Index: Station changed to:', station);
+            setSelectedStation(station);
+          }} />
         </section>
 
         {/* Audio Player / Twitch Toggle */}
