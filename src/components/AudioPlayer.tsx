@@ -221,23 +221,6 @@ const AudioPlayer = ({
               </div>
             )}
             
-            {/* Stream Info */}
-            {metadata && (
-              <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                {metadata.listeners && (
-                  <div className="flex items-center gap-1">
-                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                    {metadata.listeners} listeners
-                  </div>
-                )}
-                {metadata.bitrate && (
-                  <div>{metadata.bitrate}</div>
-                )}
-                {metadata.format && (
-                  <div>{metadata.format}</div>
-                )}
-              </div>
-            )}
           </div>
         </div>
       </CardContent>
