@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import StationSelector from "@/components/StationSelector";
-import AudioPlayerIntegrated from "@/components/AudioPlayerIntegrated";
+import AudioPlayer from "@/components/AudioPlayer";
 import DJCarousel from "@/components/DJCarousel";
 import EventsCarousel from "@/components/EventsCarousel";
 import ChatRoom from "@/components/ChatRoom";
@@ -86,7 +86,14 @@ const Index = () => {
           {selectedStation.type === 'twitch' ? (
             <TwitchEmbed />
           ) : (
-            <AudioPlayerIntegrated station={selectedStation} />
+            <AudioPlayer 
+              title={selectedStation.name}
+              description={selectedStation.currentTrack || "Now Playing"}
+              streamUrl={getStreamUrl(selectedStation.id)}
+              isLive={selectedStation.isLive}
+              coverImage="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"
+              externalLinks={getExternalLinks(selectedStation.id)}
+            />
           )}
         </section>
 
