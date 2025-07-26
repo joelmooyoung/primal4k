@@ -73,8 +73,85 @@ const AudioPlayer = ({
     />
   ));
 
-  // Don't use iframe approach - always use the global audio context
-  // This ensures compatibility with persistent player and navigation
+  // For the main radio stream, use iframe approach since it's a web player
+  if (streamUrl.includes('citrus3.com')) {
+    return (
+      <Card className="bg-gradient-card border-border/50 overflow-hidden">
+        <CardContent className="p-6">
+          <div className="flex flex-col gap-6">
+            {/* Header with title and description */}
+            <div className="text-center">
+              <h3 className="text-xl font-bold mb-1">{title}</h3>
+              <p className="text-muted-foreground">{description}</p>
+              {isLive && (
+                <div className="inline-flex bg-destructive text-destructive-foreground px-2 py-1 rounded text-xs font-semibold animate-pulse-glow mt-2">
+                  LIVE
+                </div>
+              )}
+            </div>
+
+            {/* Embedded Radio Player */}
+            <div className="w-full h-64 rounded-lg overflow-hidden">
+              <iframe 
+                src={streamUrl}
+                className="w-full h-full border-0"
+                title={title}
+                allow="autoplay"
+              />
+            </div>
+
+            {/* External Player Links */}
+            {externalLinks && (
+              <div className="flex flex-wrap gap-2 justify-center">
+                <span className="text-sm text-muted-foreground">Open in:</span>
+                {externalLinks.winamp && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    asChild
+                    className="h-8"
+                  >
+                    <a href={externalLinks.winamp} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="w-3 h-3 mr-1" />
+                      Winamp
+                    </a>
+                  </Button>
+                )}
+                {externalLinks.vlc && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    asChild
+                    className="h-8"
+                  >
+                    <a href={externalLinks.vlc} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="w-3 h-3 mr-1" />
+                      VLC
+                    </a>
+                  </Button>
+                )}
+                {externalLinks.itunes && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    asChild
+                    className="h-8"
+                  >
+                    <a href={externalLinks.itunes} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="w-3 h-3 mr-1" />
+                      iTunes
+                    </a>
+                  </Button>
+                )}
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // For other streams, use the HTML5 audio approach
   return (
     <Card className="bg-gradient-card border-border/50 overflow-hidden">
       <CardContent className="p-6">
