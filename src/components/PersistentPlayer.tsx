@@ -20,12 +20,19 @@ const PersistentPlayer = () => {
       <div className="fixed bottom-4 right-4 z-50">
         <Button
           onClick={() => setIsMinimized(false)}
-          className="bg-gradient-primary hover:bg-gradient-primary/90 text-white rounded-full w-14 h-14 shadow-lg"
+          className="bg-gradient-primary hover:bg-gradient-primary/90 text-white rounded-full w-14 h-14 shadow-lg relative overflow-hidden"
         >
+          {/* Logo background */}
+          <img 
+            src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" 
+            alt="Primal Radio Logo"
+            className="absolute inset-1 w-12 h-12 rounded-full object-cover opacity-30"
+          />
+          {/* Play/Pause icon overlay */}
           {isPlaying ? (
-            <Pause className="w-6 h-6" />
+            <Pause className="w-6 h-6 relative z-10" />
           ) : (
-            <Play className="w-6 h-6 ml-1" />
+            <Play className="w-6 h-6 ml-1 relative z-10" />
           )}
         </Button>
       </div>
@@ -40,10 +47,16 @@ const PersistentPlayer = () => {
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3 flex-1 min-w-0">
-              {metadata?.albumArt && (
+              {metadata?.albumArt ? (
                 <img 
                   src={metadata.albumArt} 
                   alt="Album art"
+                  className="w-10 h-10 rounded object-cover flex-shrink-0"
+                />
+              ) : (
+                <img 
+                  src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" 
+                  alt="Primal Radio Logo"
                   className="w-10 h-10 rounded object-cover flex-shrink-0"
                 />
               )}

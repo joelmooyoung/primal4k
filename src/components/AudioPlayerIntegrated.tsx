@@ -158,8 +158,22 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
                   }}
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="flex items-end space-x-1 h-20">
+                <div className="w-full h-full flex flex-col items-center justify-center gap-4 p-8">
+                  {/* Primal Radio Logo */}
+                  <div className="flex flex-col items-center gap-2">
+                    <img 
+                      src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" 
+                      alt="Primal Radio Logo" 
+                      className="w-16 h-16 rounded-lg object-cover shadow-lg"
+                    />
+                    <div className="text-center">
+                      <h4 className="text-lg font-bold text-white">Primal Radio</h4>
+                      <p className="text-xs text-white/70">...where it all starts</p>
+                    </div>
+                  </div>
+                  
+                  {/* Visualizer */}
+                  <div className="flex items-end space-x-1 h-16">
                     {visualizerBars}
                   </div>
                 </div>
