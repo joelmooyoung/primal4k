@@ -106,7 +106,19 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
 
   const togglePlay = async () => {
     console.log('🎵 togglePlay called, audioRef.current:', audioRef.current, 'currentStation:', currentStation);
-    if (!audioRef.current || !currentStation) return;
+    
+    if (!audioRef.current) {
+      console.log('⚠️ No audio element found');
+      return;
+    }
+    
+    if (!currentStation) {
+      console.log('⚠️ No current station selected, stopping any playing audio');
+      audioRef.current.pause();
+      setIsPlaying(false);
+      localStorage.setItem('isPlaying', 'false');
+      return;
+    }
 
     try {
       if (isPlaying) {
@@ -175,9 +187,11 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       audioRef.current.src = '';
       audioRef.current.removeAttribute('src'); // Ensure src is completely removed
       audioRef.current.load(); // Reset the audio element
-      setIsPlaying(false);
-      localStorage.setItem('isPlaying', 'false');
     }
+    
+    // Always reset playing state when changing stations
+    setIsPlaying(false);
+    localStorage.setItem('isPlaying', 'false');
     
     setCurrentStation(station);
     if (station) {
