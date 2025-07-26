@@ -218,40 +218,17 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
               )}
             </div>
 
-            {/* Debug: Move button to top */}
-            <div className="mb-4">
+            {/* Main Controls */}
+            <div className="flex items-center gap-4 mb-6">
               <button
                 onClick={() => {
-                  console.log('🔥 DIRECT AUDIO CALL');
-                  console.log('togglePlay function:', togglePlay);
-                  console.log('setCurrentStation function:', setCurrentStation);
-                  setCurrentStation(station);
+                  console.log('🎯 Simple click handler');
+                  if (currentStation?.id !== station.id) {
+                    setCurrentStation(station);
+                  }
                   togglePlay();
                 }}
-                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
-              >
-                DIRECT AUDIO TEST
-              </button>
-            </div>
-
-            {/* Main Controls */}
-            <div className="flex items-center gap-4 mb-6" style={{ pointerEvents: 'none' }}>
-              {/* Test Button */}
-              <button 
-                onClick={() => alert('Test button works!')}
-                className="bg-red-500 text-white px-2 py-1 text-xs rounded"
-                style={{ pointerEvents: 'auto' }}
-              >
-                TEST
-              </button>
-              
-              <button
-                onClick={() => {
-                  console.log('🔥 DIRECT BUTTON CLICK');
-                  handlePlay();
-                }}
-                className="bg-blue-500 hover:bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center"
-                style={{ pointerEvents: 'auto' }}
+                className="bg-gradient-primary hover:bg-gradient-primary/90 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
               >
                 {isCurrentlyPlaying ? (
                   <Pause className="w-6 h-6" />
