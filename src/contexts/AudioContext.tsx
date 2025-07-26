@@ -182,7 +182,14 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         crossOrigin="anonymous"
         preload="none"
         onEnded={() => setIsPlaying(false)}
-        onError={() => setIsPlaying(false)}
+        onError={(e) => {
+          console.error('🎯 AudioContext: Audio element error:', e);
+          setIsPlaying(false);
+        }}
+        onLoadStart={() => console.log('🎯 AudioContext: Audio load started')}
+        onCanPlay={() => console.log('🎯 AudioContext: Audio can play')}
+        onPlay={() => console.log('🎯 AudioContext: Audio play event')}
+        onPause={() => console.log('🎯 AudioContext: Audio pause event')}
       />
     </AudioContext.Provider>
   );
