@@ -66,15 +66,24 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
               )}
             </div>
 
+            {/* Debug info */}
+            <div className="text-xs text-muted-foreground text-center">
+              Loading: {streamUrl}
+            </div>
+
             {/* Embedded Radio Player */}
-            <div className="w-full h-64 rounded-lg overflow-hidden">
+            <div className="w-full h-64 rounded-lg overflow-hidden bg-muted/20 flex items-center justify-center">
               <iframe 
                 src={streamUrl}
                 className="w-full h-full border-0"
                 title={station.name}
                 allow="autoplay"
                 allowFullScreen={false}
-              />
+                onLoad={() => console.log('Iframe loaded successfully')}
+                onError={() => console.log('Iframe failed to load')}
+              >
+                <p>Your browser does not support iframes. Please use the external links below.</p>
+              </iframe>
             </div>
 
             {/* External Player Links */}
