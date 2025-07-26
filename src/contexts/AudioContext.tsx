@@ -101,13 +101,18 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
     }
   };
 
-  const handleStationChange = (station: Station | null) => {
+  const handleStationChange = async (station: Station | null) => {
+    // Immediate UI feedback
+    setIsPlaying(false);
+    
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = '';
-      audioRef.current.load(); // This properly resets the audio element
+      // Don't call load() - it causes resource issues
+      // Instead, give browser time to clean up
+      await new Promise(resolve => setTimeout(resolve, 50));
     }
-    setIsPlaying(false);
+    
     setCurrentStation(station);
     if (station) {
       localStorage.setItem('currentStation', JSON.stringify(station));
