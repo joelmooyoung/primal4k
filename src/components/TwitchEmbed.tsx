@@ -91,13 +91,16 @@ const TwitchEmbed = () => {
       
       <CardContent>
         <div className="aspect-video bg-black rounded-lg overflow-hidden">
-          {/* Try direct stream embed first */}
-          <iframe
-            src="https://fast.citrus3.com:2020/public/dj_gadaffi_and_friends"
-            className="w-full h-full border-0"
-            allowFullScreen
-            title="Primal Radio LiveStream"
-          />
+          {isScriptLoaded ? (
+            <div id="twitch-embed" className="w-full h-full" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <div className="text-center">
+                <Tv className="w-8 h-8 text-purple-500 mx-auto mb-2" />
+                <p className="text-muted-foreground">Loading Twitch player...</p>
+              </div>
+            </div>
+          )}
         </div>
         
         <div className="mt-4 text-center space-y-2">
