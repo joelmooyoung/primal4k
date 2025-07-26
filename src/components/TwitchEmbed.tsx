@@ -81,48 +81,42 @@ const TwitchEmbed = () => {
           </CardTitle>
           <Badge 
             variant="secondary" 
-            className={
-              isOffline 
-                ? "bg-chat-offline/20 text-chat-offline border-chat-offline/30"
-                : "bg-purple-500/20 text-purple-500 border-purple-500/30"
-            }
+            className="bg-chat-online/20 text-chat-online border-chat-online/30"
           >
-            <div className={`w-2 h-2 rounded-full mr-2 ${
-              isOffline ? 'bg-chat-offline' : 'bg-purple-500 animate-pulse'
-            }`} />
-            {isOffline ? 'OFFLINE' : 'LIVE'}
+            <div className="w-2 h-2 rounded-full mr-2 bg-chat-online animate-pulse" />
+            LIVE
           </Badge>
         </div>
       </CardHeader>
       
       <CardContent>
         <div className="aspect-video bg-black rounded-lg overflow-hidden">
-          {isScriptLoaded ? (
-            <div id="twitch-embed" className="w-full h-full" />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <div className="text-center">
-                <Tv className="w-8 h-8 text-purple-500 mx-auto mb-2" />
-                <p className="text-muted-foreground">Loading Twitch player...</p>
-              </div>
-            </div>
-          )}
+          {/* Try direct stream embed first */}
+          <iframe
+            src="https://fast.citrus3.com:2020/public/dj_gadaffi_and_friends"
+            className="w-full h-full border-0"
+            allowFullScreen
+            title="Primal Radio LiveStream"
+          />
         </div>
         
-        <div className="mt-4 text-center">
+        <div className="mt-4 text-center space-y-2">
+          <p className="text-sm text-muted-foreground">
+            Live video stream from Primal Radio
+          </p>
           <Button
             variant="outline"
             asChild
             className="border-purple-500/50 text-purple-500 hover:bg-purple-500/10"
           >
             <a 
-              href={`https://www.twitch.tv/${twitchChannel}`}
+              href="https://fast.citrus3.com:2020/public/dj_gadaffi_and_friends"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2"
             >
               <ExternalLink className="w-4 h-4" />
-              Visit Twitch Channel
+              Open in New Window
             </a>
           </Button>
         </div>
