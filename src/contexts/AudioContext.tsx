@@ -131,14 +131,22 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         console.log('🔊 Playing audio, src:', audioRef.current.src);
         // Ensure the audio source is set correctly
         const streamUrl = getStreamUrl(currentStation);
+        console.log('🔊 Stream URL for current station:', streamUrl);
+        
         if (audioRef.current.src !== streamUrl) {
+          console.log('🔄 Setting new audio source:', streamUrl);
           audioRef.current.src = streamUrl;
           audioRef.current.load();
         }
+        
+        console.log('🎵 Attempting to play audio...');
         await audioRef.current.play();
+        console.log('✅ Audio play successful');
+        
         // Set volume after play starts for live streams
         setTimeout(() => {
-          if (audioRef.current) {
+          if (audioRef.current && currentStation) {
+            console.log('🔊 Setting volume to:', volume);
             audioRef.current.volume = volume / 100;
           }
         }, 500);
@@ -150,6 +158,22 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       console.error('🚨 Error playing audio:', error);
       console.error('🚨 Current station when error occurred:', currentStation);
       console.error('🚨 Audio src when error occurred:', audioRef.current?.src);
+      
+      // Attempt recovery by resetting the audio element
+      console.log('🔧 Attempting audio recovery...');
+      if (audioRef.current && currentStation) {
+        try {
+          audioRef.current.src = '';
+          audioRef.current.load();
+          const streamUrl = getStreamUrl(currentStation);
+          audioRef.current.src = streamUrl;
+          audioRef.current.load();
+          console.log('🔧 Audio element reset for recovery');
+        } catch (recoveryError) {
+          console.error('🚨 Recovery failed:', recoveryError);
+        }
+      }
+      
       setIsPlaying(false);
       localStorage.setItem('isPlaying', 'false');
     }
