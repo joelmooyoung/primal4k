@@ -25,6 +25,14 @@ const EventsCarousel = () => {
       description: "Titchfield High School Homecoming - Celebrating 240 Years (1786-2026)"
     },
     {
+      id: "titchfield-gala-dinner",
+      image: "/lovable-uploads/ccc9b838-f7a2-4349-afab-8b4bf63e6741.png",
+      title: "Titchfield High School HomeComing Gala",
+      date: "1 April 2026, 6 pm",
+      location: "Jamaica Palace Hotel",
+      description: "Grand Gala Dinner - Titchfield 240th Anniversary Homecoming"
+    },
+    {
       id: "upcoming-event-1",
       image: eventPlaceholder1,
       title: "Primal Live Sessions",
