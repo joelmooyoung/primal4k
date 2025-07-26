@@ -52,10 +52,12 @@ const AudioPlayer = ({
     currentTrack: description
   };
 
-  // Set this as current station when component mounts or station changes
+  // Set this as current station when component mounts or station changes, but don't override if it's already set
   useEffect(() => {
-    setCurrentStation(station);
-  }, [station?.id, title, streamUrl]);
+    if (!currentStation || currentStation.id !== station.id) {
+      setCurrentStation(station);
+    }
+  }, [station?.id, setCurrentStation]);
 
   const isCurrentlyPlaying = currentStation?.id === station.id && isPlaying;
 
