@@ -30,6 +30,8 @@ interface AudioProviderProps {
 }
 
 export const AudioProvider = ({ children }: AudioProviderProps) => {
+  // Track station changes for debugging
+  const stationChangeCountRef = useRef(0);
   // Initialize state from localStorage to persist across re-renders
   const [currentStation, setCurrentStation] = useState<Station | null>(() => {
     try {
@@ -202,25 +204,43 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   };
 
   const handleStationChange = (station: Station | null) => {
-    console.log('🔄 Station change to:', station?.name);
+    const timestamp = Date.now();
+    console.log(`🔄 [${timestamp}] STATION CHANGE START - from:`, currentStation?.name, 'to:', station?.name);
+    console.log(`🔄 [${timestamp}] Current playing state:`, isPlaying);
+    console.log(`🔄 [${timestamp}] Audio element exists:`, !!audioRef.current);
+    console.log(`🔄 [${timestamp}] Audio element state:`, {
+      paused: audioRef.current?.paused,
+      src: audioRef.current?.src,
+      readyState: audioRef.current?.readyState
+    });
+    
+    // Track how many times this function is called
+    stationChangeCountRef.current += 1;
+    console.log(`🔄 [${timestamp}] Station change count:`, stationChangeCountRef.current);
     
     // Immediately stop playing
+    console.log(`🔄 [${timestamp}] Setting isPlaying to false`);
     setIsPlaying(false);
     localStorage.setItem('isPlaying', 'false');
     
     // Simple cleanup - just stop and clear
     if (audioRef.current) {
+      console.log(`🔄 [${timestamp}] Pausing and clearing audio`);
       audioRef.current.pause();
       audioRef.current.src = '';
+      console.log(`🔄 [${timestamp}] Audio cleaned up`);
     }
     
     // Set new station
+    console.log(`🔄 [${timestamp}] Setting new station in state`);
     setCurrentStation(station);
     if (station) {
       localStorage.setItem('currentStation', JSON.stringify(station));
     } else {
       localStorage.removeItem('currentStation');
     }
+    
+    console.log(`🔄 [${timestamp}] STATION CHANGE COMPLETE`);
   };
 
   // Remove the useEffect that sets src immediately on station change
