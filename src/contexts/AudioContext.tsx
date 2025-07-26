@@ -185,28 +185,8 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
     }
   };
 
-  useEffect(() => {
-    console.log('useEffect: currentStation changed to:', currentStation);
-    if (currentStation && audioRef.current) {
-      const streamUrl = getStreamUrl(currentStation);
-      console.log('Setting audio src to:', streamUrl);
-      
-      // Only reload if the source is different
-      if (audioRef.current.src !== streamUrl) {
-        audioRef.current.src = streamUrl;
-        audioRef.current.load();
-        
-        // Only try to autoplay if we're not already playing
-        if (isPlaying && audioRef.current.paused) {
-          console.log('Resuming audio playback after navigation');
-          audioRef.current.play().catch(error => {
-            console.error('Failed to resume audio:', error);
-            // Don't set isPlaying to false here - let user manually restart
-          });
-        }
-      }
-    }
-  }, [currentStation]);
+  // Remove the useEffect that sets src immediately on station change
+  // We'll set the src only when user tries to play
 
   return (
     <AudioContext.Provider
