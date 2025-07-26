@@ -40,6 +40,7 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
   const [selectedStation, setSelectedStation] = useState(stations[0]);
 
   const handleStationSelect = (station: Station) => {
+    console.log('🎯 StationSelector: handleStationSelect called with:', station);
     setSelectedStation(station);
     onStationChange(station);
   };

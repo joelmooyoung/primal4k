@@ -36,6 +36,8 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
+  console.log('🎵 AudioProvider render - currentStation:', currentStation, 'isPlaying:', isPlaying);
+
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume / 100;
@@ -106,7 +108,8 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   };
 
   const handleStationChange = (station: Station | null) => {
-    console.log('handleStationChange called with station:', station, 'current isPlaying:', isPlaying);
+    console.log('🔄 handleStationChange called with station:', station, 'current isPlaying:', isPlaying);
+    console.trace('Station change call stack'); // This will show us exactly where the call came from
     if (audioRef.current && isPlaying) {
       console.log('Pausing current audio before station change');
       audioRef.current.pause();
