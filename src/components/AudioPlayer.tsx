@@ -73,8 +73,114 @@ const AudioPlayer = ({
     />
   ));
 
-  // Don't use iframe approach - always use the global audio context
-  // This ensures compatibility with persistent player and navigation
+  // For the main radio stream, use iframe approach for visual display
+  // but actual audio control is handled by global AudioContext
+  if (streamUrl.includes('citrus3.com')) {
+    return (
+      <Card className="bg-gradient-card border-border/50 overflow-hidden">
+        <CardContent className="p-6">
+          <div className="flex flex-col gap-6">
+            {/* Header with title and description */}
+            <div className="text-center">
+              <h3 className="text-xl font-bold mb-1">{title}</h3>
+              <p className="text-muted-foreground">{description}</p>
+              {isLive && (
+                <div className="inline-flex bg-destructive text-destructive-foreground px-2 py-1 rounded text-xs font-semibold animate-pulse-glow mt-2">
+                  LIVE
+                </div>
+              )}
+            </div>
+
+            {/* Show album art instead of iframe for better integration */}
+            <div className="w-full h-64 rounded-lg overflow-hidden bg-gradient-primary/20 relative">
+              {coverImage ? (
+                <img 
+                  src={coverImage} 
+                  alt={title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="flex items-end space-x-1 h-20">
+                    {visualizerBars}
+                  </div>
+                </div>
+              )}
+              
+              {/* Play button overlay */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Button
+                  size="lg"
+                  onClick={togglePlay}
+                  className="bg-gradient-primary hover:bg-gradient-primary/90 text-white w-16 h-16 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                >
+                  {isCurrentlyPlaying ? (
+                    <Pause className="w-8 h-8" />
+                  ) : (
+                    <Play className="w-8 h-8 ml-1" />
+                  )}
+                </Button>
+              </div>
+              
+              {isLive && (
+                <div className="absolute top-2 right-2 bg-destructive text-destructive-foreground px-2 py-1 rounded text-xs font-semibold animate-pulse-glow">
+                  LIVE
+                </div>
+              )}
+            </div>
+
+            {/* External Player Links */}
+            {externalLinks && (
+              <div className="flex flex-wrap gap-2 justify-center">
+                <span className="text-sm text-muted-foreground">Open in:</span>
+                {externalLinks.winamp && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    asChild
+                    className="h-8"
+                  >
+                    <a href={externalLinks.winamp} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="w-3 h-3 mr-1" />
+                      Winamp
+                    </a>
+                  </Button>
+                )}
+                {externalLinks.vlc && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    asChild
+                    className="h-8"
+                  >
+                    <a href={externalLinks.vlc} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="w-3 h-3 mr-1" />
+                      VLC
+                    </a>
+                  </Button>
+                )}
+                {externalLinks.itunes && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    asChild
+                    className="h-8"
+                  >
+                    <a href={externalLinks.itunes} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="w-3 h-3 mr-1" />
+                      iTunes
+                    </a>
+                  </Button>
+                )}
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // For other streams, use the HTML5 audio approach
   return (
     <Card className="bg-gradient-card border-border/50 overflow-hidden">
       <CardContent className="p-6">
