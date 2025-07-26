@@ -31,9 +31,13 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
   const { metadata } = useStreamMetadata(streamUrl);
 
   const handlePlay = () => {
+    console.log('🎯 handlePlay called in AudioPlayerIntegrated');
+    console.log('Current station:', currentStation?.id, 'Station ID:', station.id);
     if (currentStation?.id !== station.id) {
+      console.log('Setting current station to:', station);
       setCurrentStation(station);
     }
+    console.log('Calling togglePlay...');
     togglePlay();
   };
 
