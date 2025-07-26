@@ -2,6 +2,7 @@ import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import StationSelector from "@/components/StationSelector";
 import AudioPlayer from "@/components/AudioPlayer";
+import { useStreamMetadata } from "@/hooks/useStreamMetadata";
 import DJCarousel from "@/components/DJCarousel";
 import EventsCarousel from "@/components/EventsCarousel";
 import ChatRoom from "@/components/ChatRoom";
@@ -367,43 +368,50 @@ const Index = () => {
             if (selectedStation.type === 'twitch') {
               return <TwitchEmbed />;
             } else {
-              // Just show station info - PersistentPlayer handles all audio
-              return (
-                <Card className="mx-auto max-w-2xl">
-                  <CardContent className="p-6">
-                    <div className="text-center space-y-4">
-                      <img 
-                        src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" 
-                        alt="Station Cover"
-                        className="w-32 h-32 mx-auto rounded-lg object-cover"
-                      />
-                      <div>
-                        <h3 className="text-2xl font-bold">{selectedStation.name}</h3>
-                        <p className="text-muted-foreground">{selectedStation.currentTrack || "Now Playing"}</p>
-                        {selectedStation.isLive && (
-                          <Badge variant="destructive" className="mt-2">LIVE</Badge>
-                        )}
+              // Just show station info with metadata - PersistentPlayer handles all audio
+              const StationDisplay = () => {
+                const { metadata } = useStreamMetadata(getStreamUrl(selectedStation.id));
+                
+                return (
+                  <Card className="mx-auto max-w-2xl">
+                    <CardContent className="p-6">
+                      <div className="text-center space-y-4">
+                        <img 
+                          src={metadata?.albumArt || "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"} 
+                          alt="Album Art"
+                          className="w-32 h-32 mx-auto rounded-lg object-cover"
+                        />
+                        <div>
+                          <h3 className="text-2xl font-bold">{selectedStation.name}</h3>
+                          <p className="text-lg font-semibold">{metadata?.title || selectedStation.currentTrack || "Live Stream"}</p>
+                          <p className="text-muted-foreground">{metadata?.artist || "Primal Radio"}</p>
+                          {selectedStation.isLive && (
+                            <Badge variant="destructive" className="mt-2">LIVE</Badge>
+                          )}
+                        </div>
+                        <div className="flex justify-center gap-2">
+                          {getExternalLinks(selectedStation.id).winamp && (
+                            <Button variant="outline" size="sm" asChild>
+                              <a href={getExternalLinks(selectedStation.id).winamp} target="_blank" rel="noopener noreferrer">
+                                Winamp
+                              </a>
+                            </Button>
+                          )}
+                          {getExternalLinks(selectedStation.id).vlc && (
+                            <Button variant="outline" size="sm" asChild>
+                              <a href={getExternalLinks(selectedStation.id).vlc} target="_blank" rel="noopener noreferrer">
+                                VLC
+                              </a>
+                            </Button>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex justify-center gap-2">
-                        {getExternalLinks(selectedStation.id).winamp && (
-                          <Button variant="outline" size="sm" asChild>
-                            <a href={getExternalLinks(selectedStation.id).winamp} target="_blank" rel="noopener noreferrer">
-                              Winamp
-                            </a>
-                          </Button>
-                        )}
-                        {getExternalLinks(selectedStation.id).vlc && (
-                          <Button variant="outline" size="sm" asChild>
-                            <a href={getExternalLinks(selectedStation.id).vlc} target="_blank" rel="noopener noreferrer">
-                              VLC
-                            </a>
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
+                    </CardContent>
+                  </Card>
+                );
+              };
+              
+              return <StationDisplay />;
             }
           })()}
         </section>
