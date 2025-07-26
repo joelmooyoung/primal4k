@@ -41,6 +41,7 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
 
   const handleStationSelect = (station: Station) => {
     console.log('🎯 StationSelector: handleStationSelect called with:', station);
+    console.log('🎯 StationSelector: Station ID being passed:', station.id);
     setSelectedStation(station);
     onStationChange(station);
   };
