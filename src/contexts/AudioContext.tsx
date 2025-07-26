@@ -169,10 +169,11 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
     console.log('🔄 handleStationChange called with station:', station, 'current isPlaying:', isPlaying);
     
     // Stop current audio and reset state completely when changing stations
-    if (audioRef.current && currentStation?.id !== station?.id) {
-      console.log('Stopping current audio and resetting for station change');
+    if (audioRef.current) {
+      console.log('Completely resetting audio element for station change');
       audioRef.current.pause();
       audioRef.current.src = '';
+      audioRef.current.removeAttribute('src'); // Ensure src is completely removed
       audioRef.current.load(); // Reset the audio element
       setIsPlaying(false);
       localStorage.setItem('isPlaying', 'false');
