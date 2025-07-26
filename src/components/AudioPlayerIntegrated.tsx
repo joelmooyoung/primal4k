@@ -182,17 +182,19 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
             {/* Album Art & Visualizer */}
             <div className="flex-shrink-0">
               <div className="relative w-full lg:w-64 h-64 rounded-lg overflow-hidden bg-gradient-primary/20">
+                {/* Debug info for image */}
+                <div style={{background: 'blue', color: 'white', padding: '5px', position: 'absolute', zIndex: 1000, top: 0, left: 0}}>
+                  IMG: {station.id}
+                </div>
+                
                 {/* Show album art based on station */}
                 <img 
-                  src={
-                    station.id === 'primal-radio' 
-                      ? '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
-                      : station.id === 'primal-radio-2'
-                      ? '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png' 
-                      : '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
-                  }
+                  src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"
                   alt={`${station.name} Album Art`}
                   className="w-full h-full object-cover"
+                  onLoad={() => console.log('✅ Image loaded successfully')}
+                  onError={(e) => console.log('❌ Image failed to load:', e)}
+                  style={{background: 'yellow'}} // Yellow background to see if element exists
                 />
                 
                 {/* Visualizer overlay when playing */}
