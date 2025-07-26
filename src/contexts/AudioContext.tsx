@@ -59,12 +59,18 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   });
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const gainNodeRef = useRef<GainNode | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
 
   console.log('🎵 AudioProvider render - currentStation:', currentStation, 'isPlaying:', isPlaying);
 
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume / 100;
+      // Also update Web Audio API gain if available
+      if (gainNodeRef.current) {
+        gainNodeRef.current.gain.value = volume / 100;
+      }
     }
   }, [volume]);
 
@@ -139,15 +145,12 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   const handleVolumeChange = (newVolume: number) => {
     setVolume(newVolume);
     localStorage.setItem('volume', newVolume.toString());
-    // Apply volume immediately and also after a delay to ensure audio is ready
     if (audioRef.current) {
       audioRef.current.volume = newVolume / 100;
-      // Also set volume after a brief delay in case the audio element needs time to initialize
-      setTimeout(() => {
-        if (audioRef.current) {
-          audioRef.current.volume = newVolume / 100;
-        }
-      }, 100);
+    }
+    // Also update Web Audio API gain if available
+    if (gainNodeRef.current) {
+      gainNodeRef.current.gain.value = newVolume / 100;
     }
   };
 
@@ -211,23 +214,20 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         <audio
           ref={audioRef}
           onEnded={() => setIsPlaying(false)}
-          onError={(e) => {
-            console.error('Audio error:', e);
-            setIsPlaying(false);
-          }}
-          onLoadStart={() => console.log('Audio load started')}
-          onCanPlay={() => {
-            console.log('Audio can play');
-            // Ensure volume is applied when audio is ready
-            if (audioRef.current) {
-              audioRef.current.volume = volume / 100;
-            }
-          }}
+          onError={() => setIsPlaying(false)}
           onLoadedData={() => {
-            console.log('Audio data loaded');
-            // Also apply volume when data is loaded
-            if (audioRef.current) {
-              audioRef.current.volume = volume / 100;
+            // Set up Web Audio API for better volume control
+            if (audioRef.current && !audioContextRef.current) {
+              try {
+                audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+                const source = audioContextRef.current.createMediaElementSource(audioRef.current);
+                gainNodeRef.current = audioContextRef.current.createGain();
+                source.connect(gainNodeRef.current);
+                gainNodeRef.current.connect(audioContextRef.current.destination);
+                gainNodeRef.current.gain.value = volume / 100;
+              } catch (error) {
+                console.log('Web Audio API not available, using standard volume control');
+              }
             }
           }}
         />
