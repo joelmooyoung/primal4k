@@ -76,7 +76,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         return 'https://fast.citrus3.com:2020/stream/djgadaffiandfriends';
       case 'primal-radio-2':
         console.log('🎵 Returning Primal Radio 2 URL');
-        return 'https://s1.citrus3.com:2000/AudioPlayer/primal4k';
+        return 'https://s1.citrus3.com:2000/stream/primal4k';
       case 'twitch-stream':
         console.log('🎵 Returning Twitch URL');
         return 'https://twitch.tv/primalradio';
