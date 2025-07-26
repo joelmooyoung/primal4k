@@ -73,6 +73,7 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
                 className="w-full h-full border-0"
                 title={station.name}
                 allow="autoplay"
+                allowFullScreen={false}
               />
             </div>
 
