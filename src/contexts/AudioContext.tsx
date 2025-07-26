@@ -30,21 +30,6 @@ interface AudioProviderProps {
 }
 
 export const AudioProvider = ({ children }: AudioProviderProps) => {
-  // Track station changes for debugging
-  const stationChangeCountRef = useRef(0);
-  const lastChangeTimeRef = useRef(0);
-  
-  // Create audio element imperatively, outside React
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  
-  // Initialize audio element once
-  if (!audioRef.current) {
-    audioRef.current = new Audio();
-    audioRef.current.crossOrigin = "anonymous";
-    audioRef.current.preload = "none";
-  }
-  
-  // Initialize state from localStorage to persist across re-renders
   const [currentStation, setCurrentStation] = useState<Station | null>(() => {
     try {
       const saved = localStorage.getItem('currentStation');
@@ -53,16 +38,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       return null;
     }
   });
-  const [isPlaying, setIsPlaying] = useState(() => {
-    try {
-      const saved = localStorage.getItem('isPlaying');
-      console.log('🔄 Initializing isPlaying from localStorage:', saved);
-      return saved === 'true';
-    } catch {
-      console.log('🔄 Failed to read isPlaying from localStorage, defaulting to false');
-      return false;
-    }
-  });
+  const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(() => {
     try {
       const saved = localStorage.getItem('volume');
@@ -72,30 +48,17 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
     }
   });
   const [isMuted, setIsMuted] = useState(false);
-
-  console.log('🎵 AudioProvider render - currentStation:', currentStation, 'isPlaying:', isPlaying);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume / 100;
-    }
-  }, [volume]);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const getStreamUrl = (station: Station): string => {
-    console.log('🎵 getStreamUrl called with station:', station);
-    console.log('🎵 Call stack:', new Error().stack);
     switch (station.id) {
       case 'primal-radio':
-        console.log('🎵 Returning Primal Radio URL');
         return 'https://fast.citrus3.com:2020/stream/djgadaffiandfriends';
       case 'primal-radio-2':
-        console.log('🎵 Returning Primal Radio 2 URL');
         return 'https://s1.citrus3.com:2000/stream/primal4k';
       case 'twitch-stream':
-        console.log('🎵 Returning Twitch URL');
         return 'https://twitch.tv/primalradio';
       default:
-        console.log('🎵 Using default Primal Radio URL for unknown station:', station.id);
         return 'https://fast.citrus3.com:2020/stream/djgadaffiandfriends';
     }
   };
@@ -103,7 +66,6 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   const getExternalLinks = (station: Station) => {
     if (station.type === 'twitch') return undefined;
     
-    // Use the .pls playlist files for external players
     const playlistUrls = {
       'primal-radio': 'https://fast.citrus3.com:2020/tunein/djgadaffiandfriends/stream/pls',
       'primal-radio-2': 'https://s1.citrus3.com:2000/tunein/primal4k/stream/pls'
@@ -118,77 +80,38 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   };
 
   const togglePlay = async () => {
-    console.log('🎵 togglePlay called, audioRef.current:', audioRef.current, 'currentStation:', currentStation);
+    if (!audioRef.current || !currentStation) return;
     
-    if (!audioRef.current) {
-      console.log('⚠️ No audio element found');
-      return;
-    }
-    
-    if (!currentStation) {
-      console.log('⚠️ No current station selected, stopping any playing audio');
-      audioRef.current.pause();
-      setIsPlaying(false);
-      localStorage.setItem('isPlaying', 'false');
-      return;
-    }
-
     try {
       if (isPlaying) {
-        console.log('🔇 Pausing audio');
         audioRef.current.pause();
         setIsPlaying(false);
-        localStorage.setItem('isPlaying', 'false');
-        console.log('🔇 Set isPlaying to false in localStorage');
       } else {
-        console.log('🔊 Playing audio, src:', audioRef.current.src);
-        // Ensure the audio source is set correctly
         const streamUrl = getStreamUrl(currentStation);
-        console.log('🔊 Stream URL for current station:', streamUrl);
-        
         if (audioRef.current.src !== streamUrl) {
-          console.log('🔄 Setting new audio source:', streamUrl);
           audioRef.current.src = streamUrl;
           audioRef.current.load();
         }
-        
-        console.log('🎵 Attempting to play audio...');
         await audioRef.current.play();
-        console.log('✅ Audio play successful');
-        
-        // Set volume after play starts for live streams
-        setTimeout(() => {
-          if (audioRef.current && currentStation) {
-            console.log('🔊 Setting volume to:', volume);
-            audioRef.current.volume = volume / 100;
-          }
-        }, 500);
         setIsPlaying(true);
-        localStorage.setItem('isPlaying', 'true');
-        console.log('🔊 Set isPlaying to true in localStorage');
       }
     } catch (error) {
-      console.error('🚨 Error playing audio:', error);
-      console.error('🚨 Current station when error occurred:', currentStation);
-      console.error('🚨 Audio src when error occurred:', audioRef.current?.src);
-      
-      // Attempt recovery by resetting the audio element
-      console.log('🔧 Attempting audio recovery...');
-      if (audioRef.current && currentStation) {
-        try {
-          audioRef.current.src = '';
-          audioRef.current.load();
-          const streamUrl = getStreamUrl(currentStation);
-          audioRef.current.src = streamUrl;
-          audioRef.current.load();
-          console.log('🔧 Audio element reset for recovery');
-        } catch (recoveryError) {
-          console.error('🚨 Recovery failed:', recoveryError);
-        }
-      }
-      
+      console.error('Audio error:', error);
       setIsPlaying(false);
-      localStorage.setItem('isPlaying', 'false');
+    }
+  };
+
+  const handleStationChange = (station: Station | null) => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+    }
+    setIsPlaying(false);
+    setCurrentStation(station);
+    if (station) {
+      localStorage.setItem('currentStation', JSON.stringify(station));
+    } else {
+      localStorage.removeItem('currentStation');
     }
   };
 
@@ -203,42 +126,15 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
     setVolume(newVolume);
     localStorage.setItem('volume', newVolume.toString());
     if (audioRef.current) {
-      // Force volume update multiple times to ensure it sticks
       audioRef.current.volume = newVolume / 100;
-      // Try setting volume again after a delay
-      setTimeout(() => {
-        if (audioRef.current && !audioRef.current.paused) {
-          audioRef.current.volume = newVolume / 100;
-        }
-      }, 50);
     }
   };
 
-  const handleStationChange = (station: Station | null) => {
-    console.log('🔄 Station change to:', station?.name);
-    
-    // Immediately stop playing
-    setIsPlaying(false);
-    localStorage.setItem('isPlaying', 'false');
-    
-    // Simple cleanup
+  useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = '';
+      audioRef.current.volume = volume / 100;
     }
-    
-    // Set new station
-    setCurrentStation(station);
-    if (station) {
-      localStorage.setItem('currentStation', JSON.stringify(station));
-    } else {
-      localStorage.removeItem('currentStation');
-    }
-
-  };
-
-  // Remove the useEffect that sets src immediately on station change
-  // We'll set the src only when user tries to play
+  }, [volume]);
 
   return (
     <AudioContext.Provider
@@ -256,7 +152,13 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       }}
     >
       {children}
-      {/* Audio element is now created imperatively outside of React */}
+      <audio
+        ref={audioRef}
+        crossOrigin="anonymous"
+        preload="none"
+        onEnded={() => setIsPlaying(false)}
+        onError={() => setIsPlaying(false)}
+      />
     </AudioContext.Provider>
   );
 };
