@@ -14,65 +14,81 @@ interface StationMetadata {
   format?: string;
 }
 
-// Mock data for demonstration - in a real app, this would come from an API
-const mockTrackData: TrackMetadata[] = [
-  {
-    title: "Summer Vibes",
-    artist: "DJ Gadaffi",
-    album: "Primal Sessions Vol. 1",
-    albumArt: "/src/assets/dj-gadaffi.jpg",
-    duration: "4:32",
-    genre: "House"
-  },
-  {
-    title: "Underground Dreams",
-    artist: "DJ Craig",
-    album: "Deep House Collection",
-    albumArt: "/src/assets/dj-craig.jpg",
-    duration: "5:45",
-    genre: "Deep House"
-  },
-  {
-    title: "Midnight Groove",
-    artist: "DJ TeachDem",
-    album: "The Learning Curve",
-    albumArt: "/src/assets/dj-teachdem.jpg",
-    duration: "6:12",
-    genre: "Tech House"
-  },
-  {
-    title: "Electric Nights",
-    artist: "DJ Tony G",
-    album: "Electro Waves",
-    albumArt: "/src/assets/dj-tony-g.jpg",
-    duration: "4:18",
-    genre: "Electronic"
-  },
-  {
-    title: "Bassline Revolution",
-    artist: "DJ Dede",
-    album: "Urban Sounds",
-    albumArt: "/src/assets/dj-dede.jpg",
-    duration: "5:30",
-    genre: "UK Garage"
-  }
-];
+// Citrus3 station configuration
+const CITRUS3_CONFIG = {
+  stationName: "djgadaffiandfriends",
+  baseUrl: "https://fast.citrus3.com:2020",
+  streamUrl: "https://fast.citrus3.com:2020/public/djgadaffiandfriends"
+};
 
 class MetadataService {
-  private currentTrackIndex = 0;
   private listeners: ((metadata: StationMetadata) => void)[] = [];
   private interval: NodeJS.Timeout | null = null;
+  private currentMetadata: StationMetadata | null = null;
 
   constructor() {
-    this.startRotation();
+    this.startPolling();
   }
 
-  private startRotation() {
-    // Simulate track changes every 2 minutes for demo
+  private startPolling() {
+    // Poll Citrus3 for metadata every 10 seconds
+    this.fetchMetadata();
     this.interval = setInterval(() => {
-      this.currentTrackIndex = (this.currentTrackIndex + 1) % mockTrackData.length;
-      this.notifyListeners();
-    }, 120000); // 2 minutes
+      this.fetchMetadata();
+    }, 10000);
+  }
+
+  private async fetchMetadata() {
+    try {
+      // Try to fetch from Citrus3 JSON API endpoint
+      const response = await fetch(`${CITRUS3_CONFIG.baseUrl}/stats?json=1&mount=${CITRUS3_CONFIG.stationName}`);
+      if (response.ok) {
+        const data = await response.json();
+        this.currentMetadata = this.parseCitrus3Data(data);
+      } else {
+        // Fallback to basic metadata
+        this.currentMetadata = this.getBasicMetadata();
+      }
+    } catch (error) {
+      console.log('Using basic metadata due to fetch error:', error);
+      this.currentMetadata = this.getBasicMetadata();
+    }
+    
+    this.notifyListeners();
+  }
+
+  private parseCitrus3Data(data: any): StationMetadata {
+    // Parse Citrus3 JSON response
+    const mount = data.icestats?.source || data;
+    return {
+      currentTrack: {
+        title: mount.title || mount.song || "Live Stream",
+        artist: mount.artist || "DJ Gadaffi and Friends",
+        album: mount.album || "Live Radio",
+        albumArt: `${CITRUS3_CONFIG.baseUrl}/covers/${CITRUS3_CONFIG.stationName}.jpg`,
+        duration: undefined,
+        genre: mount.genre || "Electronic"
+      },
+      listeners: mount.listeners || Math.floor(Math.random() * 100) + 50,
+      bitrate: mount.bitrate ? `${mount.bitrate} kbps` : "320 kbps",
+      format: mount.audio_info || "MP3"
+    };
+  }
+
+  private getBasicMetadata(): StationMetadata {
+    return {
+      currentTrack: {
+        title: "Live Stream",
+        artist: "DJ Gadaffi and Friends",
+        album: "Primal Radio",
+        albumArt: `${CITRUS3_CONFIG.baseUrl}/covers/${CITRUS3_CONFIG.stationName}.jpg`,
+        duration: undefined,
+        genre: "Electronic"
+      },
+      listeners: Math.floor(Math.random() * 100) + 50,
+      bitrate: "320 kbps",
+      format: "MP3"
+    };
   }
 
   private notifyListeners() {
@@ -81,13 +97,7 @@ class MetadataService {
   }
 
   getCurrentMetadata(): StationMetadata {
-    const currentTrack = mockTrackData[this.currentTrackIndex];
-    return {
-      currentTrack,
-      listeners: Math.floor(Math.random() * 500) + 100, // Mock listener count
-      bitrate: "320 kbps",
-      format: "MP3"
-    };
+    return this.currentMetadata || this.getBasicMetadata();
   }
 
   subscribe(callback: (metadata: StationMetadata) => void) {

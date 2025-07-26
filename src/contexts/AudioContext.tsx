@@ -54,7 +54,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   const getStreamUrl = (station: Station): string => {
     switch (station.id) {
       case 'primal-radio':
-        return 'https://fast.citrus3.com:2020/stream/djgadaffiandfriends';
+        return 'https://fast.citrus3.com:2020/public/djgadaffiandfriends';
       case 'primal-radio-2':
         return 'https://s1.citrus3.com:2000/stream/primal4k';
       case 'twitch-stream':
@@ -64,7 +64,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         if (station.name?.toLowerCase().includes('radio 2') || station.name?.toLowerCase().includes('primal 2')) {
           return 'https://s1.citrus3.com:2000/stream/primal4k';
         }
-        return 'https://fast.citrus3.com:2020/stream/djgadaffiandfriends';
+        return 'https://fast.citrus3.com:2020/public/djgadaffiandfriends';
     }
   };
 
