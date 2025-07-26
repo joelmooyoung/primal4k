@@ -222,12 +222,15 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
             <div className="mb-4">
               <button
                 onClick={() => {
-                  console.log('🔥 MOVED BUTTON CLICK');
-                  handlePlay();
+                  console.log('🔥 DIRECT AUDIO CALL');
+                  console.log('togglePlay function:', togglePlay);
+                  console.log('setCurrentStation function:', setCurrentStation);
+                  setCurrentStation(station);
+                  togglePlay();
                 }}
                 className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
               >
-                TEST PLAY BUTTON HERE
+                DIRECT AUDIO TEST
               </button>
             </div>
 
