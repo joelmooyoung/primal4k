@@ -50,16 +50,13 @@ const TwitchEmbed = () => {
         const parentDomains = [
           hostname,
           'localhost',
-          'lovableproject.com',
-          '*.lovableproject.com'
+          '93d33477-c474-4a2d-8760-2925f3e19bcc.lovableproject.com'
         ];
         
-        // Add specific Lovable preview domains
+        // Add lovableproject.com for any Lovable preview
         if (hostname.includes('lovableproject.com')) {
-          parentDomains.push(hostname.split('.')[0] + '.lovableproject.com');
+          parentDomains.push('lovableproject.com');
         }
-        
-        console.log('Twitch parent domains:', parentDomains);
         
         const options = {
           width: '100%',
