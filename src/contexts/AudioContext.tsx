@@ -32,6 +32,7 @@ interface AudioProviderProps {
 export const AudioProvider = ({ children }: AudioProviderProps) => {
   // Track station changes for debugging
   const stationChangeCountRef = useRef(0);
+  const lastChangeTimeRef = useRef(0);
   
   // Create audio element imperatively, outside React
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -214,15 +215,19 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   };
 
   const handleStationChange = (station: Station | null) => {
+    const now = Date.now();
+    const timeSinceLastChange = now - lastChangeTimeRef.current;
+    
+    // Prevent rapid station changes (less than 200ms apart)
+    if (timeSinceLastChange < 200 && stationChangeCountRef.current > 0) {
+      console.log(`🚫 Station change blocked - too rapid (${timeSinceLastChange}ms since last)`);
+      return;
+    }
+    
+    lastChangeTimeRef.current = now;
     const timestamp = Date.now();
     console.log(`🔄 [${timestamp}] STATION CHANGE START - from:`, currentStation?.name, 'to:', station?.name);
     console.log(`🔄 [${timestamp}] Current playing state:`, isPlaying);
-    console.log(`🔄 [${timestamp}] Audio element exists:`, !!audioRef.current);
-    console.log(`🔄 [${timestamp}] Audio element state:`, {
-      paused: audioRef.current?.paused,
-      src: audioRef.current?.src,
-      readyState: audioRef.current?.readyState
-    });
     
     // Track how many times this function is called
     stationChangeCountRef.current += 1;
