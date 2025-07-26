@@ -41,8 +41,11 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   });
   const [isPlaying, setIsPlaying] = useState(() => {
     try {
-      return localStorage.getItem('isPlaying') === 'true';
+      const saved = localStorage.getItem('isPlaying');
+      console.log('🔄 Initializing isPlaying from localStorage:', saved);
+      return saved === 'true';
     } catch {
+      console.log('🔄 Failed to read isPlaying from localStorage, defaulting to false');
       return false;
     }
   });
@@ -96,20 +99,22 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   };
 
   const togglePlay = async () => {
-    console.log('togglePlay called, audioRef.current:', audioRef.current, 'currentStation:', currentStation);
+    console.log('🎵 togglePlay called, audioRef.current:', audioRef.current, 'currentStation:', currentStation);
     if (!audioRef.current || !currentStation) return;
 
     try {
       if (isPlaying) {
-        console.log('Pausing audio');
+        console.log('🔇 Pausing audio');
         audioRef.current.pause();
         setIsPlaying(false);
         localStorage.setItem('isPlaying', 'false');
+        console.log('🔇 Set isPlaying to false in localStorage');
       } else {
-        console.log('Playing audio, src:', audioRef.current.src);
+        console.log('🔊 Playing audio, src:', audioRef.current.src);
         await audioRef.current.play();
         setIsPlaying(true);
         localStorage.setItem('isPlaying', 'true');
+        console.log('🔊 Set isPlaying to true in localStorage');
       }
     } catch (error) {
       console.error('Error playing audio:', error);
