@@ -2,16 +2,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AudioProvider } from "@/contexts/AudioContext";
 import PersistentPlayer from "@/components/PersistentPlayer";
 import Index from "./pages/Index";
-import Contact from "./pages/Contact";
-import DJs from "./pages/DJs";
-import DJProfile from "./pages/DJProfile";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfService from "./pages/TermsOfService";
-import NotFound from "./pages/NotFound";
 
 // Create queryClient outside component to prevent recreation
 const queryClient = new QueryClient();
@@ -28,19 +21,8 @@ const App = () => {
         <AudioProvider key="persistent-audio">
           <Toaster />
           <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/djs" element={<DJs />} />
-              <Route path="/dj/:djId" element={<DJProfile />} />
-              <Route path="/privacy" element={<PrivacyPolicy />} />
-              <Route path="/terms" element={<TermsOfService />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <PersistentPlayer />
-          </BrowserRouter>
+          <Index />
+          <PersistentPlayer />
         </AudioProvider>
       </TooltipProvider>
     </QueryClientProvider>
