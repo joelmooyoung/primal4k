@@ -168,6 +168,9 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
   }
 
   // For other streams, use the HTML5 audio approach with global context
+  console.log('🎯 AudioPlayerIntegrated: About to render. metadata:', metadata);
+  console.log('🎯 AudioPlayerIntegrated: metadata?.albumArt:', metadata?.albumArt);
+  
   return (
     <Card className="bg-gradient-card border-border/50 overflow-hidden">
       <CardContent className="p-6">
@@ -175,48 +178,57 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
           {/* Album Art & Visualizer */}
           <div className="flex-shrink-0">
             <div className="relative w-full lg:w-64 h-64 rounded-lg overflow-hidden bg-gradient-primary/20">
-              {metadata?.albumArt ? (
-                <>
-                  <img 
-                    src={metadata.albumArt} 
-                    alt={`${metadata.title} by ${metadata.artist}`}
-                    className="w-full h-full object-cover"
-                    onLoad={() => console.log('🎵 Album art loaded successfully:', metadata.albumArt)}
-                    onError={(e) => {
-                      console.log('🎵 Album art failed to load:', metadata.albumArt);
-                      // Fallback to logo background if album art fails to load
-                      e.currentTarget.style.display = 'none';
-                    }}
-                  />
-                  {console.log('🎵 Rendering album art img element for:', metadata.albumArt)}
-                </>
-              ) : (
-                <div 
-                  className="w-full h-full flex flex-col items-center justify-center gap-4 p-8 relative overflow-hidden"
-                  style={{
-                    backgroundImage: `url('/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png')`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat'
-                  }}
-                >
-                  {/* Dark overlay for better text readability */}
-                  <div className="absolute inset-0 bg-black/40 pointer-events-none" />
-                  
-                  {/* Content overlay */}
-                  <div className="relative z-10 flex flex-col items-center gap-4 pointer-events-none">
-                    <div className="text-center">
-                      <h4 className="text-lg font-bold text-white drop-shadow-lg">Primal Radio</h4>
-                      <p className="text-xs text-white/90 drop-shadow-md">...where it all starts</p>
+              {(() => {
+                console.log('🎯 Inside album art conditional. metadata:', metadata);
+                console.log('🎯 metadata?.albumArt value:', metadata?.albumArt);
+                console.log('🎯 Boolean check result:', !!metadata?.albumArt);
+                
+                if (metadata?.albumArt) {
+                  console.log('🎵 Rendering album art img element for:', metadata.albumArt);
+                  return (
+                    <img 
+                      src={metadata.albumArt} 
+                      alt={`${metadata.title} by ${metadata.artist}`}
+                      className="w-full h-full object-cover"
+                      onLoad={() => console.log('🎵 Album art loaded successfully:', metadata.albumArt)}
+                      onError={(e) => {
+                        console.log('🎵 Album art failed to load:', metadata.albumArt);
+                        // Fallback to logo background if album art fails to load
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
+                  );
+                } else {
+                  console.log('🎯 No album art, rendering fallback');
+                  return (
+                    <div 
+                      className="w-full h-full flex flex-col items-center justify-center gap-4 p-8 relative overflow-hidden"
+                      style={{
+                        backgroundImage: `url('/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png')`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat'
+                      }}
+                    >
+                      {/* Dark overlay for better text readability */}
+                      <div className="absolute inset-0 bg-black/40 pointer-events-none" />
+                      
+                      {/* Content overlay */}
+                      <div className="relative z-10 flex flex-col items-center gap-4 pointer-events-none">
+                        <div className="text-center">
+                          <h4 className="text-lg font-bold text-white drop-shadow-lg">Primal Radio</h4>
+                          <p className="text-xs text-white/90 drop-shadow-md">...where it all starts</p>
+                        </div>
+                        
+                        {/* Visualizer */}
+                        <div className="flex items-end space-x-1 h-16">
+                          {visualizerBars}
+                        </div>
+                      </div>
                     </div>
-                    
-                    {/* Visualizer */}
-                    <div className="flex items-end space-x-1 h-16">
-                      {visualizerBars}
-                    </div>
-                  </div>
-                </div>
-              )}
+                  );
+                }
+              })()}
               
               {/* Visualizer overlay when playing */}
               {isCurrentlyPlaying && metadata?.albumArt && (
