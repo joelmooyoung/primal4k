@@ -29,6 +29,7 @@ const AudioPlayer = ({
   station: stationProp,
   externalLinks 
 }: AudioPlayerProps) => {
+  console.log('🎯 AudioPlayer render - received station prop:', stationProp);
   // Use global audio context
   const { 
     isPlaying, 

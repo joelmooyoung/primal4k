@@ -86,19 +86,25 @@ const Index = () => {
 
         {/* Audio Player / Twitch Toggle */}
         <section className="mb-12 animate-fade-in-up">
-          {selectedStation.type === 'twitch' ? (
-            <TwitchEmbed />
-          ) : (
-            <AudioPlayer 
-              title={selectedStation.name}
-              description={selectedStation.currentTrack || "Now Playing"}
-              streamUrl={getStreamUrl(selectedStation.id)}
-              isLive={selectedStation.isLive}
-              coverImage="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"
-              station={selectedStation}
-              externalLinks={getExternalLinks(selectedStation.id)}
-            />
-          )}
+          {(() => {
+            console.log('🎯 Index: Rendering with selectedStation:', selectedStation);
+            
+            if (selectedStation.type === 'twitch') {
+              return <TwitchEmbed />;
+            } else {
+              return (
+                <AudioPlayer
+                  title={selectedStation.name}
+                  description={selectedStation.currentTrack || "Now Playing"}
+                  streamUrl={getStreamUrl(selectedStation.id)}
+                  isLive={selectedStation.isLive}
+                  coverImage="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"
+                  station={selectedStation}
+                  externalLinks={getExternalLinks(selectedStation.id)}
+                />
+              );
+            }
+          })()}
         </section>
 
         {/* Chat Section */}
