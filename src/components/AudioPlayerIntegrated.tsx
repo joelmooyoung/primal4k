@@ -179,8 +179,8 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
             <div className="relative w-full lg:w-64 h-64 rounded-lg overflow-hidden bg-gradient-primary/20">
               {/* Show album art based on station */}
               <img 
-                src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"
-                alt={`${station.name} Album Art`}
+                src={metadata?.currentTrack?.albumArt || "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"}
+                alt={metadata?.currentTrack ? `${metadata.currentTrack.artist} - ${metadata.currentTrack.title}` : `${station.name} Album Art`}
                 className="w-full h-full object-cover"
               />
               
@@ -300,6 +300,24 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
                       iTunes
                     </a>
                   </Button>
+                )}
+              </div>
+            )}
+
+            {/* Stream Info */}
+            {metadata && (
+              <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                {metadata.listeners && (
+                  <div className="flex items-center gap-1">
+                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    {metadata.listeners} listeners
+                  </div>
+                )}
+                {metadata.bitrate && (
+                  <div>{metadata.bitrate}</div>
+                )}
+                {metadata.format && (
+                  <div>{metadata.format}</div>
                 )}
               </div>
             )}
