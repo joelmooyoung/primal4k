@@ -185,7 +185,7 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
               />
               
               {/* Visualizer overlay when playing */}
-              {isCurrentlyPlaying && metadata?.albumArt && (
+              {isCurrentlyPlaying && metadata?.currentTrack?.albumArt && (
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-4">
                   <div className="flex items-end space-x-1 h-12 opacity-80">
                     {visualizerBars.slice(0, 10)}
@@ -205,14 +205,14 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
           <div className="flex-1">
             <div className="mb-4">
               <h3 className="text-xl font-bold mb-1">
-                {metadata?.title || station.name}
+                {metadata?.currentTrack?.title || station.name}
               </h3>
               <p className="text-muted-foreground">
-                {metadata?.artist || station.currentTrack || 'Now Playing'}
+                {metadata?.currentTrack?.artist || station.currentTrack || 'Now Playing'}
               </p>
-              {metadata?.album && (
+              {metadata?.currentTrack?.album && (
                 <p className="text-sm text-muted-foreground/70">
-                  {metadata.album}
+                  {metadata.currentTrack.album}
                 </p>
               )}
             </div>

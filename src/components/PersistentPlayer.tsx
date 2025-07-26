@@ -49,9 +49,9 @@ const PersistentPlayer = () => {
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3 flex-1 min-w-0">
-              {metadata?.albumArt ? (
+              {metadata?.currentTrack?.albumArt ? (
                 <img 
-                  src={metadata.albumArt} 
+                  src={metadata.currentTrack.albumArt} 
                   alt="Album art"
                   className="w-10 h-10 rounded object-cover flex-shrink-0"
                   onError={(e) => {
@@ -68,10 +68,10 @@ const PersistentPlayer = () => {
               )}
               <div className="flex-1 min-w-0">
                 <h4 className="font-semibold text-sm truncate">
-                  {metadata?.title || currentStation.name}
+                  {metadata?.currentTrack?.title || currentStation.name}
                 </h4>
                 <p className="text-xs text-muted-foreground truncate">
-                  {metadata?.artist || (currentStation.isLive ? 'LIVE' : 'Now Playing')}
+                  {metadata?.currentTrack?.artist || (currentStation.isLive ? 'LIVE' : 'Now Playing')}
                 </p>
               </div>
             </div>
