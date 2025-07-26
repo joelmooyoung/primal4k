@@ -45,13 +45,13 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   const getStreamUrl = (station: Station): string => {
     switch (station.id) {
       case 'primal-radio':
-        return 'https://citrus3.com:8040/live';
+        return 'https://fast.citrus3.com:2020/AudioPlayer/djgadaffiandfriends?mount=&';
       case 'dj-live':
-        return 'https://citrus3.com:8038/live';
+        return 'https://s1.citrus3.com:2000/AudioPlayer/primal4k?mount=&';
       case 'twitch-stream':
         return 'https://twitch.tv/primalradio';
       default:
-        return 'https://citrus3.com:8040/live';
+        return 'https://fast.citrus3.com:2020/AudioPlayer/djgadaffiandfriends?mount=&';
     }
   };
 
@@ -128,8 +128,8 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       }}
     >
       {children}
-      {/* Global audio element for non-iframe streams */}
-      {currentStation && !getStreamUrl(currentStation).includes('citrus3.com') && (
+      {/* Global audio element for all streams */}
+      {currentStation && (
         <audio
           ref={audioRef}
           onEnded={() => setIsPlaying(false)}

@@ -49,8 +49,8 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
     />
   ));
 
-  // For the main radio stream, use iframe approach since it's a web player
-  if (streamUrl.includes('citrus3.com')) {
+  // Use HTML5 audio player for all streams now
+  if (false) { // Disable iframe approach
     return (
       <Card className="bg-gradient-card border-border/50 overflow-hidden">
         <CardContent className="p-6">
