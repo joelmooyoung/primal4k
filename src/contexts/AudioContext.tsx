@@ -228,6 +228,8 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       {currentStation && (
         <audio
           ref={audioRef}
+          crossOrigin="anonymous"
+          preload="none"
           onEnded={() => setIsPlaying(false)}
           onError={(e) => {
             console.error('🚨 Audio element error:', e);
