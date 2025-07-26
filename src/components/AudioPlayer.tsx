@@ -52,7 +52,11 @@ const AudioPlayer = ({
     currentTrack: description
   };
 
-  // Don't interfere with AudioContext - let PersistentPlayer handle station management
+  // Set current station in AudioContext for PersistentPlayer
+  useEffect(() => {
+    console.log('🎯 AudioPlayer: Setting current station:', station);
+    setCurrentStation(station);
+  }, [station.id, setCurrentStation]); // Re-run when station ID changes
 
   const isCurrentlyPlaying = currentStation?.id === station.id && isPlaying;
 
