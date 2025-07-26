@@ -17,6 +17,14 @@ interface EventSlide {
 const EventsCarousel = () => {
   const slides: EventSlide[] = [
     {
+      id: "titchfield-homecoming",
+      image: "/lovable-uploads/a10764f8-ce89-4bfe-a981-aa16d2029894.png",
+      title: "Save The Date",
+      date: "March 29 - April 5, 2026",
+      location: "Port Antonio, Jamaica",
+      description: "Titchfield High School Homecoming - Celebrating 240 Years (1786-2026)"
+    },
+    {
       id: "upcoming-event-1",
       image: eventPlaceholder1,
       title: "Primal Live Sessions",
