@@ -60,7 +60,7 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
               <h3 className="text-xl font-bold mb-1">{station.name}</h3>
               <p className="text-muted-foreground">{station.currentTrack || 'Now Playing'}</p>
               {station.isLive && (
-                <div className="inline-flex bg-destructive text-destructive-foreground px-2 py-1 rounded text-xs font-semibold animate-pulse-glow mt-2">
+                <div className="inline-flex bg-destructive text-destructive-foreground px-2 py-1 rounded text-xs font-semibold animate-pulse mt-2">
                   LIVE
                 </div>
               )}
@@ -152,7 +152,7 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
               </div>
               
               {station.isLive && (
-                <div className="absolute top-2 right-2 bg-destructive text-destructive-foreground px-2 py-1 rounded text-xs font-semibold animate-pulse-glow">
+                <div className="absolute top-2 right-2 bg-destructive text-destructive-foreground px-2 py-1 rounded text-xs font-semibold animate-pulse">
                   LIVE
                 </div>
               )}
