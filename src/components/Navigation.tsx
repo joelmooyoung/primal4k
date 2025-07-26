@@ -56,11 +56,8 @@ const Navigation = () => {
                     // Only scroll to section if we're on the home page
                     document.querySelector(item.href)?.scrollIntoView({ behavior: 'smooth' });
                   } else {
-                    // Navigate to home page first, then scroll to section after navigation
-                    navigate('/');
-                    setTimeout(() => {
-                      document.querySelector(item.href)?.scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
+                    // Navigate to home page first, then scroll to section
+                    navigate('/' + item.href);
                   }
                 }}
               >
@@ -97,11 +94,8 @@ const Navigation = () => {
                       // Only scroll to section if we're on the home page
                       document.querySelector(item.href)?.scrollIntoView({ behavior: 'smooth' });
                     } else {
-                      // Navigate to home page first, then scroll to section after navigation
-                      navigate('/');
-                      setTimeout(() => {
-                        document.querySelector(item.href)?.scrollIntoView({ behavior: 'smooth' });
-                      }, 100);
+                      // Navigate to home page first, then scroll to section
+                      navigate('/' + item.href);
                     }
                     setIsOpen(false);
                   }}

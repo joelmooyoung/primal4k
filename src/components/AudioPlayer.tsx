@@ -73,7 +73,8 @@ const AudioPlayer = ({
     />
   ));
 
-  // Always use the HTML5 audio approach with album art
+  // Don't use iframe approach - always use the global audio context
+  // This ensures compatibility with persistent player and navigation
   return (
     <Card className="bg-gradient-card border-border/50 overflow-hidden">
       <CardContent className="p-6">
