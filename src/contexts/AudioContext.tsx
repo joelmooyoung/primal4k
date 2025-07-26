@@ -134,7 +134,9 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         console.log('🔊 Set isPlaying to true in localStorage');
       }
     } catch (error) {
-      console.error('Error playing audio:', error);
+      console.error('🚨 Error playing audio:', error);
+      console.error('🚨 Current station when error occurred:', currentStation);
+      console.error('🚨 Audio src when error occurred:', audioRef.current?.src);
       setIsPlaying(false);
       localStorage.setItem('isPlaying', 'false');
     }
