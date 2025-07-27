@@ -42,7 +42,7 @@ const EventsCarousel = () => {
 
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }, 5000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, [isPlaying, slides.length]);

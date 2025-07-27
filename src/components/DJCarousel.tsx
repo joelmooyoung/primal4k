@@ -154,7 +154,7 @@ const DJCarousel = () => {
 
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }, 4000);
+    }, 8000);
 
     return () => clearInterval(interval);
   }, [isPlaying, slides.length]);
