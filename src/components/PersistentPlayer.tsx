@@ -26,8 +26,8 @@ const PersistentPlayer = () => {
         >
           {/* Logo background */}
           <img 
-            src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" 
-            alt="Primal Radio Logo"
+            src={metadata?.djImage || "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"} 
+            alt={metadata?.djImage ? `${metadata.currentTrack?.artist}` : "Primal Radio Logo"}
             className="absolute inset-1 w-12 h-12 rounded-full object-cover opacity-30"
           />
           {/* Play/Pause icon overlay */}
@@ -49,10 +49,10 @@ const PersistentPlayer = () => {
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3 flex-1 min-w-0">
-              {metadata?.currentTrack?.albumArt ? (
+              {(metadata?.djImage || metadata?.currentTrack?.albumArt) ? (
                 <img 
-                  src={metadata.currentTrack.albumArt} 
-                  alt="Album art"
+                  src={metadata.djImage || metadata.currentTrack.albumArt} 
+                  alt={metadata.djImage ? `${metadata.currentTrack?.artist}` : "Album art"}
                   className="w-10 h-10 rounded object-cover flex-shrink-0"
                   onError={(e) => {
                     // Fallback to logo if album art fails

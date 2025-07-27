@@ -1,3 +1,5 @@
+import { getDJImageForHost } from '@/utils/djImageMapping';
+
 interface TrackMetadata {
   title: string;
   artist: string;
@@ -12,6 +14,7 @@ interface StationMetadata {
   listeners?: number;
   bitrate?: string;
   format?: string;
+  djImage?: string; // DJ image for scheduled shows
 }
 
 // Schedule data
@@ -199,6 +202,9 @@ class MetadataService {
     // Check if we have a scheduled show (not the fallback)
     const hasScheduledShow = currentShow.show !== "Primal4k.com";
     
+    // Get DJ image for scheduled show
+    const djImage = hasScheduledShow ? getDJImageForHost(currentShow.host) : null;
+    
     if (hasScheduledShow) {
       // If there's a scheduled show, use the host as artist and show as title
       artist = currentShow.host;
@@ -242,7 +248,8 @@ class MetadataService {
       },
       listeners: parseInt(data.connections) || 0,
       bitrate: data.bitrate ? `${data.bitrate} kbps` : "128 kbps",
-      format: data.format?.[0] || "AAC"
+      format: data.format?.[0] || "AAC",
+      djImage: djImage || undefined
     };
   }
 
@@ -257,6 +264,11 @@ class MetadataService {
     
     const currentTrack = tracks[Math.floor(Date.now() / 30000) % tracks.length];
     
+    // Get current show information for DJ image
+    const currentShow = getCurrentShow();
+    const hasScheduledShow = currentShow.show !== "Primal4k.com";
+    const djImage = hasScheduledShow ? getDJImageForHost(currentShow.host) : null;
+    
     return {
       currentTrack: {
         title: currentTrack.title,
@@ -268,12 +280,19 @@ class MetadataService {
       },
       listeners: Math.floor(Math.random() * 150) + 50,
       bitrate: "320 kbps",
-      format: "MP3"
+      format: "MP3",
+      djImage: djImage || undefined
     };
   }
 
   private getBasicMetadata(): StationMetadata {
     const config = CITRUS3_STATIONS[this.currentStationId as keyof typeof CITRUS3_STATIONS] || CITRUS3_STATIONS['primal-radio'];
+    
+    // Get current show information for DJ image
+    const currentShow = getCurrentShow();
+    const hasScheduledShow = currentShow.show !== "Primal4k.com";
+    const djImage = hasScheduledShow ? getDJImageForHost(currentShow.host) : null;
+    
     return {
       currentTrack: {
         title: "Live Stream",
@@ -285,7 +304,8 @@ class MetadataService {
       },
       listeners: Math.floor(Math.random() * 100) + 50,
       bitrate: "320 kbps",
-      format: "MP3"
+      format: "MP3",
+      djImage: djImage || undefined
     };
   }
 

@@ -179,10 +179,10 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
           {/* Album Art & Visualizer */}
           <div className="flex-shrink-0">
             <div className="relative w-full lg:w-64 h-64 rounded-lg overflow-hidden bg-gradient-primary/20">
-              {/* Show album art based on station */}
+              {/* Show DJ image during scheduled shows, then album art based on station */}
               <img 
-                src={metadata?.currentTrack?.albumArt || "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"}
-                alt={metadata?.currentTrack ? `${metadata.currentTrack.artist} - ${metadata.currentTrack.title}` : `${station.name} Album Art`}
+                src={metadata?.djImage || metadata?.currentTrack?.albumArt || "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"}
+                alt={metadata?.djImage ? `${metadata.currentTrack?.artist}` : metadata?.currentTrack ? `${metadata.currentTrack.artist} - ${metadata.currentTrack.title}` : `${station.name} Album Art`}
                 className="w-full h-full object-cover"
               />
               

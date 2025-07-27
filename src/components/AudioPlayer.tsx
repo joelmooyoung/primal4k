@@ -89,11 +89,11 @@ const AudioPlayer = ({
           {/* Cover Image & Visualizer */}
           <div className="flex-shrink-0">
             <div className="relative w-full lg:w-64 h-64 rounded-lg overflow-hidden bg-gradient-primary/20">
-              {/* Use metadata cover art or fallback to prop */}
-              {(metadata?.currentTrack?.albumArt || coverImage) ? (
+              {/* Use DJ image during scheduled shows, then metadata cover art or fallback to prop */}
+              {(metadata?.djImage || metadata?.currentTrack?.albumArt || coverImage) ? (
                 <img 
-                  src={metadata?.currentTrack?.albumArt || coverImage} 
-                  alt={metadata?.currentTrack ? `${metadata.currentTrack.artist} - ${metadata.currentTrack.title}` : title}
+                  src={metadata?.djImage || metadata?.currentTrack?.albumArt || coverImage} 
+                  alt={metadata?.djImage ? `${metadata.currentTrack?.artist}` : metadata?.currentTrack ? `${metadata.currentTrack.artist} - ${metadata.currentTrack.title}` : title}
                   className="w-full h-full object-cover"
                 />
               ) : (
