@@ -193,19 +193,42 @@ class MetadataService {
     
     // Parse the "nowplaying" field which is in "Artist - Title" format
     const nowPlaying = data.nowplaying || "Live Stream";
-    let artist = currentShow.host;
-    let title = currentShow.show;
+    let artist: string;
+    let title: string;
     
-    // If we have specific track info from the stream, use that as the title
-    if (nowPlaying.includes(' - ')) {
-      const parts = nowPlaying.split(' - ');
-      // Keep the scheduled host but use the track info as title
-      title = `${currentShow.show} - ${parts.slice(1).join(' - ')}`;
-    } else if (nowPlaying !== "Live Stream" && nowPlaying !== "Unknown") {
-      title = `${currentShow.show} - ${nowPlaying}`;
-    } else if (nowPlaying === "Unknown") {
-      // Replace "Unknown" with "Primal4K"
-      title = `${currentShow.show} - Primal4K`;
+    // Check if we have a scheduled show (not the fallback)
+    const hasScheduledShow = currentShow.show !== "Primal4k.com";
+    
+    if (hasScheduledShow) {
+      // If there's a scheduled show, use the host as artist and show as title
+      artist = currentShow.host;
+      title = currentShow.show;
+      
+      // If we have specific track info from the stream, append it to the show title
+      if (nowPlaying.includes(' - ')) {
+        const parts = nowPlaying.split(' - ');
+        title = `${currentShow.show} - ${parts.slice(1).join(' - ')}`;
+      } else if (nowPlaying !== "Live Stream" && nowPlaying !== "Unknown") {
+        title = `${currentShow.show} - ${nowPlaying}`;
+      } else if (nowPlaying === "Unknown") {
+        title = `${currentShow.show} - Primal4K`;
+      }
+    } else {
+      // No scheduled show - use actual song info if available
+      if (nowPlaying.includes(' - ')) {
+        const parts = nowPlaying.split(' - ');
+        artist = parts[0];
+        title = parts.slice(1).join(' - ');
+      } else if (nowPlaying !== "Live Stream" && nowPlaying !== "Unknown") {
+        artist = "Primal4k.com";
+        title = nowPlaying;
+      } else if (nowPlaying === "Unknown") {
+        artist = "Primal4k.com";
+        title = "Primal4K";
+      } else {
+        artist = "PrimalMediaGroup.net";
+        title = "Primal4k.com";
+      }
     }
 
     return {
