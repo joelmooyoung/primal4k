@@ -89,7 +89,7 @@ function getCurrentShow(): { show: string; host: string } {
   }
   
   // Default fallback if no show is scheduled
-  return { show: "Primal Radio", host: "DJ Gadaffi and Friends" };
+  return { show: "Primal4k.com", host: "PrimalMediaGroup.net" };
 }
 
 function parseTimeToMinutes(timeStr: string): number {
