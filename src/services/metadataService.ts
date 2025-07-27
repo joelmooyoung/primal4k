@@ -201,8 +201,11 @@ class MetadataService {
       const parts = nowPlaying.split(' - ');
       // Keep the scheduled host but use the track info as title
       title = `${currentShow.show} - ${parts.slice(1).join(' - ')}`;
-    } else if (nowPlaying !== "Live Stream") {
+    } else if (nowPlaying !== "Live Stream" && nowPlaying !== "Unknown") {
       title = `${currentShow.show} - ${nowPlaying}`;
+    } else if (nowPlaying === "Unknown") {
+      // Replace "Unknown" with "Primal4K"
+      title = `${currentShow.show} - Primal4K`;
     }
 
     return {
