@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AudioProvider } from "@/contexts/AudioContext";
 import PersistentPlayer from "@/components/PersistentPlayer";
+import IconTest from "@/components/IconTest";
 import Index from "./pages/Index";
 
 // Create queryClient outside component to prevent recreation
@@ -23,6 +24,7 @@ const App = () => {
           <Sonner />
           <Index />
           <PersistentPlayer />
+          <IconTest />
         </AudioProvider>
       </TooltipProvider>
     </QueryClientProvider>
