@@ -28,7 +28,7 @@ const PersistentPlayer = () => {
           <img 
             src={metadata?.djImage || "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"} 
             alt={metadata?.djImage ? `${metadata.currentTrack?.artist}` : "Primal Radio Logo"}
-            className="absolute inset-1 w-12 h-12 rounded-full object-cover opacity-30"
+            className={`absolute inset-1 w-12 h-12 rounded-full opacity-30 ${metadata?.djImage ? 'object-contain bg-gradient-primary/10' : 'object-cover'}`}
           />
           {/* Play/Pause icon overlay */}
           {isPlaying ? (
@@ -53,7 +53,7 @@ const PersistentPlayer = () => {
                 <img 
                   src={metadata.djImage || metadata.currentTrack.albumArt} 
                   alt={metadata.djImage ? `${metadata.currentTrack?.artist}` : "Album art"}
-                  className="w-10 h-10 rounded object-cover flex-shrink-0"
+                  className={`w-10 h-10 rounded flex-shrink-0 ${metadata?.djImage ? 'object-contain bg-gradient-primary/10' : 'object-cover'}`}
                   onError={(e) => {
                     // Fallback to logo if album art fails
                     e.currentTarget.src = '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png';

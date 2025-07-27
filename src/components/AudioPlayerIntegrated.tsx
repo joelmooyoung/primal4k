@@ -183,7 +183,7 @@ const AudioPlayerIntegrated = ({ station }: AudioPlayerIntegratedProps) => {
               <img 
                 src={metadata?.djImage || metadata?.currentTrack?.albumArt || "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png"}
                 alt={metadata?.djImage ? `${metadata.currentTrack?.artist}` : metadata?.currentTrack ? `${metadata.currentTrack.artist} - ${metadata.currentTrack.title}` : `${station.name} Album Art`}
-                className="w-full h-full object-cover"
+                className={`w-full h-full ${metadata?.djImage ? 'object-contain bg-gradient-primary/10' : 'object-cover'}`}
               />
               
               {/* Visualizer overlay when playing */}

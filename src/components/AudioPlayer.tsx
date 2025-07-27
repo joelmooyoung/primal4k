@@ -94,7 +94,7 @@ const AudioPlayer = ({
                 <img 
                   src={metadata?.djImage || metadata?.currentTrack?.albumArt || coverImage} 
                   alt={metadata?.djImage ? `${metadata.currentTrack?.artist}` : metadata?.currentTrack ? `${metadata.currentTrack.artist} - ${metadata.currentTrack.title}` : title}
-                  className="w-full h-full object-cover"
+                  className={`w-full h-full ${metadata?.djImage ? 'object-contain bg-gradient-primary/10' : 'object-cover'}`}
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
