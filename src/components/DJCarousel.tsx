@@ -140,7 +140,7 @@ const DJCarousel = () => {
     },
     {
       id: "dr-dawkins",
-      image: "/lovable-uploads/ccc9b838-f7a2-4349-afab-8b4bf63e6741.png",
+      image: "/lovable-uploads/7792b74e-b282-4973-bc9b-40ea514033e6.png",
       title: "Dr Dawkins",
       description: "Answers from The Word with Dr Dawkins"
     }
