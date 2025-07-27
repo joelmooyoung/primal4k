@@ -136,7 +136,7 @@ const DJCarousel = () => {
       id: "alopex",
       image: alopex,
       title: "Alopex",
-      description: "Urban Underground"
+      description: "Answers from The Word - What does the Bible say?"
     },
     {
       id: "dr-dawkins",
