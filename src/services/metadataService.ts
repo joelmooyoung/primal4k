@@ -14,6 +14,101 @@ interface StationMetadata {
   format?: string;
 }
 
+// Schedule data
+const PROGRAM_SCHEDULE = [
+  { day: "Monday", show: "The Community Buzz", host: "Imaara", time: "4:00 PM - 6:00 PM" },
+  { day: "Monday", show: "Primally Poetic", host: "Neiima & Poets", time: "8:30 PM - 9:30 PM" },
+  { day: "Tuesday", show: "Open", host: "Open", time: "6:00 PM - 7:00 PM" },
+  { day: "Tuesday", show: "Level Up", host: "Jean Marie", time: "7:00 PM - 8:00 PM" },
+  { day: "Tuesday", show: "Soul2Soul", host: "DJ 77 & DJ Gadaffi", time: "8:00 PM - 10:00 PM" },
+  { day: "Tuesday", show: "MetaMorphosis", host: "Doc Iman Blak", time: "10:00 PM - 12:00 AM" },
+  { day: "Wednesday", show: "Hold a Reasoning", host: "Singing Melody", time: "1:00 PM - 3:00 PM" },
+  { day: "Wednesday", show: "Urban Honeys", host: "DJ 77", time: "6:00 PM - 7:00 PM" },
+  { day: "Wednesday", show: "Linen & Lace - A Straight Jazz Odyssey", host: "DJ 77", time: "7:00 PM - 8:00 PM" },
+  { day: "Wednesday", show: "The Wednesday Workout", host: "DJ DeDe", time: "8:00 PM - 10:00 PM" },
+  { day: "Wednesday", show: "The Tony G Show", host: "DJ Tony G", time: "10:00 PM - 12:00 AM" },
+  { day: "Thursday", show: "Lioncore", host: "Daddy Lion Chandell", time: "3:00 PM - 5:00 PM" },
+  { day: "Thursday", show: "The Matrix", host: "Neiima & DeDe", time: "6:00 PM - 7:00 PM" },
+  { day: "Thursday", show: "Hype Thursdays", host: "DJ Jermaine Hard Drive", time: "7:00 PM - 9:00 PM" },
+  { day: "Thursday", show: "The Heart of Soul", host: "DLC", time: "9:00 PM - 11:00 PM" },
+  { day: "Friday", show: "Afternoon Delight", host: "DLC", time: "11:00 AM - 3:00 PM" },
+  { day: "Friday", show: "The Heart of Soul", host: "DLC", time: "3:00 PM - 6:00 PM" },
+  { day: "Friday", show: "The Traffic Jam Mix", host: "DJ Teachdem", time: "6:00 PM - 8:00 PM" },
+  { day: "Friday", show: "Screech At Night", host: "DJ Screech", time: "8:00 PM - 10:00 PM" },
+  { day: "Friday", show: "Deja Vu", host: "DJ Migrane", time: "10:00 PM - 12:00 AM" },
+  { day: "Saturday", show: "The Roots Dynamic Experience", host: "DLC", time: "10:00 AM - 1:00 PM" },
+  { day: "Saturday", show: "The Skaturday Bang", host: "DLC", time: "1:00 PM - 4:00 PM" },
+  { day: "Saturday", show: "Primal Sports", host: "Dale, Kane, Froggy & The Controversial Boss", time: "4:00 PM - 5:00/5:30 PM" },
+  { day: "Saturday", show: "Amapiano & more", host: "DJ Teachdem", time: "5:00/5:30 PM - 7:30 PM" },
+  { day: "Saturday", show: "Di Drive", host: "DJ Keu", time: "7:30 PM - 9:30 PM" },
+  { day: "Saturday", show: "Outside We Deh", host: "DJ Badbin", time: "9:30 PM - 12:00 AM" },
+  { day: "Sunday", show: "Answers from The Word", host: "Alopex/Dr Dawkins", time: "9:00 AM - 10:00 AM" },
+  { day: "Sunday", show: "Sunday Serenade", host: "DJ DeDe", time: "10:00 AM - 12:00 PM" },
+  { day: "Sunday", show: "Level Up", host: "Jean Marie", time: "12:00 PM - 1:00 PM" },
+  { day: "Sunday", show: "Grown Folks Music", host: "DJ Keu", time: "1:00 PM - 3:00 PM" },
+  { day: "Sunday", show: "The Kool Runnings Show", host: "Professor X", time: "3:00 PM - 6:00 PM" },
+  { day: "Sunday", show: "The Cookie Jar", host: "DJ Migrane", time: "6:00 PM - 9:00 PM" },
+  { day: "Sunday", show: "The Quiet Storm Show", host: "DJ Smooth Daddy", time: "9:00 PM - 11:00 PM" }
+];
+
+// Helper function to parse time strings and get current show
+function getCurrentShow(): { show: string; host: string } {
+  const now = new Date();
+  
+  // Convert to EST/EDT
+  const estTime = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
+  const currentDay = estTime.toLocaleDateString('en-US', { weekday: 'long' });
+  const currentHour = estTime.getHours();
+  const currentMinute = estTime.getMinutes();
+  const currentTimeInMinutes = currentHour * 60 + currentMinute;
+  
+  // Find matching show for current day and time
+  const todaysShows = PROGRAM_SCHEDULE.filter(schedule => schedule.day === currentDay);
+  
+  for (const schedule of todaysShows) {
+    const timeRange = schedule.time;
+    const [startTime, endTime] = timeRange.split(' - ');
+    
+    const startMinutes = parseTimeToMinutes(startTime);
+    let endMinutes = parseTimeToMinutes(endTime);
+    
+    // Handle midnight crossover (e.g., 10:00 PM - 12:00 AM)
+    if (endMinutes <= startMinutes) {
+      endMinutes += 24 * 60; // Add 24 hours
+    }
+    
+    // Check if current time is within this show's time range
+    if (currentTimeInMinutes >= startMinutes && currentTimeInMinutes < endMinutes) {
+      return { show: schedule.show, host: schedule.host };
+    }
+    
+    // Handle midnight crossover for current time too
+    if (endMinutes > 24 * 60 && currentTimeInMinutes + 24 * 60 >= startMinutes && currentTimeInMinutes + 24 * 60 < endMinutes) {
+      return { show: schedule.show, host: schedule.host };
+    }
+  }
+  
+  // Default fallback if no show is scheduled
+  return { show: "Primal Radio", host: "DJ Gadaffi and Friends" };
+}
+
+function parseTimeToMinutes(timeStr: string): number {
+  const time = timeStr.trim();
+  const [hourMinute, period] = time.split(' ');
+  const [hourStr, minuteStr = '0'] = hourMinute.split(':');
+  
+  let hour = parseInt(hourStr);
+  const minute = parseInt(minuteStr);
+  
+  if (period === 'PM' && hour !== 12) {
+    hour += 12;
+  } else if (period === 'AM' && hour === 12) {
+    hour = 0;
+  }
+  
+  return hour * 60 + minute;
+}
+
 // Citrus3 station configurations
 const CITRUS3_STATIONS = {
   'primal-radio': {
@@ -93,17 +188,21 @@ class MetadataService {
   private parseCitrus3Data(data: any, stationConfig: any): StationMetadata {
     console.log('🎵 MetadataService: Parsing Citrus3 data structure:', Object.keys(data));
     
+    // Get current show information based on schedule
+    const currentShow = getCurrentShow();
+    
     // Parse the "nowplaying" field which is in "Artist - Title" format
     const nowPlaying = data.nowplaying || "Live Stream";
-    let artist = this.currentStationId === 'primal-radio-2' ? "Primal Radio 2" : "DJ Gadaffi and Friends";
-    let title = "Live Stream";
+    let artist = currentShow.host;
+    let title = currentShow.show;
     
+    // If we have specific track info from the stream, use that as the title
     if (nowPlaying.includes(' - ')) {
       const parts = nowPlaying.split(' - ');
-      artist = parts[0];
-      title = parts.slice(1).join(' - ');
-    } else {
-      title = nowPlaying;
+      // Keep the scheduled host but use the track info as title
+      title = `${currentShow.show} - ${parts.slice(1).join(' - ')}`;
+    } else if (nowPlaying !== "Live Stream") {
+      title = `${currentShow.show} - ${nowPlaying}`;
     }
 
     return {
