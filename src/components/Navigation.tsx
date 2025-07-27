@@ -41,6 +41,10 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
           element.scrollIntoView({ behavior: 'smooth' });
         }
       }
+    } else if (section === 'home') {
+      // Navigate to home and scroll to top
+      onNavigate?.(section);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       // Navigate to section
       console.log('🎯 Navigation: Calling onNavigate with section:', section);
@@ -55,7 +59,7 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
           {/* Logo */}
           <div 
             className="flex items-center space-x-2 cursor-pointer" 
-            onClick={() => onNavigate?.('home')}
+            onClick={() => handleNavClick('home')}
           >
             <img 
               src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" 
