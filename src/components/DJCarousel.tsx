@@ -18,6 +18,7 @@ import professorX from "@/assets/professor-x-original.jpg";
 import djMigrane from "@/assets/dj-migrane-original.jpeg";
 import djScreench from "@/assets/dj-screech-original.jpeg";
 import dlcLioncore from "@/assets/dlc-lioncore-original.jpeg";
+import alopex from "@/assets/alopex-original.jpeg";
 const djSmoothDaddy = "/lovable-uploads/0dff8266-ab20-4e95-8173-8e6383bad650.png";
 
 interface DJSlide {
@@ -130,6 +131,18 @@ const DJCarousel = () => {
       image: djSmoothDaddy,
       title: "The Smooth Daddy",
       description: "The Quiet Storm"
+    },
+    {
+      id: "alopex",
+      image: alopex,
+      title: "Alopex",
+      description: "Urban Underground"
+    },
+    {
+      id: "dr-dawkins",
+      image: "/lovable-uploads/ccc9b838-f7a2-4349-afab-8b4bf63e6741.png",
+      title: "Dr Dawkins",
+      description: "The Dr Dawkins Show"
     }
   ];
 
