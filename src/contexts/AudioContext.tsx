@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useRef, useEffect, ReactNode } from 'react';
-
+import { metadataService } from '@/services/metadataService';
 import { Station } from "@/types/station";
 
 interface AudioContextType {
@@ -147,6 +147,8 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       setCurrentStation(station);
       if (station) {
         localStorage.setItem('currentStation', JSON.stringify(station));
+        // Update metadata service with new station
+        metadataService.setCurrentStation(station.id);
       } else {
         localStorage.removeItem('currentStation');
       }

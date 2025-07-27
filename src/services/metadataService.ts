@@ -14,21 +14,34 @@ interface StationMetadata {
   format?: string;
 }
 
-// Citrus3 station configuration
-const CITRUS3_CONFIG = {
-  stationName: "djgadaffiandfriends",
-  baseUrl: "https://fast.citrus3.com:2020",
-  streamUrl: "https://fast.citrus3.com:2020/public/djgadaffiandfriends"
+// Citrus3 station configurations
+const CITRUS3_STATIONS = {
+  'primal-radio': {
+    stationName: "djgadaffiandfriends",
+    baseUrl: "https://fast.citrus3.com:2020",
+    apiUrl: "https://fast.citrus3.com:2020/json/stream/djgadaffiandfriends"
+  },
+  'primal-radio-2': {
+    stationName: "primal4k",
+    baseUrl: "https://s1.citrus3.com:2000",
+    apiUrl: "https://s1.citrus3.com:2000/json/stream/primal4k"
+  }
 };
 
 class MetadataService {
   private listeners: ((metadata: StationMetadata) => void)[] = [];
   private interval: NodeJS.Timeout | null = null;
   private currentMetadata: StationMetadata | null = null;
+  private currentStationId: string = 'primal-radio';
 
   constructor() {
     this.loadCitrus3Widgets();
     this.startPolling();
+  }
+
+  setCurrentStation(stationId: string) {
+    this.currentStationId = stationId;
+    this.fetchMetadata(); // Immediately fetch metadata for new station
   }
 
   private loadCitrus3Widgets() {
@@ -49,32 +62,40 @@ class MetadataService {
   }
 
   private async fetchMetadata() {
+    const stationConfig = CITRUS3_STATIONS[this.currentStationId as keyof typeof CITRUS3_STATIONS];
+    if (!stationConfig) {
+      console.log('🎵 MetadataService: No config for station:', this.currentStationId);
+      this.currentMetadata = this.getEnhancedBasicMetadata();
+      this.notifyListeners();
+      return;
+    }
+
     try {
-      console.log('🎵 MetadataService: Fetching from Citrus3 JSON API...');
-      const response = await fetch('https://fast.citrus3.com:2020/json/stream/djgadaffiandfriends');
+      console.log('🎵 MetadataService: Fetching from Citrus3 JSON API for station:', this.currentStationId);
+      const response = await fetch(stationConfig.apiUrl);
       
       if (response.ok) {
         const data = await response.json();
         console.log('🎵 MetadataService: Received JSON data:', data);
-        this.currentMetadata = this.parseCitrus3Data(data);
+        this.currentMetadata = this.parseCitrus3Data(data, stationConfig);
       } else {
         console.log('🎵 MetadataService: API request failed, using enhanced metadata');
-        this.currentMetadata = this.getEnhancedBasicMetadata();
+        this.currentMetadata = this.getEnhancedBasicMetadata(stationConfig);
       }
     } catch (error) {
       console.log('🎵 MetadataService: Using enhanced metadata due to error:', error);
-      this.currentMetadata = this.getEnhancedBasicMetadata();
+      this.currentMetadata = this.getEnhancedBasicMetadata(stationConfig);
     }
     
     this.notifyListeners();
   }
 
-  private parseCitrus3Data(data: any): StationMetadata {
+  private parseCitrus3Data(data: any, stationConfig: any): StationMetadata {
     console.log('🎵 MetadataService: Parsing Citrus3 data structure:', Object.keys(data));
     
     // Parse the "nowplaying" field which is in "Artist - Title" format
     const nowPlaying = data.nowplaying || "Live Stream";
-    let artist = "DJ Gadaffi and Friends";
+    let artist = this.currentStationId === 'primal-radio-2' ? "Primal Radio 2" : "DJ Gadaffi and Friends";
     let title = "Live Stream";
     
     if (nowPlaying.includes(' - ')) {
@@ -90,7 +111,7 @@ class MetadataService {
         title,
         artist,
         album: "Live Radio",
-        albumArt: data.coverart || `${CITRUS3_CONFIG.baseUrl}/covers/${CITRUS3_CONFIG.stationName}.jpg`,
+        albumArt: data.coverart || `${stationConfig.baseUrl}/covers/${stationConfig.stationName}.jpg`,
         duration: undefined,
         genre: "Electronic"
       },
@@ -100,7 +121,8 @@ class MetadataService {
     };
   }
 
-  private getEnhancedBasicMetadata(): StationMetadata {
+  private getEnhancedBasicMetadata(stationConfig?: any): StationMetadata {
+    const config = stationConfig || CITRUS3_STATIONS['primal-radio'];
     const tracks = [
       { title: "House Vibes", artist: "DJ Gadaffi" },
       { title: "Deep Sounds", artist: "Various Artists" },
@@ -115,7 +137,7 @@ class MetadataService {
         title: currentTrack.title,
         artist: currentTrack.artist,
         album: "Primal Radio Live",
-        albumArt: `${CITRUS3_CONFIG.baseUrl}/covers/${CITRUS3_CONFIG.stationName}.jpg`,
+        albumArt: `${config.baseUrl}/covers/${config.stationName}.jpg`,
         duration: undefined,
         genre: "Electronic"
       },
@@ -126,12 +148,13 @@ class MetadataService {
   }
 
   private getBasicMetadata(): StationMetadata {
+    const config = CITRUS3_STATIONS[this.currentStationId as keyof typeof CITRUS3_STATIONS] || CITRUS3_STATIONS['primal-radio'];
     return {
       currentTrack: {
         title: "Live Stream",
-        artist: "DJ Gadaffi and Friends",
+        artist: this.currentStationId === 'primal-radio-2' ? "Primal Radio 2" : "DJ Gadaffi and Friends",
         album: "Primal Radio",
-        albumArt: `${CITRUS3_CONFIG.baseUrl}/covers/${CITRUS3_CONFIG.stationName}.jpg`,
+        albumArt: `${config.baseUrl}/covers/${config.stationName}.jpg`,
         duration: undefined,
         genre: "Electronic"
       },
