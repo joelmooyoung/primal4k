@@ -143,6 +143,12 @@ const DJCarousel = () => {
       image: "/lovable-uploads/7792b74e-b282-4973-bc9b-40ea514033e6.png",
       title: "Dr Dawkins",
       description: "Answers from The Word with Dr Dawkins"
+    },
+    {
+      id: "dj-badbin",
+      image: "/lovable-uploads/b0224e5d-bbbb-46da-991e-c479ee6973ae.png",
+      title: "DJ Badbin",
+      description: "Hip-Hop & Urban Vibes"
     }
   ];
 
