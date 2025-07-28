@@ -310,7 +310,6 @@ const DJProfile = () => {
   };
 
   const dj = djData[djId as keyof typeof djData];
-  console.log('DJ ID:', djId, 'DJ Data:', dj, 'Available keys:', Object.keys(djData));
 
   if (!dj) {
     return (
