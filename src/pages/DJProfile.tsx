@@ -307,7 +307,6 @@ const DJProfile = () => {
       experience: "10+ years in radio",
       email: "smoothdaddy@primal4k.com"
     }
-    // Add more DJ data as needed
   };
 
   const dj = djData[djId as keyof typeof djData];
