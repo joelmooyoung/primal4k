@@ -255,14 +255,14 @@ const DJs = () => {
           {djs.map((dj, index) => (
             <Card key={index} className="bg-gradient-card border-border/50 hover:shadow-lg transition-all duration-300">
               <CardContent className="p-6">
-                {/* DJ Image */}
-                <div className="flex justify-center mb-4">
-                  <img 
-                    src={dj.image} 
-                    alt={dj.name}
-                    className="w-20 h-20 rounded-full object-cover border-2 border-primary/20"
-                  />
-                </div>
+                 {/* DJ Image */}
+                 <div className="flex justify-center mb-4">
+                   <img 
+                     src={dj.image} 
+                     alt={dj.name}
+                     className="w-32 h-32 rounded-full object-cover border-2 border-primary/20"
+                   />
+                 </div>
                 
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">

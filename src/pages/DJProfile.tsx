@@ -115,15 +115,19 @@ const DJProfile = () => {
             {/* Main Profile */}
             <div className="lg:col-span-2">
               <Card className="bg-gradient-card border-border/50 mb-6">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <Radio className="w-8 h-8 text-primary" />
-                      <div>
-                        <CardTitle className="text-2xl">{dj.name}</CardTitle>
-                        <p className="text-muted-foreground">{dj.show}</p>
-                      </div>
-                    </div>
+                 <CardHeader>
+                   <div className="flex items-center justify-between">
+                     <div className="flex items-center gap-4">
+                       <img 
+                         src="/placeholder.svg" 
+                         alt={dj.name}
+                         className="w-16 h-16 rounded-full object-cover border-2 border-primary/20"
+                       />
+                       <div>
+                         <CardTitle className="text-2xl">{dj.name}</CardTitle>
+                         <p className="text-muted-foreground">{dj.show}</p>
+                       </div>
+                     </div>
                     <Badge variant="secondary" className="bg-primary/20 text-primary border-primary/30">
                       <Music className="w-3 h-3 mr-1" />
                       DJ
