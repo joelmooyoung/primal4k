@@ -482,7 +482,7 @@ const Index = () => {
             </div>
 
             {/* Calendar-style display */}
-            <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-7 gap-2">
               {(() => {
                 const scheduleData = [
                   { day: "Monday", show: "The Community Buzz", host: "Imaara", time: "4:00 PM - 6:00 PM" },
@@ -533,7 +533,7 @@ const Index = () => {
                       <div className="space-y-3">
                         {dayShows.map((show, index) => (
                           <div key={index} className="bg-gradient-card/80 rounded-lg p-3 border border-primary/10 hover:border-primary/30 transition-all duration-200 hover:shadow-md backdrop-blur-sm">
-                            <div className="font-semibold text-sm text-foreground mb-2 line-clamp-2">
+                            <div className="font-semibold text-sm text-foreground mb-2 break-words">
                               {show.show}
                             </div>
                             <div className="text-xs text-accent font-medium mb-1 bg-accent/10 rounded px-2 py-1 inline-block">
