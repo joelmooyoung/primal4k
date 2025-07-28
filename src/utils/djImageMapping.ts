@@ -13,7 +13,7 @@ import docImanBlak from "@/assets/doc-iman-blak-original.jpeg";
 import professorX from "@/assets/professor-x-original.jpg";
 import djMigrane from "@/assets/dj-migrane-original.jpeg";
 import djScreench from "@/assets/dj-screech-original.jpeg";
-import djBadbin from "@/assets/dj-badbin-original.jpeg";
+const djBadbin = "/lovable-uploads/b0224e5d-bbbb-46da-991e-c479ee6973ae.png";
 import alopex from "@/assets/alopex-original.jpeg";
 import dlcLioncore from "@/assets/dlc-lioncore-original.jpeg";
 
