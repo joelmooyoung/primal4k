@@ -310,6 +310,7 @@ const DJProfile = () => {
   };
 
   const dj = djData[djId as keyof typeof djData];
+  console.log('DJ ID:', djId, 'DJ Data:', dj, 'Available keys:', Object.keys(djData));
 
   if (!dj) {
     return (
@@ -354,11 +355,11 @@ const DJProfile = () => {
                  <CardHeader>
                    <div className="flex items-center justify-between">
                      <div className="flex items-center gap-4">
-                       <img 
-                         src={djImages[djId as string] || "/placeholder.svg"} 
-                         alt={dj.name}
-                         className="w-32 h-32 rounded-full object-cover border-2 border-primary/20"
-                       />
+                        <img 
+                          src={djImages[djId as string] || "/placeholder.svg"} 
+                          alt={dj.name}
+                          className="w-48 h-48 rounded-full object-cover border-2 border-primary/20"
+                        />
                        <div>
                          <CardTitle className="text-2xl">{dj.name}</CardTitle>
                          <p className="text-muted-foreground">{dj.show}</p>
