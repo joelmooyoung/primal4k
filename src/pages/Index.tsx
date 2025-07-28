@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import StationSelector from "@/components/StationSelector";
 import AudioPlayer from "@/components/AudioPlayer";
@@ -858,6 +858,13 @@ const Index = () => {
 
   const renderDJProfileSection = () => {
     const dj = djProfileData[selectedDJId];
+    
+    // Scroll to top when DJ profile section renders
+    useEffect(() => {
+      if (activeSection === 'dj-profile') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, [activeSection, selectedDJId]);
     
     if (!dj) {
       return (
