@@ -292,12 +292,16 @@ const DJs = () => {
                     {dj.description}
                   </p>
                   
-                   <Button 
-                     variant="outline" 
-                     size="sm" 
-                     className="w-full mt-4"
-                     onClick={() => navigate(`/dj/${dj.id}`)}
-                   >
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full mt-4"
+                      onClick={() => {
+                        // Use hash navigation to stay on single page
+                        window.location.hash = `dj-${dj.id}`;
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                    >
                      View Profile
                    </Button>
                 </div>

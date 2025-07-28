@@ -821,15 +821,17 @@ const Index = () => {
                   {dj.description}
                 </p>
                 
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="w-full mt-4"
-                  onClick={() => {
-                    setSelectedDJId(dj.id);
-                    setActiveSection('dj-profile');
-                  }}
-                >
+                 <Button 
+                   variant="outline" 
+                   size="sm" 
+                   className="w-full mt-4"
+                   onClick={() => {
+                     setSelectedDJId(dj.id);
+                     setActiveSection('dj-profile');
+                     // Scroll to top when DJ profile loads
+                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                   }}
+                 >
                   View Profile
                 </Button>
               </div>
