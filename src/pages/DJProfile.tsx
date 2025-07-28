@@ -6,8 +6,55 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Radio, Clock, Music, Calendar, Users, Mail } from "lucide-react";
 
+// Import DJ images
+import djGadaffi from "@/assets/dj-gadaffi-original.jpeg";
+import dj77 from "@/assets/dj-77-original.jpeg";
+import djDede from "@/assets/dj-dede-original.jpeg";
+import djJermaine from "@/assets/dj-jermaine-original.jpeg";
+import djTonyG from "@/assets/dj-tony-g-original.jpeg";
+import djKeu from "@/assets/dj-keu-original.jpeg";
+import djTeachdem from "@/assets/dj-teachdem-original.jpeg";
+import djCraig from "@/assets/dj-craig-original.jpeg";
+import jeanMarie from "@/assets/jean-marie-original.jpeg";
+import theMatrix from "@/assets/the-matrix-original.jpeg";
+import docImanBlak from "@/assets/doc-iman-blak-original.jpeg";
+import professorX from "@/assets/professor-x-original.jpg";
+import djMigrane from "@/assets/dj-migrane-original.jpeg";
+import djScreench from "@/assets/dj-screech-original.jpeg";
+import djBadbin from "@/assets/dj-badbin-original.jpeg";
+import alopex from "@/assets/alopex-original.jpeg";
+import dlcLioncore from "@/assets/dlc-lioncore-original.jpeg";
+const djSmoothDaddy = "/lovable-uploads/0dff8266-ab20-4e95-8173-8e6383bad650.png";
+
 const DJProfile = () => {
   const { djId } = useParams();
+
+  // DJ image mapping
+  const djImages: Record<string, string> = {
+    "imaara": "/placeholder.svg",
+    "neiima-poets": "/placeholder.svg",
+    "jean-marie": jeanMarie,
+    "dj-77-gadaffi": djGadaffi,
+    "doc-iman-blak": docImanBlak,
+    "dj-jermaine-hard-drive": djJermaine,
+    "singing-melody": "/placeholder.svg",
+    "dj-77": dj77,
+    "dj-dede": djDede,
+    "dj-tony-g": djTonyG,
+    "neiima-dede": theMatrix,
+    "dlc-daddy-lion": dlcLioncore,
+    "dj-keu": djKeu,
+    "dj-tracy": "/placeholder.svg",
+    "dj-teachdem": djTeachdem,
+    "dj-screech": djScreench,
+    "dj-migrane": djMigrane,
+    "dj-craig": djCraig,
+    "primal-sports-team": "/placeholder.svg",
+    "dj-badbin": djBadbin,
+    "alopex-dr-dawkins": alopex,
+    "professor-x": professorX,
+    "dj-smooth-daddy": djSmoothDaddy
+  };
 
   const djData = {
     "imaara": {
@@ -119,9 +166,9 @@ const DJProfile = () => {
                    <div className="flex items-center justify-between">
                      <div className="flex items-center gap-4">
                        <img 
-                         src="/placeholder.svg" 
+                         src={djImages[djId as string] || "/placeholder.svg"} 
                          alt={dj.name}
-                         className="w-16 h-16 rounded-full object-cover border-2 border-primary/20"
+                         className="w-24 h-24 rounded-full object-cover border-2 border-primary/20"
                        />
                        <div>
                          <CardTitle className="text-2xl">{dj.name}</CardTitle>

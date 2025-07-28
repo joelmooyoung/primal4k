@@ -260,7 +260,7 @@ const DJs = () => {
                    <img 
                      src={dj.image} 
                      alt={dj.name}
-                     className="w-32 h-32 rounded-full object-cover border-2 border-primary/20"
+                     className="w-64 h-64 rounded-full object-cover border-2 border-primary/20"
                    />
                  </div>
                 
