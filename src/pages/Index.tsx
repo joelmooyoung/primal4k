@@ -52,6 +52,13 @@ const Index = () => {
   const [activeSection, setActiveSection] = useState<PageSection>('home');
   const [selectedDJId, setSelectedDJId] = useState<string>('');
 
+  // Scroll to top when DJ profile section loads
+  useEffect(() => {
+    if (activeSection === 'dj-profile') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [activeSection, selectedDJId]);
+
   // Debug active section changes
   const handleSectionChange = (section: PageSection) => {
     console.log('🎯 Index: activeSection changing from', activeSection, 'to', section);
@@ -858,13 +865,6 @@ const Index = () => {
 
   const renderDJProfileSection = () => {
     const dj = djProfileData[selectedDJId];
-    
-    // Scroll to top when DJ profile section renders
-    useEffect(() => {
-      if (activeSection === 'dj-profile') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    }, [activeSection, selectedDJId]);
     
     if (!dj) {
       return (
