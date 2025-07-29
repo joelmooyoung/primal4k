@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Music, Calendar, Users, Radio, Clock, Mail, Phone, MapPin } from "lucide-react";
 import { Station } from "@/types/station";
+import { supabase } from "@/integrations/supabase/client";
 
 // Import DJ images
 import djGadaffi from "@/assets/dj-gadaffi-original.jpeg";
@@ -51,6 +52,7 @@ const Index = () => {
   
   const [activeSection, setActiveSection] = useState<PageSection>('home');
   const [selectedDJId, setSelectedDJId] = useState<string>('');
+  const [scheduleData, setScheduleData] = useState<Array<{day: string; show: string; host: string; time: string}>>([]);
 
   // Scroll to top when DJ profile section loads
   useEffect(() => {
@@ -58,6 +60,57 @@ const Index = () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [activeSection, selectedDJId]);
+
+  // Fetch schedule data from database
+  useEffect(() => {
+    const fetchSchedule = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('schedule')
+          .select('*')
+          .order('day_of_week')
+          .order('start_time');
+
+        if (error) {
+          console.error('Error fetching schedule:', error);
+          return;
+        }
+
+        if (data) {
+          // Convert database format to display format
+          const formattedSchedule = data.map(item => {
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const day = days[item.day_of_week];
+            
+            // Format time from HH:MM:SS to HH:MM AM/PM
+            const formatTime = (timeStr: string) => {
+              const [hours, minutes] = timeStr.split(':');
+              const hour = parseInt(hours);
+              const ampm = hour >= 12 ? 'PM' : 'AM';
+              const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+              return `${displayHour}:${minutes} ${ampm}`;
+            };
+
+            const startTime = formatTime(item.start_time);
+            const endTime = formatTime(item.end_time);
+            
+            return {
+              day,
+              show: item.show_name,
+              host: item.host_name,
+              time: `${startTime} - ${endTime}`
+            };
+          });
+
+          setScheduleData(formattedSchedule);
+        }
+      } catch (error) {
+        console.error('Error fetching schedule:', error);
+      }
+    };
+
+    fetchSchedule();
+  }, []);
 
   // Debug active section changes
   const handleSectionChange = (section: PageSection) => {
@@ -691,42 +744,6 @@ const Index = () => {
             {/* Calendar-style display */}
             <div className="grid grid-cols-1 md:grid-cols-7 gap-2">
               {(() => {
-                const scheduleData = [
-                  { day: "Monday", show: "The Community Buzz", host: "Imaara", time: "4:00 PM - 6:00 PM" },
-                  { day: "Monday", show: "Primally Poetic", host: "Neiima & Poets", time: "8:30 PM - 9:30 PM" },
-                  { day: "Tuesday", show: "Open", host: "Open", time: "6:00 PM - 7:00 PM" },
-                  { day: "Tuesday", show: "Level Up", host: "Jean Marie", time: "7:00 PM - 8:00 PM" },
-                  { day: "Tuesday", show: "Soul2Soul", host: "DJ 77 & DJ Gadaffi", time: "8:00 PM - 10:00 PM" },
-                  { day: "Tuesday", show: "MetaMorphosis", host: "Doc Iman Blak", time: "10:00 PM - 12:00 AM" },
-                  { day: "Wednesday", show: "Hold a Reasoning", host: "Singing Melody", time: "1:00 PM - 3:00 PM" },
-                  { day: "Wednesday", show: "Urban Honeys", host: "DJ 77", time: "6:00 PM - 7:00 PM" },
-                  { day: "Wednesday", show: "Linen & Lace - A Straight Jazz Odyssey", host: "DJ 77", time: "7:00 PM - 8:00 PM" },
-                  { day: "Wednesday", show: "The Wednesday Workout", host: "DJ DeDe", time: "8:00 PM - 10:00 PM" },
-                  { day: "Wednesday", show: "The Tony G Show", host: "DJ Tony G", time: "10:00 PM - 12:00 AM" },
-                  { day: "Thursday", show: "Lioncore", host: "Daddy Lion Chandell", time: "3:00 PM - 5:00 PM" },
-                  { day: "Thursday", show: "The Matrix", host: "Neiima & DeDe", time: "6:00 PM - 7:00 PM" },
-                  { day: "Thursday", show: "Hype Thursdays", host: "DJ Jermaine Hard Drive", time: "7:00 PM - 9:00 PM" },
-                  { day: "Thursday", show: "The Heart of Soul", host: "DLC", time: "9:00 PM - 11:00 PM" },
-                  { day: "Friday", show: "Afternoon Delight", host: "DLC", time: "11:00 AM - 3:00 PM" },
-                  { day: "Friday", show: "The Heart of Soul", host: "DLC", time: "3:00 PM - 6:00 PM" },
-                  { day: "Friday", show: "The Traffic Jam Mix", host: "DJ Teachdem", time: "6:00 PM - 8:00 PM" },
-                  { day: "Friday", show: "Screech At Night", host: "DJ Screech", time: "8:00 PM - 10:00 PM" },
-                  { day: "Friday", show: "Deja Vu", host: "DJ Migrane", time: "10:00 PM - 12:00 AM" },
-                  { day: "Saturday", show: "The Roots Dynamic Experience", host: "DLC", time: "10:00 AM - 1:00 PM" },
-                  { day: "Saturday", show: "The Skaturday Bang", host: "DLC", time: "1:00 PM - 4:00 PM" },
-                  { day: "Saturday", show: "Primal Sports", host: "Dale, Kane, Froggy & The Controversial Boss", time: "4:00 PM - 5:00/5:30 PM" },
-                  { day: "Saturday", show: "Amapiano & more", host: "DJ Teachdem", time: "5:00/5:30 PM - 7:30 PM" },
-                  { day: "Saturday", show: "Di Drive", host: "DJ Keu", time: "7:30 PM - 9:30 PM" },
-                  { day: "Saturday", show: "Outside We Deh", host: "DJ Badbin", time: "9:30 PM - 12:00 AM" },
-                  { day: "Sunday", show: "Answers from The Word", host: "Alopex/Dr Dawkins", time: "9:00 AM - 10:00 AM" },
-                  { day: "Sunday", show: "Sunday Serenade", host: "DJ DeDe", time: "10:00 AM - 12:00 PM" },
-                  { day: "Sunday", show: "Level Up", host: "Jean Marie", time: "12:00 PM - 1:00 PM" },
-                  { day: "Sunday", show: "Grown Folks Music", host: "DJ Keu", time: "1:00 PM - 3:00 PM" },
-                  { day: "Sunday", show: "The Kool Runnings Show", host: "Professor X", time: "3:00 PM - 6:00 PM" },
-                  { day: "Sunday", show: "The Cookie Jar", host: "DJ Migrane", time: "6:00 PM - 9:00 PM" },
-                  { day: "Sunday", show: "The Quiet Storm Show", host: "DJ Smooth Daddy", time: "9:00 PM - 11:00 PM" }
-                ];
-
                 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
                 
                 return days.map(day => {
