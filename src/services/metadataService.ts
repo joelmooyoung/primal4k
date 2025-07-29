@@ -1,4 +1,5 @@
 import { getDJImageForHost } from '@/utils/djImageMapping';
+import { supabase } from '@/integrations/supabase/client';
 
 interface TrackMetadata {
   title: string;
@@ -17,82 +18,78 @@ interface StationMetadata {
   djImage?: string; // DJ image for scheduled shows
 }
 
-// Schedule data
-const PROGRAM_SCHEDULE = [
-  { day: "Monday", show: "The Community Buzz", host: "Imaara", time: "4:00 PM - 6:00 PM" },
-  { day: "Monday", show: "Primally Poetic", host: "Neiima & Poets", time: "8:30 PM - 9:30 PM" },
-  { day: "Tuesday", show: "Open", host: "Open", time: "6:00 PM - 7:00 PM" },
-  { day: "Tuesday", show: "Level Up", host: "Jean Marie", time: "7:00 PM - 8:00 PM" },
-  { day: "Tuesday", show: "Soul2Soul", host: "DJ 77 & DJ Gadaffi", time: "8:00 PM - 10:00 PM" },
-  { day: "Tuesday", show: "MetaMorphosis", host: "Doc Iman Blak", time: "10:00 PM - 12:00 AM" },
-  { day: "Wednesday", show: "Hold a Reasoning", host: "Singing Melody", time: "1:00 PM - 3:00 PM" },
-  { day: "Wednesday", show: "Urban Honeys", host: "DJ 77", time: "6:00 PM - 7:00 PM" },
-  { day: "Wednesday", show: "Linen & Lace - A Straight Jazz Odyssey", host: "DJ 77", time: "7:00 PM - 8:00 PM" },
-  { day: "Wednesday", show: "The Wednesday Workout", host: "DJ DeDe", time: "8:00 PM - 10:00 PM" },
-  { day: "Wednesday", show: "The Tony G Show", host: "DJ Tony G", time: "10:00 PM - 12:00 AM" },
-  { day: "Thursday", show: "Lioncore", host: "Daddy Lion Chandell", time: "3:00 PM - 5:00 PM" },
-  { day: "Thursday", show: "The Matrix", host: "Neiima & DeDe", time: "6:00 PM - 7:00 PM" },
-  { day: "Thursday", show: "Hype Thursdays", host: "DJ Jermaine Hard Drive", time: "7:00 PM - 9:00 PM" },
-  { day: "Thursday", show: "The Heart of Soul", host: "DLC", time: "9:00 PM - 11:00 PM" },
-  { day: "Friday", show: "Afternoon Delight", host: "DLC", time: "11:00 AM - 3:00 PM" },
-  { day: "Friday", show: "The Heart of Soul", host: "DLC", time: "3:00 PM - 6:00 PM" },
-  { day: "Friday", show: "The Traffic Jam Mix", host: "DJ Teachdem", time: "6:00 PM - 8:00 PM" },
-  { day: "Friday", show: "Screech At Night", host: "DJ Screech", time: "8:00 PM - 10:00 PM" },
-  { day: "Friday", show: "Deja Vu", host: "DJ Migrane", time: "10:00 PM - 12:00 AM" },
-  { day: "Saturday", show: "The Roots Dynamic Experience", host: "DLC", time: "10:00 AM - 1:00 PM" },
-  { day: "Saturday", show: "The Skaturday Bang", host: "DLC", time: "1:00 PM - 4:00 PM" },
-  { day: "Saturday", show: "Primal Sports", host: "Dale, Kane, Froggy & The Controversial Boss", time: "4:00 PM - 5:00/5:30 PM" },
-  { day: "Saturday", show: "Amapiano & more", host: "DJ Teachdem", time: "5:00/5:30 PM - 7:30 PM" },
-  { day: "Saturday", show: "Di Drive", host: "DJ Keu", time: "7:30 PM - 9:30 PM" },
-  { day: "Saturday", show: "Outside We Deh", host: "DJ Badbin", time: "9:30 PM - 12:00 AM" },
-  { day: "Sunday", show: "Answers from The Word", host: "Alopex/Dr Dawkins", time: "9:00 AM - 10:00 AM" },
-  { day: "Sunday", show: "Sunday Serenade", host: "DJ DeDe", time: "10:00 AM - 12:00 PM" },
-  { day: "Sunday", show: "Level Up", host: "Jean Marie", time: "12:00 PM - 1:00 PM" },
-  { day: "Sunday", show: "Grown Folks Music", host: "DJ Keu", time: "1:00 PM - 3:00 PM" },
-  { day: "Sunday", show: "The Kool Runnings Show", host: "Professor X", time: "3:00 PM - 6:00 PM" },
-  { day: "Sunday", show: "The Cookie Jar", host: "DJ Migrane", time: "6:00 PM - 9:00 PM" },
-  { day: "Sunday", show: "The Quiet Storm Show", host: "DJ Smooth Daddy", time: "9:00 PM - 11:00 PM" }
-];
-
-// Helper function to parse time strings and get current show
-function getCurrentShow(): { show: string; host: string } {
-  const now = new Date();
-  
-  // Convert to EST/EDT
-  const estTime = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
-  const currentDay = estTime.toLocaleDateString('en-US', { weekday: 'long' });
-  const currentHour = estTime.getHours();
-  const currentMinute = estTime.getMinutes();
-  const currentTimeInMinutes = currentHour * 60 + currentMinute;
-  
-  // Find matching show for current day and time
-  const todaysShows = PROGRAM_SCHEDULE.filter(schedule => schedule.day === currentDay);
-  
-  for (const schedule of todaysShows) {
-    const timeRange = schedule.time;
-    const [startTime, endTime] = timeRange.split(' - ');
+// Helper function to get current show from database
+async function getCurrentShow(): Promise<{ show: string; host: string }> {
+  try {
+    const now = new Date();
     
-    const startMinutes = parseTimeToMinutes(startTime);
-    let endMinutes = parseTimeToMinutes(endTime);
+    // Convert to EST/EDT
+    const estTime = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
+    const currentDay = estTime.getDay(); // 0 = Sunday, 6 = Saturday
+    const currentHour = estTime.getHours();
+    const currentMinute = estTime.getMinutes();
+    const currentTime = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}:00`;
     
-    // Handle midnight crossover (e.g., 10:00 PM - 12:00 AM)
-    if (endMinutes <= startMinutes) {
-      endMinutes += 24 * 60; // Add 24 hours
+    console.log('🎵 getCurrentShow: Looking for show on day', currentDay, 'at time', currentTime);
+    
+    // Query schedule table for current day and time
+    const { data: scheduleData, error } = await supabase
+      .from('schedule')
+      .select('show_name, host_name, start_time, end_time')
+      .eq('day_of_week', currentDay)
+      .order('start_time');
+    
+    if (error) {
+      console.error('🎵 getCurrentShow: Database error:', error);
+      return { show: "Primal4k.com", host: "PrimalMediaGroup.net" };
     }
     
-    // Check if current time is within this show's time range
-    if (currentTimeInMinutes >= startMinutes && currentTimeInMinutes < endMinutes) {
-      return { show: schedule.show, host: schedule.host };
+    if (!scheduleData || scheduleData.length === 0) {
+      console.log('🎵 getCurrentShow: No schedule data found for day', currentDay);
+      return { show: "Primal4k.com", host: "PrimalMediaGroup.net" };
     }
     
-    // Handle midnight crossover for current time too
-    if (endMinutes > 24 * 60 && currentTimeInMinutes + 24 * 60 >= startMinutes && currentTimeInMinutes + 24 * 60 < endMinutes) {
-      return { show: schedule.show, host: schedule.host };
+    // Find the current show
+    for (const schedule of scheduleData) {
+      const startTime = schedule.start_time;
+      const endTime = schedule.end_time;
+      
+      // Convert time strings to minutes for comparison
+      const startMinutes = timeToMinutes(startTime);
+      let endMinutes = timeToMinutes(endTime);
+      const currentMinutes = currentHour * 60 + currentMinute;
+      
+      // Handle midnight crossover (e.g., 22:00 - 02:00)
+      if (endMinutes <= startMinutes) {
+        endMinutes += 24 * 60; // Add 24 hours
+      }
+      
+      // Check if current time is within this show's time range
+      if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
+        console.log('🎵 getCurrentShow: Found current show:', schedule.show_name, 'by', schedule.host_name);
+        return { show: schedule.show_name, host: schedule.host_name };
+      }
+      
+      // Handle midnight crossover for current time too
+      if (endMinutes > 24 * 60 && currentMinutes + 24 * 60 >= startMinutes && currentMinutes + 24 * 60 < endMinutes) {
+        console.log('🎵 getCurrentShow: Found current show (midnight crossover):', schedule.show_name, 'by', schedule.host_name);
+        return { show: schedule.show_name, host: schedule.host_name };
+      }
     }
+    
+    console.log('🎵 getCurrentShow: No matching show found, using fallback');
+    return { show: "Primal4k.com", host: "PrimalMediaGroup.net" };
+    
+  } catch (error) {
+    console.error('🎵 getCurrentShow: Error fetching schedule:', error);
+    return { show: "Primal4k.com", host: "PrimalMediaGroup.net" };
   }
-  
-  // Default fallback if no show is scheduled
-  return { show: "Primal4k.com", host: "PrimalMediaGroup.net" };
+}
+
+// Helper function to convert time string to minutes
+function timeToMinutes(timeStr: string): number {
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  return hours * 60 + minutes;
 }
 
 function parseTimeToMinutes(timeStr: string): number {
@@ -163,7 +160,7 @@ class MetadataService {
     const stationConfig = CITRUS3_STATIONS[this.currentStationId as keyof typeof CITRUS3_STATIONS];
     if (!stationConfig) {
       console.log('🎵 MetadataService: No config for station:', this.currentStationId);
-      this.currentMetadata = this.getEnhancedBasicMetadata();
+      this.currentMetadata = await this.getEnhancedBasicMetadata();
       this.notifyListeners();
       return;
     }
@@ -175,24 +172,24 @@ class MetadataService {
       if (response.ok) {
         const data = await response.json();
         console.log('🎵 MetadataService: Received JSON data:', data);
-        this.currentMetadata = this.parseCitrus3Data(data, stationConfig);
+        this.currentMetadata = await this.parseCitrus3Data(data, stationConfig);
       } else {
         console.log('🎵 MetadataService: API request failed, using enhanced metadata');
-        this.currentMetadata = this.getEnhancedBasicMetadata(stationConfig);
+        this.currentMetadata = await this.getEnhancedBasicMetadata(stationConfig);
       }
     } catch (error) {
       console.log('🎵 MetadataService: Using enhanced metadata due to error:', error);
-      this.currentMetadata = this.getEnhancedBasicMetadata(stationConfig);
+      this.currentMetadata = await this.getEnhancedBasicMetadata(stationConfig);
     }
     
     this.notifyListeners();
   }
 
-  private parseCitrus3Data(data: any, stationConfig: any): StationMetadata {
+  private async parseCitrus3Data(data: any, stationConfig: any): Promise<StationMetadata> {
     console.log('🎵 MetadataService: Parsing Citrus3 data structure:', Object.keys(data));
     
     // Get current show information based on schedule
-    const currentShow = getCurrentShow();
+    const currentShow = await getCurrentShow();
     
     // Parse the "nowplaying" field which is in "Artist - Title" format
     const nowPlaying = data.nowplaying || "Live Stream";
@@ -253,7 +250,7 @@ class MetadataService {
     };
   }
 
-  private getEnhancedBasicMetadata(stationConfig?: any): StationMetadata {
+  private async getEnhancedBasicMetadata(stationConfig?: any): Promise<StationMetadata> {
     const config = stationConfig || CITRUS3_STATIONS['primal-radio'];
     const tracks = [
       { title: "House Vibes", artist: "DJ Gadaffi" },
@@ -265,7 +262,7 @@ class MetadataService {
     const currentTrack = tracks[Math.floor(Date.now() / 30000) % tracks.length];
     
     // Get current show information for DJ image
-    const currentShow = getCurrentShow();
+    const currentShow = await getCurrentShow();
     const hasScheduledShow = currentShow.show !== "Primal4k.com";
     const djImage = hasScheduledShow ? getDJImageForHost(currentShow.host) : null;
     
@@ -285,11 +282,11 @@ class MetadataService {
     };
   }
 
-  private getBasicMetadata(): StationMetadata {
+  private async getBasicMetadata(): Promise<StationMetadata> {
     const config = CITRUS3_STATIONS[this.currentStationId as keyof typeof CITRUS3_STATIONS] || CITRUS3_STATIONS['primal-radio'];
     
     // Get current show information for DJ image
-    const currentShow = getCurrentShow();
+    const currentShow = await getCurrentShow();
     const hasScheduledShow = currentShow.show !== "Primal4k.com";
     const djImage = hasScheduledShow ? getDJImageForHost(currentShow.host) : null;
     
@@ -315,7 +312,20 @@ class MetadataService {
   }
 
   getCurrentMetadata(): StationMetadata {
-    return this.currentMetadata || this.getBasicMetadata();
+    return this.currentMetadata || {
+      currentTrack: {
+        title: "Live Stream",
+        artist: this.currentStationId === 'primal-radio-2' ? "Primal Radio 2" : "DJ Gadaffi and Friends",
+        album: "Primal Radio",
+        albumArt: CITRUS3_STATIONS[this.currentStationId as keyof typeof CITRUS3_STATIONS]?.baseUrl + "/covers/" + CITRUS3_STATIONS[this.currentStationId as keyof typeof CITRUS3_STATIONS]?.stationName + ".jpg" || CITRUS3_STATIONS['primal-radio'].baseUrl + "/covers/" + CITRUS3_STATIONS['primal-radio'].stationName + ".jpg",
+        duration: undefined,
+        genre: "Electronic"
+      },
+      listeners: Math.floor(Math.random() * 100) + 50,
+      bitrate: "320 kbps",
+      format: "MP3",
+      djImage: undefined
+    };
   }
 
   subscribe(callback: (metadata: StationMetadata) => void) {
