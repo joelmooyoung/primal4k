@@ -148,6 +148,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       if (station) {
         localStorage.setItem('currentStation', JSON.stringify(station));
         // Update metadata service with new station
+        console.log('🚨 AudioContext: Updating metadata service with station:', station.id);
         metadataService.setCurrentStation(station.id);
       } else {
         localStorage.removeItem('currentStation');
@@ -175,6 +176,14 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       audioRef.current.volume = volume / 100;
     }
   }, [volume]);
+
+  // Initialize metadata service with current station on mount
+  useEffect(() => {
+    if (currentStation) {
+      console.log('🚨 AudioContext: Initializing metadata service with station:', currentStation.id);
+      metadataService.setCurrentStation(currentStation.id);
+    }
+  }, []);
 
   return (
     <AudioContext.Provider
