@@ -3,6 +3,7 @@ import Navigation from "@/components/Navigation";
 import StationSelector from "@/components/StationSelector";
 import AudioPlayer from "@/components/AudioPlayer";
 import { useStreamMetadata } from "@/hooks/useStreamMetadata";
+import { useAudio } from "@/contexts/AudioContext";
 import DJCarousel from "@/components/DJCarousel";
 import EventsCarousel from "@/components/EventsCarousel";
 import ChatRoom from "@/components/ChatRoom";
@@ -41,6 +42,7 @@ const djSmoothDaddy = "/lovable-uploads/0dff8266-ab20-4e95-8173-8e6383bad650.png
 type PageSection = 'home' | 'djs' | 'dj-profile' | 'contact';
 
 const Index = () => {
+  const { setCurrentStation } = useAudio();
   const [selectedStation, setSelectedStation] = useState<Station>({
     id: 'primal-radio',
     name: 'Primal Radio',
@@ -622,6 +624,7 @@ const Index = () => {
         <StationSelector onStationChange={(station) => {
           console.log('🎯 Index: Station changed to:', station);
           setSelectedStation(station);
+          setCurrentStation(station);
         }} />
       </section>
 
