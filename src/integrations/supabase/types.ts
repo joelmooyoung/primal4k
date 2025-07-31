@@ -23,6 +23,7 @@ export type Database = {
           id: string
           show_name: string
           start_time: string
+          station_id: string
           updated_at: string
         }
         Insert: {
@@ -33,6 +34,7 @@ export type Database = {
           id?: string
           show_name: string
           start_time: string
+          station_id?: string
           updated_at?: string
         }
         Update: {
@@ -43,6 +45,7 @@ export type Database = {
           id?: string
           show_name?: string
           start_time?: string
+          station_id?: string
           updated_at?: string
         }
         Relationships: []

@@ -19,7 +19,7 @@ interface StationMetadata {
 }
 
 // Helper function to get current show from database
-async function getCurrentShow(): Promise<{ show: string; host: string }> {
+async function getCurrentShow(stationId: string = 'primal-radio'): Promise<{ show: string; host: string }> {
   try {
     const now = new Date();
     
@@ -30,23 +30,24 @@ async function getCurrentShow(): Promise<{ show: string; host: string }> {
     const currentMinute = estTime.getMinutes();
     const currentTime = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}:00`;
     
-    console.log('🎵 getCurrentShow: Looking for show on day', currentDay, 'at time', currentTime);
+    console.log('🎵 getCurrentShow: Looking for show on day', currentDay, 'at time', currentTime, 'for station', stationId);
     
-    // Query schedule table for current day and time
+    // Query schedule table for current day and time, filtered by station
     const { data: scheduleData, error } = await supabase
       .from('schedule')
       .select('show_name, host_name, start_time, end_time')
       .eq('day_of_week', currentDay)
+      .eq('station_id', stationId)
       .order('start_time');
     
     if (error) {
       console.error('🎵 getCurrentShow: Database error:', error);
-      return { show: "Primal4k.com", host: "PrimalMediaGroup.net" };
+      return getDefaultShow(stationId);
     }
     
     if (!scheduleData || scheduleData.length === 0) {
-      console.log('🎵 getCurrentShow: No schedule data found for day', currentDay);
-      return { show: "Primal4k.com", host: "PrimalMediaGroup.net" };
+      console.log('🎵 getCurrentShow: No schedule data found for day', currentDay, 'station', stationId);
+      return getDefaultShow(stationId);
     }
     
     // Find the current show
@@ -66,24 +67,32 @@ async function getCurrentShow(): Promise<{ show: string; host: string }> {
       
       // Check if current time is within this show's time range
       if (currentMinutes >= startMinutes && currentMinutes < endMinutes) {
-        console.log('🎵 getCurrentShow: Found current show:', schedule.show_name, 'by', schedule.host_name);
+        console.log('🎵 getCurrentShow: Found current show:', schedule.show_name, 'by', schedule.host_name, 'on station', stationId);
         return { show: schedule.show_name, host: schedule.host_name };
       }
       
       // Handle midnight crossover for current time too
       if (endMinutes > 24 * 60 && currentMinutes + 24 * 60 >= startMinutes && currentMinutes + 24 * 60 < endMinutes) {
-        console.log('🎵 getCurrentShow: Found current show (midnight crossover):', schedule.show_name, 'by', schedule.host_name);
+        console.log('🎵 getCurrentShow: Found current show (midnight crossover):', schedule.show_name, 'by', schedule.host_name, 'on station', stationId);
         return { show: schedule.show_name, host: schedule.host_name };
       }
     }
     
-    console.log('🎵 getCurrentShow: No matching show found, using fallback');
-    return { show: "Primal4k.com", host: "PrimalMediaGroup.net" };
+    console.log('🎵 getCurrentShow: No matching show found for station', stationId, 'using fallback');
+    return getDefaultShow(stationId);
     
   } catch (error) {
     console.error('🎵 getCurrentShow: Error fetching schedule:', error);
-    return { show: "Primal4k.com", host: "PrimalMediaGroup.net" };
+    return getDefaultShow(stationId);
   }
+}
+
+// Helper function to get default show based on station
+function getDefaultShow(stationId: string): { show: string; host: string } {
+  if (stationId === 'primal-radio-2') {
+    return { show: "Primal Radio 2", host: "PrimalMediaGroup.net" };
+  }
+  return { show: "Primal4k.com", host: "PrimalMediaGroup.net" };
 }
 
 // Helper function to convert time string to minutes
@@ -188,8 +197,8 @@ class MetadataService {
   private async parseCitrus3Data(data: any, stationConfig: any): Promise<StationMetadata> {
     console.log('🎵 MetadataService: Parsing Citrus3 data structure:', Object.keys(data));
     
-    // Get current show information based on schedule
-    const currentShow = await getCurrentShow();
+    // Get current show information based on schedule for this station
+    const currentShow = await getCurrentShow(this.currentStationId);
     
     // Parse the "nowplaying" field which is in "Artist - Title" format
     const nowPlaying = data.nowplaying || "Live Stream";
@@ -197,7 +206,7 @@ class MetadataService {
     let title: string;
     
     // Check if we have a scheduled show (not the fallback)
-    const hasScheduledShow = currentShow.show !== "Primal4k.com";
+    const hasScheduledShow = currentShow.show !== getDefaultShow(this.currentStationId).show;
     
     // Get DJ image for scheduled show
     const djImage = hasScheduledShow ? getDJImageForHost(currentShow.host) : null;
@@ -262,8 +271,8 @@ class MetadataService {
     const currentTrack = tracks[Math.floor(Date.now() / 30000) % tracks.length];
     
     // Get current show information for DJ image
-    const currentShow = await getCurrentShow();
-    const hasScheduledShow = currentShow.show !== "Primal4k.com";
+    const currentShow = await getCurrentShow(this.currentStationId);
+    const hasScheduledShow = currentShow.show !== getDefaultShow(this.currentStationId).show;
     const djImage = hasScheduledShow ? getDJImageForHost(currentShow.host) : null;
     
     return {
@@ -286,8 +295,8 @@ class MetadataService {
     const config = CITRUS3_STATIONS[this.currentStationId as keyof typeof CITRUS3_STATIONS] || CITRUS3_STATIONS['primal-radio'];
     
     // Get current show information for DJ image
-    const currentShow = await getCurrentShow();
-    const hasScheduledShow = currentShow.show !== "Primal4k.com";
+    const currentShow = await getCurrentShow(this.currentStationId);
+    const hasScheduledShow = currentShow.show !== getDefaultShow(this.currentStationId).show;
     const djImage = hasScheduledShow ? getDJImageForHost(currentShow.host) : null;
     
     return {
