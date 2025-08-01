@@ -16,10 +16,17 @@ const MobileAppCTA = () => {
           📱 Get Our Mobile App!
         </h3>
         
-        <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+        <p className="text-muted-foreground mb-4 max-w-md mx-auto">
           Install Primal4k to your phone for the best listening experience. 
           Enjoy our radio stations anywhere, anytime.
         </p>
+        
+        <div className="text-sm text-muted-foreground mb-6 max-w-lg mx-auto">
+          <p className="mb-2 font-medium">📱 Easy Installation:</p>
+          <p className="mb-1">• <strong>iPhone/iPad:</strong> Tap the share button and select "Add to Home Screen"</p>
+          <p className="mb-1">• <strong>Android:</strong> Tap the menu button and select "Add to Home Screen" or "Install App"</p>
+          <p>• Works offline and loads instantly from your home screen!</p>
+        </div>
         
         <Button 
           asChild
