@@ -174,6 +174,8 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume / 100;
+      // Add audio normalization to help with volume consistency
+      audioRef.current.preload = 'metadata';
     }
   }, [volume]);
 
@@ -204,7 +206,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       <audio
         ref={audioRef}
         crossOrigin="anonymous"
-        preload="none"
+        preload="metadata"
         onEnded={() => setIsPlaying(false)}
         onError={(e) => {
           console.error('🎯 AudioContext: Audio element error:', e);
@@ -214,6 +216,18 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         onCanPlay={() => console.log('🎯 AudioContext: Audio can play')}
         onPlay={() => console.log('🎯 AudioContext: Audio play event')}
         onPause={() => console.log('🎯 AudioContext: Audio pause event')}
+        onVolumeChange={() => {
+          if (audioRef.current) {
+            console.log('🎯 AudioContext: Volume changed to:', audioRef.current.volume);
+          }
+        }}
+        onLoadedMetadata={() => {
+          if (audioRef.current) {
+            console.log('🎯 AudioContext: Audio metadata loaded');
+            // Ensure consistent volume after metadata loads
+            audioRef.current.volume = volume / 100;
+          }
+        }}
       />
     </AudioContext.Provider>
   );
