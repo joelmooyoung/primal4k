@@ -9,6 +9,7 @@ import EventsCarousel from "@/components/EventsCarousel";
 import ChatRoom from "@/components/ChatRoom";
 import TwitchEmbed from "@/components/TwitchEmbed";
 import PrimalText3D from "@/components/PrimalText3D";
+import MobileAppCTA from "@/components/MobileAppCTA";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -792,8 +793,13 @@ const Index = () => {
       </section>
 
       {/* Events Carousel Section */}
-      <section id="events" className="animate-fade-in-up">
+      <section id="events" className="mb-12 animate-fade-in-up">
         <EventsCarousel />
+      </section>
+
+      {/* Mobile App CTA Section */}
+      <section className="mb-12 animate-fade-in-up">
+        <MobileAppCTA />
       </section>
     </>
   );
