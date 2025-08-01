@@ -64,13 +64,14 @@ const Index = () => {
     }
   }, [activeSection, selectedDJId]);
 
-  // Fetch schedule data from database
+  // Fetch schedule data from database - only show station 1 schedule
   useEffect(() => {
     const fetchSchedule = async () => {
       try {
         const { data, error } = await supabase
           .from('schedule')
           .select('*')
+          .eq('station_id', 'primal-radio')
           .order('day_of_week')
           .order('start_time');
 
