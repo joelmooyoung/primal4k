@@ -2,14 +2,17 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Radio, Tv, Music } from "lucide-react";
+import { Radio, Tv, Music, Play, Pause } from "lucide-react";
 import { Station } from "@/types/station";
+import { useAudio } from "@/contexts/AudioContext";
 
 interface StationSelectorProps {
   onStationChange: (station: Station) => void;
 }
 
 const StationSelector = ({ onStationChange }: StationSelectorProps) => {
+  const { currentStation, isPlaying, togglePlay, setCurrentStation } = useAudio();
+  
   const stations: Station[] = [
     {
       id: 'primal-radio',
@@ -37,13 +40,23 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
     }
   ];
 
-  const [selectedStation, setSelectedStation] = useState(stations[0]);
+  const [selectedStation, setSelectedStation] = useState(currentStation || stations[0]);
 
   const handleStationSelect = (station: Station) => {
     console.log('🎯 StationSelector: handleStationSelect called with:', station);
     console.log('🎯 StationSelector: Station ID being passed:', station.id);
     setSelectedStation(station);
     onStationChange(station);
+  };
+
+  const handlePlayButtonClick = () => {
+    // If no station is set in context, set the selected station first
+    if (!currentStation || currentStation.id !== selectedStation.id) {
+      setCurrentStation(selectedStation);
+      onStationChange(selectedStation);
+    }
+    // Then toggle play
+    togglePlay();
   };
 
   return (
@@ -115,13 +128,24 @@ const StationSelector = ({ onStationChange }: StationSelectorProps) => {
       {selectedStation && (
         <div className="mt-6">
           <Button
-            className="w-full text-white hover:opacity-90 transition-opacity"
+            onClick={handlePlayButtonClick}
+            className="w-full text-white hover:opacity-90 transition-opacity flex items-center gap-2"
             style={{ 
               background: 'linear-gradient(180deg, hsl(60 100% 50%) 0%, hsl(120 40% 30%) 15%)',
             }}
             size="lg"
           >
-            Listen to {selectedStation.name}
+            {isPlaying && currentStation?.id === selectedStation.id ? (
+              <>
+                <Pause className="w-5 h-5" />
+                Pause {selectedStation.name}
+              </>
+            ) : (
+              <>
+                <Play className="w-5 h-5" />
+                Listen to {selectedStation.name}
+              </>
+            )}
           </Button>
         </div>
       )}
