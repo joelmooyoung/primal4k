@@ -187,33 +187,41 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   const handleStationChange = (station: Station | null) => {
     console.log('🚨 AudioContext: handleStationChange called with station:', station);
     console.trace('🚨 AudioContext: Call stack for station change:');
+    
+    // COMPLETELY TERMINATE PREVIOUS STREAM AND CONNECTIONS
     // Clear any pending switch
     if (switchTimeoutRef.current) {
       clearTimeout(switchTimeoutRef.current);
+      switchTimeoutRef.current = null;
     }
     
-    // Immediate UI feedback
+    // Clear any ongoing reconnection attempts
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+      reconnectTimeoutRef.current = null;
+    }
+    reconnectAttemptsRef.current = 0;
+    
+    // Immediate UI feedback and complete audio termination
     setIsPlaying(false);
     
-    // Throttle the actual switching to prevent browser overload
-    switchTimeoutRef.current = setTimeout(async () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = '';
-        // Small delay for cleanup
-        await new Promise(resolve => setTimeout(resolve, 50));
-      }
-      
-      setCurrentStation(station);
-      if (station) {
-        localStorage.setItem('currentStation', JSON.stringify(station));
-        // Update metadata service with new station
-        console.log('🚨 AudioContext: Updating metadata service with station:', station.id);
-        metadataService.setCurrentStation(station.id);
-      } else {
-        localStorage.removeItem('currentStation');
-      }
-    }, 100); // Wait 100ms before actually switching
+    if (audioRef.current) {
+      // Force complete termination of current stream
+      audioRef.current.pause();
+      audioRef.current.src = '';
+      audioRef.current.load(); // Force reload to clear any cached data
+    }
+    
+    // Immediate station switch - no throttling needed for complete termination
+    setCurrentStation(station);
+    if (station) {
+      localStorage.setItem('currentStation', JSON.stringify(station));
+      // Update metadata service with new station
+      console.log('🚨 AudioContext: Updating metadata service with station:', station.id);
+      metadataService.setCurrentStation(station.id);
+    } else {
+      localStorage.removeItem('currentStation');
+    }
   };
 
   const toggleMute = () => {
