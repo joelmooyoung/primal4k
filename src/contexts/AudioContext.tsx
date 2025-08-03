@@ -53,6 +53,8 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   });
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const gainNodeRef = useRef<GainNode | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
 
   const getStreamUrl = (station: Station): string => {
     switch (station.id) {
@@ -86,6 +88,28 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
       vlc: playlistUrl,
       itunes: playlistUrl
     };
+  };
+
+  // Setup Web Audio API for volume normalization
+  const setupAudioProcessing = () => {
+    if (!audioRef.current || audioContextRef.current) return;
+
+    try {
+      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const source = audioContextRef.current.createMediaElementSource(audioRef.current);
+      gainNodeRef.current = audioContextRef.current.createGain();
+      
+      // Connect audio processing chain
+      source.connect(gainNodeRef.current);
+      gainNodeRef.current.connect(audioContextRef.current.destination);
+      
+      // Set initial gain for volume normalization
+      gainNodeRef.current.gain.value = 1.0;
+      
+      console.log('🎵 AudioContext: Audio processing setup complete');
+    } catch (error) {
+      console.warn('🎵 AudioContext: Web Audio API not available, using fallback volume control:', error);
+    }
   };
 
   const attemptReconnect = async () => {
@@ -234,8 +258,19 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   const handleVolumeChange = (newVolume: number) => {
     setVolume(newVolume);
     localStorage.setItem('volume', newVolume.toString());
+    
+    // Apply volume through both HTML5 audio and Web Audio API for better control
     if (audioRef.current) {
       audioRef.current.volume = newVolume / 100;
+    }
+    
+    // Apply normalization through Web Audio API if available
+    if (gainNodeRef.current) {
+      // Apply gentle compression for Radio One to reduce fluctuations
+      const normalizedGain = currentStation?.id === 'primal-radio' 
+        ? Math.min((newVolume / 100) * 1.2, 1.0) // Slight boost with limit for Radio One
+        : newVolume / 100;
+      gainNodeRef.current.gain.value = normalizedGain;
     }
   };
 
@@ -304,9 +339,21 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
           console.warn('🎯 AudioContext: Audio aborted');
           setIsPlaying(false);
         }}
-        onLoadStart={() => console.log('🎯 AudioContext: Audio load started')}
-        onCanPlay={() => console.log('🎯 AudioContext: Audio can play')}
-        onPlay={() => console.log('🎯 AudioContext: Audio play event')}
+        onLoadStart={() => {
+          console.log('🎯 AudioContext: Audio load started');
+          setupAudioProcessing();
+        }}
+        onCanPlay={() => {
+          console.log('🎯 AudioContext: Audio can play');
+          // Resume audio context if it was suspended
+          if (audioContextRef.current?.state === 'suspended') {
+            audioContextRef.current.resume();
+          }
+        }}
+        onPlay={() => {
+          console.log('🎯 AudioContext: Audio play event');
+          setupAudioProcessing();
+        }}
         onPause={() => console.log('🎯 AudioContext: Audio pause event')}
         onVolumeChange={() => {
           if (audioRef.current) {
@@ -316,8 +363,11 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         onLoadedMetadata={() => {
           if (audioRef.current) {
             console.log('🎯 AudioContext: Audio metadata loaded');
-            // Ensure consistent volume after metadata loads
+            // Ensure consistent volume after metadata loads and setup audio processing
             audioRef.current.volume = volume / 100;
+            setupAudioProcessing();
+            // Apply initial volume normalization
+            handleVolumeChange(volume);
           }
         }}
       />
