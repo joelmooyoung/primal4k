@@ -31,6 +31,9 @@ interface AudioProviderProps {
 
 export const AudioProvider = ({ children }: AudioProviderProps) => {
   const switchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const reconnectAttemptsRef = useRef(0);
+  const maxReconnectAttempts = 3;
   const [currentStation, setCurrentStation] = useState<Station | null>(() => {
     try {
       const saved = localStorage.getItem('currentStation');
@@ -85,9 +88,54 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
     };
   };
 
+  const attemptReconnect = async () => {
+    if (!audioRef.current || !currentStation || reconnectAttemptsRef.current >= maxReconnectAttempts) {
+      return;
+    }
+
+    reconnectAttemptsRef.current++;
+    const delay = Math.min(1000 * Math.pow(2, reconnectAttemptsRef.current - 1), 10000); // Exponential backoff, max 10s
+    
+    console.log(`🔄 AudioContext: Reconnect attempt ${reconnectAttemptsRef.current}/${maxReconnectAttempts} in ${delay}ms`);
+    
+    reconnectTimeoutRef.current = setTimeout(async () => {
+      if (!audioRef.current || !currentStation) return;
+      
+      try {
+        // Force reload the stream
+        const streamUrl = getStreamUrl(currentStation);
+        audioRef.current.src = '';
+        await new Promise(resolve => setTimeout(resolve, 100)); // Brief pause
+        audioRef.current.src = streamUrl;
+        audioRef.current.load();
+        
+        console.log('🔄 AudioContext: Attempting reconnect play...');
+        await audioRef.current.play();
+        setIsPlaying(true);
+        reconnectAttemptsRef.current = 0; // Reset on success
+        console.log('✅ AudioContext: Reconnection successful');
+      } catch (error) {
+        console.error('🔄 AudioContext: Reconnect failed:', error);
+        if (reconnectAttemptsRef.current < maxReconnectAttempts) {
+          attemptReconnect(); // Try again
+        } else {
+          console.error('🔴 AudioContext: Max reconnect attempts reached');
+          setIsPlaying(false);
+        }
+      }
+    }, delay);
+  };
+
   const togglePlay = async () => {
     console.log('🎯 AudioContext: togglePlay called - currentStation:', currentStation, 'isPlaying:', isPlaying);
     if (!audioRef.current || !currentStation) return;
+    
+    // Clear any ongoing reconnection attempts
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+      reconnectTimeoutRef.current = null;
+    }
+    reconnectAttemptsRef.current = 0;
     
     try {
       if (isPlaying) {
@@ -99,11 +147,12 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         const streamUrl = getStreamUrl(currentStation);
         console.log('🎯 AudioContext: Stream URL:', streamUrl);
         
-        // Test if stream URL is accessible
-        console.log('🎯 AudioContext: Testing stream accessibility...');
-        
+        // Force fresh connection for better reliability
         if (audioRef.current.src !== streamUrl) {
           audioRef.current.src = streamUrl;
+          audioRef.current.load();
+        } else {
+          // Even if same URL, reload to ensure fresh connection
           audioRef.current.load();
         }
         
@@ -121,6 +170,17 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         error: audioRef.current?.error
       });
       setIsPlaying(false);
+      
+      // Attempt automatic reconnection for network errors
+      if (error instanceof Error && (
+        error.name === 'NotSupportedError' ||
+        error.message.includes('network') ||
+        error.message.includes('NETWORK_') ||
+        audioRef.current?.error?.code === MediaError.MEDIA_ERR_NETWORK
+      )) {
+        console.log('🔄 AudioContext: Network error detected, attempting reconnection...');
+        attemptReconnect();
+      }
     }
   };
 
@@ -210,6 +270,30 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         onEnded={() => setIsPlaying(false)}
         onError={(e) => {
           console.error('🎯 AudioContext: Audio element error:', e);
+          const audio = e.target as HTMLAudioElement;
+          setIsPlaying(false);
+          
+          // Handle network errors with automatic reconnection
+          if (audio.error) {
+            console.error('🎯 AudioContext: Media error code:', audio.error.code);
+            if (audio.error.code === MediaError.MEDIA_ERR_NETWORK || 
+                audio.error.code === MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED) {
+              console.log('🔄 AudioContext: Network/source error in audio element, attempting reconnection...');
+              attemptReconnect();
+            }
+          }
+        }}
+        onStalled={() => {
+          console.warn('🎯 AudioContext: Audio stalled - network issue detected');
+          if (isPlaying) {
+            attemptReconnect();
+          }
+        }}
+        onSuspend={() => {
+          console.warn('🎯 AudioContext: Audio suspended - possible connection issue');
+        }}
+        onAbort={() => {
+          console.warn('🎯 AudioContext: Audio aborted');
           setIsPlaying(false);
         }}
         onLoadStart={() => console.log('🎯 AudioContext: Audio load started')}
