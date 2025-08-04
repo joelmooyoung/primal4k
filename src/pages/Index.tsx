@@ -599,7 +599,7 @@ const Index = () => {
     <>
       {/* Hero Section */}
       <section className="text-center mb-12 animate-fade-in-up">
-        <div className="mb-4">
+        <div className="mb-4 cursor-pointer" onClick={() => window.location.reload()}>
           <PrimalText3D size="large" animate={true} />
         </div>
         <p className="text-xl text-foreground mb-8">

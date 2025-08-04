@@ -30,11 +30,6 @@ interface AudioProviderProps {
 }
 
 export const AudioProvider = ({ children }: AudioProviderProps) => {
-  const switchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const connectionDropTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const reconnectAttemptsRef = useRef(0);
-  const maxReconnectAttempts = 3;
   const [currentStation, setCurrentStation] = useState<Station | null>(() => {
     try {
       const saved = localStorage.getItem('currentStation');
@@ -113,66 +108,11 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
     }
   };
 
-  const handleConnectionDrop = () => {
-    // Only for station 1 (primal-radio) and only if user is still actively playing it
-    if (!audioRef.current || !currentStation || currentStation.id !== 'primal-radio' || !isPlaying) {
-      return;
-    }
-
-    console.log('🔴 AudioContext: Connection drop detected for Radio One - fresh reconnect in 2 seconds');
-    
-    // Clear any existing recovery attempts
-    if (reconnectTimeoutRef.current) {
-      clearTimeout(reconnectTimeoutRef.current);
-      reconnectTimeoutRef.current = null;
-    }
-    
-    connectionDropTimeoutRef.current = setTimeout(async () => {
-      // Double check user is still on the same station and wants to play
-      if (!currentStation || currentStation.id !== 'primal-radio' || !isPlaying) {
-        console.log('🔴 AudioContext: User changed station or stopped - canceling recovery');
-        return;
-      }
-      
-      console.log('🔄 AudioContext: Starting fresh connection for Radio One');
-      
-      try {
-        // Completely reset the connection
-        audioRef.current!.pause();
-        audioRef.current!.src = '';
-        audioRef.current!.load();
-        
-        // Brief pause to ensure cleanup
-        await new Promise(resolve => setTimeout(resolve, 100));
-        
-        // Fresh connection
-        const streamUrl = getStreamUrl(currentStation);
-        audioRef.current!.src = streamUrl;
-        audioRef.current!.load();
-        
-        await audioRef.current!.play();
-        console.log('✅ AudioContext: Fresh connection established for Radio One');
-      } catch (error) {
-        console.error('🔴 AudioContext: Fresh reconnection failed:', error);
-        setIsPlaying(false);
-      }
-    }, 2000);
-  };
 
   const togglePlay = async () => {
     console.log('🎯 AudioContext: togglePlay called - currentStation:', currentStation, 'isPlaying:', isPlaying);
     if (!audioRef.current || !currentStation) return;
     
-    // Clear any ongoing recovery attempts
-    if (reconnectTimeoutRef.current) {
-      clearTimeout(reconnectTimeoutRef.current);
-      reconnectTimeoutRef.current = null;
-    }
-    if (connectionDropTimeoutRef.current) {
-      clearTimeout(connectionDropTimeoutRef.current);
-      connectionDropTimeoutRef.current = null;
-    }
-    reconnectAttemptsRef.current = 0;
     
     try {
       if (isPlaying) {
@@ -207,17 +147,6 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         error: audioRef.current?.error
       });
       setIsPlaying(false);
-      
-      // Only use simplified recovery for station 1
-      if (currentStation?.id === 'primal-radio' && error instanceof Error && (
-        error.name === 'NotSupportedError' ||
-        error.message.includes('network') ||
-        error.message.includes('NETWORK_') ||
-        audioRef.current?.error?.code === MediaError.MEDIA_ERR_NETWORK
-      )) {
-        console.log('🔄 AudioContext: Network error detected for Radio One');
-        handleConnectionDrop();
-      }
     }
   };
 
@@ -226,22 +155,6 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
     console.trace('🚨 AudioContext: Call stack for station change:');
     
     // COMPLETELY TERMINATE PREVIOUS STREAM AND CONNECTIONS
-    // Clear any pending switch
-    if (switchTimeoutRef.current) {
-      clearTimeout(switchTimeoutRef.current);
-      switchTimeoutRef.current = null;
-    }
-    
-    // Clear any ongoing recovery attempts
-    if (reconnectTimeoutRef.current) {
-      clearTimeout(reconnectTimeoutRef.current);
-      reconnectTimeoutRef.current = null;
-    }
-    if (connectionDropTimeoutRef.current) {
-      clearTimeout(connectionDropTimeoutRef.current);
-      connectionDropTimeoutRef.current = null;
-    }
-    reconnectAttemptsRef.current = 0;
     
     // Immediate UI feedback and complete audio termination
     setIsPlaying(false);
@@ -333,21 +246,9 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
           const audio = e.target as HTMLAudioElement;
           setIsPlaying(false);
           
-          // Handle network errors with simplified recovery for station 1 only
-          if (audio.error && currentStation?.id === 'primal-radio') {
-            console.error('🎯 AudioContext: Media error code:', audio.error.code);
-            if (audio.error.code === MediaError.MEDIA_ERR_NETWORK || 
-                audio.error.code === MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED) {
-              console.log('🔄 AudioContext: Network/source error for Radio One');
-              handleConnectionDrop();
-            }
-          }
         }}
         onStalled={() => {
           console.warn('🎯 AudioContext: Audio stalled - network issue detected');
-          if (isPlaying && currentStation?.id === 'primal-radio') {
-            handleConnectionDrop();
-          }
         }}
         onSuspend={() => {
           console.warn('🎯 AudioContext: Audio suspended - possible connection issue');
