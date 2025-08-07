@@ -53,8 +53,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
   const getStreamUrl = (station: Station): string => {
     switch (station.id) {
       case 'primal-radio':
-        // Try multiple stream URL formats
-        return 'https://fast.citrus3.com:2020/stream/djgadaffiandfriends';
+        return 'https://azura.primal4k.com/listen/joelmooyoung/radio.mp3';
       case 'primal-radio-2':
         return 'https://s1.citrus3.com:2000/stream/primal4k';
       case 'twitch-stream':
@@ -64,7 +63,7 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
         if (station.name?.toLowerCase().includes('radio 2') || station.name?.toLowerCase().includes('primal 2')) {
           return 'https://s1.citrus3.com:2000/stream/primal4k';
         }
-        return 'https://fast.citrus3.com:2020/stream/djgadaffiandfriends';
+        return 'https://azura.primal4k.com/listen/joelmooyoung/radio.mp3';
     }
   };
 
