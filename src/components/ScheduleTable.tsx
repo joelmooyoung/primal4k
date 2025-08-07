@@ -61,63 +61,51 @@ export const ScheduleTable = () => {
 
   // Group schedule by day
   const scheduleByDay = scheduleData.reduce((acc, entry) => {
-    if (!acc[entry.day_of_week]) {
-      acc[entry.day_of_week] = [];
+    const dayName = dayNames[entry.day_of_week];
+    if (!acc[dayName]) {
+      acc[dayName] = [];
     }
-    acc[entry.day_of_week].push(entry);
+    acc[dayName].push({
+      show: entry.show_name,
+      host: entry.host_name,
+      time: `${formatTime(entry.start_time)} - ${formatTime(entry.end_time)}`
+    });
     return acc;
-  }, {} as Record<number, ScheduleEntry[]>);
+  }, {} as Record<string, Array<{show: string, host: string, time: string}>>);
 
   return (
-    <div className="space-y-6">
-      {/* Table view for larger screens */}
-      <div className="hidden md:block">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="border-b border-border">
-              <th className="text-left p-3 font-semibold">Day</th>
-              <th className="text-left p-3 font-semibold">Show</th>
-              <th className="text-left p-3 font-semibold">Host</th>
-              <th className="text-left p-3 font-semibold">Time (Eastern)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {scheduleData.map((entry) => (
-              <tr key={entry.id} className="border-b border-border/30 hover:bg-muted/20">
-                <td className="p-3 font-medium">{dayNames[entry.day_of_week]}</td>
-                <td className="p-3">{entry.show_name}</td>
-                <td className="p-3 text-muted-foreground">{entry.host_name}</td>
-                <td className="p-3 text-accent">
-                  {formatTime(entry.start_time)} - {formatTime(entry.end_time)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Card view for mobile screens */}
-      <div className="md:hidden space-y-4">
-        {Object.entries(scheduleByDay).map(([dayOfWeek, entries]) => (
-          <div key={dayOfWeek} className="bg-card border border-border rounded-lg p-4">
-            <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
-              <Calendar className="w-4 h-4" />
-              {dayNames[parseInt(dayOfWeek)]}
+    <div className="grid grid-cols-1 md:grid-cols-7 gap-2">
+      {dayNames.map(day => {
+        const dayShows = scheduleByDay[day] || [];
+        
+        return (
+          <div key={day} className="bg-card/60 backdrop-blur-sm border-2 border-primary/20 rounded-xl p-5 min-h-[220px] shadow-lg hover:shadow-primary/10 transition-all duration-300 hover:border-primary/40">
+            <h3 className="font-bold text-xl mb-4 text-center border-b-2 border-primary/30 pb-3 text-primary-glow">
+              {day}
             </h3>
             <div className="space-y-3">
-              {entries.map((entry) => (
-                <div key={entry.id} className="border-l-2 border-primary pl-3">
-                  <div className="font-medium">{entry.show_name}</div>
-                  <div className="text-sm text-muted-foreground">{entry.host_name}</div>
-                  <div className="text-sm text-accent">
-                    {formatTime(entry.start_time)} - {formatTime(entry.end_time)}
+              {dayShows.map((show, index) => (
+                <div key={index} className="bg-gradient-card/80 rounded-lg p-3 border border-primary/10 hover:border-primary/30 transition-all duration-200 hover:shadow-md backdrop-blur-sm">
+                  <div className="font-semibold text-sm text-foreground mb-2 break-words">
+                    {show.show}
+                  </div>
+                  <div className="text-xs text-accent font-medium mb-1 bg-accent/10 rounded px-2 py-1 inline-block">
+                    {show.host}
+                  </div>
+                  <div className="text-xs text-primary font-bold bg-primary/10 rounded px-2 py-1 inline-block">
+                    {show.time}
                   </div>
                 </div>
               ))}
+              {dayShows.length === 0 && (
+                <div className="text-muted-foreground text-center text-sm italic py-8 bg-muted/10 rounded-lg border border-muted/20">
+                  No shows scheduled
+                </div>
+              )}
             </div>
           </div>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 };
