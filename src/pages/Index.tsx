@@ -694,57 +694,6 @@ const Index = () => {
         </Card>
       </section>
 
-      <section className="mb-12 animate-fade-in-up">
-        <Card className="bg-gradient-card border-border/50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calendar className="w-5 h-5" />
-              Calendar View
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {/* Calendar-style display */}
-            <div className="grid grid-cols-1 md:grid-cols-7 gap-2">
-              {(() => {
-                const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-                
-                return days.map(day => {
-                  const dayShows = scheduleData.filter(item => item.day === day);
-                  
-                  return (
-                    <div key={day} className="bg-card/60 backdrop-blur-sm border-2 border-primary/20 rounded-xl p-5 min-h-[220px] shadow-lg hover:shadow-primary/10 transition-all duration-300 hover:border-primary/40">
-                      <h3 className="font-bold text-xl mb-4 text-center border-b-2 border-primary/30 pb-3 text-primary-glow">
-                        {day}
-                      </h3>
-                      <div className="space-y-3">
-                        {dayShows.map((show, index) => (
-                          <div key={index} className="bg-gradient-card/80 rounded-lg p-3 border border-primary/10 hover:border-primary/30 transition-all duration-200 hover:shadow-md backdrop-blur-sm">
-                            <div className="font-semibold text-sm text-foreground mb-2 break-words">
-                              {show.show}
-                            </div>
-                            <div className="text-xs text-accent font-medium mb-1 bg-accent/10 rounded px-2 py-1 inline-block">
-                              {show.host}
-                            </div>
-                            <div className="text-xs text-primary font-bold bg-primary/10 rounded px-2 py-1 inline-block">
-                              {show.time}
-                            </div>
-                          </div>
-                        ))}
-                        {dayShows.length === 0 && (
-                          <div className="text-muted-foreground text-center text-sm italic py-8 bg-muted/10 rounded-lg border border-muted/20">
-                            No shows scheduled
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                });
-              })()}
-            </div>
-          </CardContent>
-        </Card>
-      </section>
-
       {/* DJ Carousel Section */}
       <section className="mb-12 animate-fade-in-up">
         <DJCarousel />
