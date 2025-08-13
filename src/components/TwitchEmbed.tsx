@@ -229,19 +229,26 @@ const TwitchEmbed = () => {
       </CardHeader>
       
       <CardContent>
-        {isAndroid ? (
-          renderAndroidFallback()
-        ) : hasError ? (
-          renderErrorFallback()
-        ) : (
-          <div className="aspect-video bg-black rounded-lg overflow-hidden">
-            {/* Use the container div directly as Twitch player target */}
-            <div 
-              id="twitch-livestream-container" 
-              className="w-full h-full"
-            />
-          </div>
-        )}
+        {(() => {
+          console.log('🎥 Render state - isAndroid:', isAndroid, 'hasError:', hasError, 'isScriptLoaded:', isScriptLoaded);
+          
+          if (isAndroid) {
+            return renderAndroidFallback();
+          } else if (hasError) {
+            console.log('🎥 Rendering error fallback - hasError:', hasError, 'isScriptLoaded:', isScriptLoaded);
+            return renderErrorFallback();
+          } else {
+            console.log('🎥 Rendering normal player container');
+            return (
+              <div className="aspect-video bg-black rounded-lg overflow-hidden">
+                <div 
+                  id="twitch-livestream-container" 
+                  className="w-full h-full"
+                />
+              </div>
+            );
+          }
+        })()}
         
         <div className="mt-4 text-center space-y-2">
           <p className="text-sm text-muted-foreground">
