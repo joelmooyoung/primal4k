@@ -83,6 +83,8 @@ const TwitchEmbed = () => {
   }, [isAndroid]);
 
   const initializeTwitchPlayer = () => {
+    console.log('🎥 initializeTwitchPlayer called - Twitch available:', !!window.Twitch, 'Existing player:', !!window.twitchPlayer);
+    
     if (window.Twitch && !window.twitchPlayer) {
       try {
         const hostname = window.location.hostname;
@@ -97,6 +99,8 @@ const TwitchEmbed = () => {
           parentDomains.push('lovableproject.com');
         }
         
+        console.log('🎥 Creating Twitch player with domains:', parentDomains);
+        
         const options = {
           width: '100%',
           height: '100%',
@@ -105,31 +109,45 @@ const TwitchEmbed = () => {
         };
 
         // Use the container div directly as the player target
+        const container = document.getElementById('twitch-livestream-container');
+        console.log('🎥 Container element found:', !!container);
+        
+        if (!container) {
+          console.error('🎥 Twitch container not found!');
+          setHasError(true);
+          return;
+        }
+
         window.twitchPlayer = new window.Twitch.Player('twitch-livestream-container', options);
+        console.log('🎥 Twitch Player created successfully');
         
         window.twitchPlayer.addEventListener(window.Twitch.Player.READY, () => {
+          console.log('🎥 Twitch player READY event fired');
           window.twitchPlayer.setVolume(1);
           window.twitchPlayer.setMuted(true);
-          console.log('🎥 Twitch player ready');
           setHasError(false);
         });
 
         window.twitchPlayer.addEventListener(window.Twitch.Player.OFFLINE, () => {
+          console.log('🎥 Twitch player OFFLINE event fired');
           setIsOffline(true);
         });
 
         window.twitchPlayer.addEventListener(window.Twitch.Player.ONLINE, () => {
+          console.log('🎥 Twitch player ONLINE event fired');
           setIsOffline(false);
         });
 
         window.twitchPlayer.addEventListener(window.Twitch.Player.ERROR, (error: any) => {
-          console.error('🎥 Twitch player error:', error);
+          console.error('🎥 Twitch player ERROR event:', error);
           setHasError(true);
         });
       } catch (error) {
         console.error('🎥 Error initializing Twitch player:', error);
         setHasError(true);
       }
+    } else {
+      console.log('🎥 Cannot initialize player - Twitch:', !!window.Twitch, 'Existing player:', !!window.twitchPlayer);
     }
   };
 
