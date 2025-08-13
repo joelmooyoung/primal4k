@@ -25,12 +25,18 @@ const TwitchEmbed = () => {
   // Detect platform
   useEffect(() => {
     const userAgent = navigator.userAgent.toLowerCase();
-    const isAndroidDevice = userAgent.includes('android');
+    // More specific Android detection - must contain 'android' and NOT be Windows or macOS
+    const isAndroidDevice = userAgent.includes('android') && 
+                           !userAgent.includes('windows') && 
+                           !userAgent.includes('mac') && 
+                           !userAgent.includes('iphone') && 
+                           !userAgent.includes('ipad');
     const isMobileDevice = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
     
     setIsAndroid(isAndroidDevice);
     setIsMobile(isMobileDevice);
     
+    console.log('🎥 Platform detection - UserAgent:', userAgent);
     console.log('🎥 Platform detection - Android:', isAndroidDevice, 'Mobile:', isMobileDevice);
   }, []);
 
