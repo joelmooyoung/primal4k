@@ -48,20 +48,23 @@ const TwitchEmbed = () => {
       return;
     }
 
+    console.log('🎥 Loading Twitch script for non-Android platform');
     // Load Twitch embed script for iOS and other platforms
     const script = document.createElement('script');
     script.src = 'https://player.twitch.tv/js/embed/v1.js';
     script.onload = () => {
+      console.log('🎥 Twitch script loaded successfully');
       setIsScriptLoaded(true);
       initializeTwitchPlayer();
     };
-    script.onerror = () => {
-      console.error('🎥 Failed to load Twitch script');
+    script.onerror = (error) => {
+      console.error('🎥 Failed to load Twitch script:', error);
       setHasError(true);
     };
     document.head.appendChild(script);
 
     return () => {
+      console.log('🎥 Cleaning up Twitch player');
       // Clean up Twitch player when component unmounts
       if (window.twitchPlayer) {
         try {
