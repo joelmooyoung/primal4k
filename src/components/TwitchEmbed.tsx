@@ -20,7 +20,13 @@ const TwitchEmbed = () => {
   const [isAndroid, setIsAndroid] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   
-  console.log('🎥 TwitchEmbed - Channel:', twitchChannel, 'Script loaded:', isScriptLoaded, 'Offline:', isOffline);
+  // Debug function to track hasError changes
+  const setHasErrorWithLog = (value: boolean, reason: string) => {
+    console.log(`🎥 Setting hasError to ${value} - Reason: ${reason}`);
+    setHasError(value);
+  };
+  
+  console.log('🎥 TwitchEmbed - Channel:', twitchChannel, 'Script loaded:', isScriptLoaded, 'Offline:', isOffline, 'HasError:', hasError);
 
   // Detect platform
   useEffect(() => {
@@ -44,7 +50,7 @@ const TwitchEmbed = () => {
     // On Android, skip the Twitch embed script as it's problematic in WebView
     if (isAndroid) {
       console.log('🎥 Android detected - using fallback method');
-      setHasError(true); // Show fallback immediately
+      setHasErrorWithLog(true, 'Android device detected'); // Show fallback immediately
       return;
     }
 
@@ -59,7 +65,7 @@ const TwitchEmbed = () => {
     };
     script.onerror = (error) => {
       console.error('🎥 Failed to load Twitch script:', error);
-      setHasError(true);
+      setHasErrorWithLog(true, 'Script loading failed');
     };
     document.head.appendChild(script);
 
@@ -114,7 +120,7 @@ const TwitchEmbed = () => {
         
         if (!container) {
           console.error('🎥 Twitch container not found!');
-          setHasError(true);
+          setHasErrorWithLog(true, 'Container element not found');
           return;
         }
 
@@ -125,7 +131,7 @@ const TwitchEmbed = () => {
           console.log('🎥 Twitch player READY event fired');
           window.twitchPlayer.setVolume(1);
           window.twitchPlayer.setMuted(true);
-          setHasError(false);
+          setHasErrorWithLog(false, 'Player ready event fired');
         });
 
         window.twitchPlayer.addEventListener(window.Twitch.Player.OFFLINE, () => {
@@ -140,11 +146,11 @@ const TwitchEmbed = () => {
 
         window.twitchPlayer.addEventListener(window.Twitch.Player.ERROR, (error: any) => {
           console.error('🎥 Twitch player ERROR event:', error);
-          setHasError(true);
+          setHasErrorWithLog(true, `Player error event: ${JSON.stringify(error)}`);
         });
       } catch (error) {
         console.error('🎥 Error initializing Twitch player:', error);
-        setHasError(true);
+        setHasErrorWithLog(true, `Player initialization exception: ${error}`);
       }
     } else {
       console.log('🎥 Cannot initialize player - Twitch:', !!window.Twitch, 'Existing player:', !!window.twitchPlayer);
