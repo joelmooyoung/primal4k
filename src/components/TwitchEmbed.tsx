@@ -155,15 +155,39 @@ const TwitchEmbed = () => {
           setHasErrorWithLog(true, `Player error event: ${JSON.stringify(error)}`);
         });
 
-        // Add a timeout to detect if player never loads
+        // Add a timeout to detect if player never loads or check actual state
         setTimeout(() => {
           if (!window.twitchPlayer || window.twitchPlayer.getPlayerState() === undefined) {
             console.log('🎥 Player timeout - forcing offline state');
             setDebugInfo(prev => [...prev, 'Player timeout - no events fired']);
             setIsOffline(true);
           } else {
-            console.log('🎥 Player state check:', window.twitchPlayer.getPlayerState());
-            setDebugInfo(prev => [...prev, `Player state: ${window.twitchPlayer.getPlayerState()}`]);
+            const playerState = window.twitchPlayer.getPlayerState();
+            console.log('🎥 Player state check:', playerState);
+            setDebugInfo(prev => [...prev, `Player state: ${playerState}`]);
+            
+            // Check if player is actually ready but events didn't fire
+            try {
+              const currentTime = window.twitchPlayer.getCurrentTime();
+              const duration = window.twitchPlayer.getDuration();
+              console.log('🎥 Player metrics - time:', currentTime, 'duration:', duration);
+              
+              // If we can get time/duration, player is likely ready
+              if (currentTime !== undefined || duration !== undefined) {
+                console.log('🎥 Player appears ready - forcing ready state');
+                setHasErrorWithLog(false, 'Player ready via state check');
+                // Check if stream is actually live
+                if (duration === 0 || currentTime === 0) {
+                  setIsOffline(true);
+                }
+              } else {
+                console.log('🎥 Player state exists but not functional - setting offline');
+                setIsOffline(true);
+              }
+            } catch (error) {
+              console.log('🎥 Error checking player state:', error);
+              setIsOffline(true);
+            }
           }
         }, 5000); // Reduced timeout to 5 seconds
       } catch (error) {
