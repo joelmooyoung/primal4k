@@ -131,6 +131,7 @@ const TwitchEmbed = () => {
         
         window.twitchPlayer.addEventListener(window.Twitch.Player.READY, () => {
           console.log('🎥 Twitch player READY event fired');
+          setDebugInfo(prev => [...prev, 'READY event fired']);
           window.twitchPlayer.setVolume(1);
           window.twitchPlayer.setMuted(true);
           setHasErrorWithLog(false, 'Player ready event fired');
@@ -138,18 +139,30 @@ const TwitchEmbed = () => {
 
         window.twitchPlayer.addEventListener(window.Twitch.Player.OFFLINE, () => {
           console.log('🎥 Twitch player OFFLINE event fired');
+          setDebugInfo(prev => [...prev, 'OFFLINE event fired']);
           setIsOffline(true);
         });
 
         window.twitchPlayer.addEventListener(window.Twitch.Player.ONLINE, () => {
           console.log('🎥 Twitch player ONLINE event fired');
+          setDebugInfo(prev => [...prev, 'ONLINE event fired']);
           setIsOffline(false);
         });
 
         window.twitchPlayer.addEventListener(window.Twitch.Player.ERROR, (error: any) => {
           console.error('🎥 Twitch player ERROR event:', error);
+          setDebugInfo(prev => [...prev, `ERROR: ${JSON.stringify(error)}`]);
           setHasErrorWithLog(true, `Player error event: ${JSON.stringify(error)}`);
         });
+
+        // Add a timeout to detect if player never loads
+        setTimeout(() => {
+          if (!window.twitchPlayer || window.twitchPlayer.getPlayerState() === undefined) {
+            console.log('🎥 Player timeout - forcing offline state');
+            setDebugInfo(prev => [...prev, 'Player timeout - no state']);
+            setIsOffline(true);
+          }
+        }, 10000);
       } catch (error) {
         console.error('🎥 Error initializing Twitch player:', error);
         setHasErrorWithLog(true, `Player initialization exception: ${error}`);
