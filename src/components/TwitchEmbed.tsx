@@ -177,11 +177,7 @@ const TwitchEmbed = () => {
               if (currentTime !== undefined || duration !== undefined) {
                 console.log('🎥 Player appears ready - forcing ready state');
                 setHasErrorWithLog(false, 'Player ready via state check');
-                // Only set offline if playback is explicitly "Offline" or channel is empty
-                if (playbackState === 'Offline' || playerState.channelName === '') {
-                  console.log('🎥 Stream is offline based on playback state');
-                  setIsOffline(true);
-                }
+                setIsOffline(false); // Player is ready, so not offline
               } else {
                 console.log('🎥 Player state exists but not functional - setting offline');
                 setIsOffline(true);
