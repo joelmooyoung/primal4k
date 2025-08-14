@@ -19,10 +19,12 @@ const TwitchEmbed = () => {
   const [hasError, setHasError] = useState(false);
   const [isAndroid, setIsAndroid] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [debugInfo, setDebugInfo] = useState<string[]>([]);
   
   // Debug function to track hasError changes
   const setHasErrorWithLog = (value: boolean, reason: string) => {
     console.log(`🎥 Setting hasError to ${value} - Reason: ${reason}`);
+    setDebugInfo(prev => [...prev, `hasError=${value}: ${reason}`]);
     setHasError(value);
   };
   
@@ -235,6 +237,16 @@ const TwitchEmbed = () => {
       </CardHeader>
       
       <CardContent>
+        {/* Debug Panel - Visible on screen */}
+        <div className="mb-4 p-3 bg-yellow-100 border border-yellow-300 rounded text-black text-xs">
+          <strong>Debug Info:</strong><br />
+          isAndroid: {isAndroid.toString()}<br />
+          hasError: {hasError.toString()}<br />
+          isScriptLoaded: {isScriptLoaded.toString()}<br />
+          isOffline: {isOffline.toString()}<br />
+          Debug Log: {debugInfo.slice(-3).join(' | ')}
+        </div>
+
         {(() => {
           console.log('🎥 Render state - isAndroid:', isAndroid, 'hasError:', hasError, 'isScriptLoaded:', isScriptLoaded);
           
