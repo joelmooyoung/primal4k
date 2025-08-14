@@ -159,10 +159,13 @@ const TwitchEmbed = () => {
         setTimeout(() => {
           if (!window.twitchPlayer || window.twitchPlayer.getPlayerState() === undefined) {
             console.log('🎥 Player timeout - forcing offline state');
-            setDebugInfo(prev => [...prev, 'Player timeout - no state']);
+            setDebugInfo(prev => [...prev, 'Player timeout - no events fired']);
             setIsOffline(true);
+          } else {
+            console.log('🎥 Player state check:', window.twitchPlayer.getPlayerState());
+            setDebugInfo(prev => [...prev, `Player state: ${window.twitchPlayer.getPlayerState()}`]);
           }
-        }, 10000);
+        }, 5000); // Reduced timeout to 5 seconds
       } catch (error) {
         console.error('🎥 Error initializing Twitch player:', error);
         setHasErrorWithLog(true, `Player initialization exception: ${error}`);
@@ -171,6 +174,33 @@ const TwitchEmbed = () => {
       console.log('🎥 Cannot initialize player - Twitch:', !!window.Twitch, 'Existing player:', !!window.twitchPlayer);
     }
   };
+
+  const renderOfflineState = () => (
+    <div className="aspect-video bg-gradient-to-br from-gray-900/20 to-gray-700/20 rounded-lg overflow-hidden flex flex-col items-center justify-center p-6 border border-gray-500/20">
+      <Tv className="w-12 h-12 text-gray-400 mb-4" />
+      <h3 className="text-lg font-semibold text-gray-300 mb-2 text-center">
+        Stream Offline
+      </h3>
+      <p className="text-sm text-gray-200/80 text-center mb-4 max-w-sm">
+        The live stream is currently offline. Check back later or watch previous content on Twitch.
+      </p>
+      <Button
+        variant="outline"
+        asChild
+        className="border-gray-500/50 text-gray-400 hover:bg-gray-500/10"
+      >
+        <a 
+          href={`https://www.twitch.tv/${twitchChannel}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2"
+        >
+          <ExternalLink className="w-4 h-4" />
+          Watch on Twitch
+        </a>
+      </Button>
+    </div>
+  );
 
   const renderAndroidFallback = () => (
     <div className="aspect-video bg-gradient-to-br from-purple-900/20 to-blue-900/20 rounded-lg overflow-hidden flex flex-col items-center justify-center p-6 border border-purple-500/20">
@@ -261,13 +291,16 @@ const TwitchEmbed = () => {
         </div>
 
         {(() => {
-          console.log('🎥 Render state - isAndroid:', isAndroid, 'hasError:', hasError, 'isScriptLoaded:', isScriptLoaded);
+          console.log('🎥 Render state - isAndroid:', isAndroid, 'hasError:', hasError, 'isScriptLoaded:', isScriptLoaded, 'isOffline:', isOffline);
           
           if (isAndroid) {
             return renderAndroidFallback();
           } else if (hasError) {
             console.log('🎥 Rendering error fallback - hasError:', hasError, 'isScriptLoaded:', isScriptLoaded);
             return renderErrorFallback();
+          } else if (isOffline) {
+            console.log('🎥 Rendering offline state');
+            return renderOfflineState();
           } else {
             console.log('🎥 Rendering normal player container');
             return (
