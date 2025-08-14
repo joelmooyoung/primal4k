@@ -170,14 +170,16 @@ const TwitchEmbed = () => {
             try {
               const currentTime = window.twitchPlayer.getCurrentTime();
               const duration = window.twitchPlayer.getDuration();
-              console.log('🎥 Player metrics - time:', currentTime, 'duration:', duration);
+              const playbackState = playerState.playback;
+              console.log('🎥 Player metrics - time:', currentTime, 'duration:', duration, 'playback:', playbackState);
               
-              // If we can get time/duration, player is likely ready
+              // If we can get metrics, player is likely ready
               if (currentTime !== undefined || duration !== undefined) {
                 console.log('🎥 Player appears ready - forcing ready state');
                 setHasErrorWithLog(false, 'Player ready via state check');
-                // Check if stream is actually live
-                if (duration === 0 || currentTime === 0) {
+                // Only set offline if playback is explicitly "Offline" or channel is empty
+                if (playbackState === 'Offline' || playerState.channelName === '') {
+                  console.log('🎥 Stream is offline based on playback state');
                   setIsOffline(true);
                 }
               } else {
