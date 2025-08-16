@@ -23,10 +23,10 @@ const App = () => {
   console.log('🏗️ App component render - Instance ID:', APP_INSTANCE_ID);
   
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <AudioProvider key="persistent-audio">
-          <BrowserRouter>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <AudioProvider key="persistent-audio">
             <Toaster />
             <Sonner />
             <Routes>
@@ -39,10 +39,10 @@ const App = () => {
               <Route path="*" element={<NotFound />} />
             </Routes>
             <PersistentPlayer />
-          </BrowserRouter>
-        </AudioProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
+          </AudioProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   );
 };
 
