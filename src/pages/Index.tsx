@@ -272,11 +272,11 @@ const Index = () => {
     },
     {
       id: "dj-tracy",
-      name: "DJ Tracyvirgo",
+      name: "DJ Tracy Virgo",
       show: "The Tracy Show",
       time: "Various Times",
       description: "Spinning the best in Dancehall, Reggae, Soca, R&B, and Soul",
-      image: "/placeholder.svg",
+      image: "/lovable-uploads/46c761fe-8c5b-49c7-90bf-eb45f6d069f4.png",
       isLive: false
     },
     {
@@ -495,7 +495,7 @@ const Index = () => {
       email: "keu@primal4k.com"
     },
     "dj-tracy": {
-      name: "DJ Tracyvirgo",
+      name: "DJ Tracy Virgo",
       show: "The Tracy Show",
       time: "Various Times",
       description: "Spinning the best in Dancehall, Reggae, Soca, R&B, and Soul",

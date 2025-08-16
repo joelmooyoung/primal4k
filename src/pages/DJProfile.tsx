@@ -44,7 +44,7 @@ const DJProfile = () => {
     "neiima-dede": theMatrix,
     "dlc-daddy-lion": dlcLioncore,
     "dj-keu": djKeu,
-    "dj-tracy": "/placeholder.svg",
+    "dj-tracy": "/lovable-uploads/46c761fe-8c5b-49c7-90bf-eb45f6d069f4.png",
     "dj-teachdem": djTeachdem,
     "dj-screech": djScreench,
     "dj-migrane": djMigrane,
@@ -208,7 +208,7 @@ const DJProfile = () => {
       email: "keu@primal4k.com"
     },
     "dj-tracy": {
-      name: "DJ Tracyvirgo",
+      name: "DJ Tracy Virgo",
       show: "The Tracy Show",
       time: "Various Times",
       description: "Spinning the best in Dancehall, Reggae, Soca, R&B, and Soul",
