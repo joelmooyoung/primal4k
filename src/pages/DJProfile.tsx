@@ -44,7 +44,7 @@ const DJProfile = () => {
     "neiima-dede": theMatrix,
     "dlc-daddy-lion": dlcLioncore,
     "dj-keu": djKeu,
-    "dj-tracy": "/lovable-uploads/34bed781-9d47-4e1c-b090-081a6286afb1.png",
+    "dj-tracy": "/placeholder.svg",
     "dj-teachdem": djTeachdem,
     "dj-screech": djScreench,
     "dj-migrane": djMigrane,
@@ -208,13 +208,13 @@ const DJProfile = () => {
       email: "keu@primal4k.com"
     },
     "dj-tracy": {
-      name: "DJ Tracyvirgo",
+      name: "DJ Tracy",
       show: "The Tracy Show",
       time: "Various Times",
-      description: "Spinning the best in Dancehall, Reggae, Soca, R&B, and Soul — from timeless classics to your favorite jams.",
-      bio: "My passion was born in the heart of Uptown Bronx, 1992, in my mom's basement — just me, my brother, a stack of records, and a dream. We'd roll up to neighborhood BBQs with crates in hand, sometimes uninvited, always ready to light up the block. That hustle turned into house parties, underground bars, and Bronx clubs, where we built our name from the ground up. Every dollar we earned went right back into the culture — digging through crates at Moodies, NuLook, Jammys, and for those rare remixes, Rock and Soul in Manhattan. Music became more than a job — it became my escape, my identity, my purpose. I bring your musical fantasies to life with every set.",
-      specialties: ["Dancehall", "Reggae", "Soca", "R&B", "Soul"],
-      experience: "Started in 1992 in Uptown Bronx",
+      description: "Bringing you the best music and entertainment",
+      bio: "DJ Tracy is a versatile radio personality known for her engaging shows and diverse music selections. She brings energy and entertainment to every broadcast.",
+      specialties: ["Contemporary Music", "Entertainment", "Audience Engagement"],
+      experience: "4+ years in radio",
       email: "tracy@primal4k.com"
     },
     "dj-teachdem": {

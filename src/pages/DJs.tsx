@@ -149,11 +149,11 @@ const DJs = () => {
     },
     {
       id: "dj-tracy",
-      name: "DJ Tracyvirgo",
+      name: "DJ Tracy",
       show: "The Tracy Show",
       time: "Various Times",
-      description: "Spinning the best in Dancehall, Reggae, Soca, R&B, and Soul — from timeless classics to your favorite jams.",
-      image: "/lovable-uploads/34bed781-9d47-4e1c-b090-081a6286afb1.png",
+      description: "Bringing you the best music and entertainment",
+      image: "/placeholder.svg",
       isLive: false
     },
     {
@@ -296,7 +296,11 @@ const DJs = () => {
                       variant="outline" 
                       size="sm" 
                       className="w-full mt-4"
-                      onClick={() => navigate(`/dj-profile/${dj.id}`)}
+                      onClick={() => {
+                        // Use hash navigation to stay on single page
+                        window.location.hash = `dj-${dj.id}`;
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
                     >
                      View Profile
                    </Button>
