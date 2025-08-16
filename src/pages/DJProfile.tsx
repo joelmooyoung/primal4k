@@ -212,7 +212,7 @@ const DJProfile = () => {
       show: "The Tracy Show",
       time: "Various Times",
       description: "Bringing you the best music and entertainment",
-      bio: "DJ Tracy is a versatile radio personality known for her engaging shows and diverse music selections. She brings energy and entertainment to every broadcast.",
+      bio: "DJ Tracy is a versatile radio personality known for his engaging shows and diverse music selections. He brings energy and entertainment to every broadcast.",
       specialties: ["Contemporary Music", "Entertainment", "Audience Engagement"],
       experience: "4+ years in radio",
       email: "tracy@primal4k.com"
