@@ -272,10 +272,10 @@ const Index = () => {
     },
     {
       id: "dj-tracy",
-      name: "DJ Tracy",
+      name: "DJ Tracyvirgo",
       show: "The Tracy Show",
       time: "Various Times",
-      description: "Bringing you the best music and entertainment",
+      description: "Spinning the best in Dancehall, Reggae, Soca, R&B, and Soul",
       image: "/placeholder.svg",
       isLive: false
     },
@@ -495,14 +495,15 @@ const Index = () => {
       email: "keu@primal4k.com"
     },
     "dj-tracy": {
-      name: "DJ Tracy",
+      name: "DJ Tracyvirgo",
       show: "The Tracy Show",
       time: "Various Times",
-      description: "Bringing you the best music and entertainment",
-      bio: "DJ Tracy is a versatile radio personality known for his engaging shows and diverse music selections. He brings energy and entertainment to every broadcast.",
-      specialties: ["Contemporary Music", "Entertainment", "Audience Engagement"],
-      experience: "4+ years in radio",
-      email: "tracy@primal4k.com"
+      description: "Spinning the best in Dancehall, Reggae, Soca, R&B, and Soul",
+      bio: "Spinning the best in Dancehall, Reggae, Soca, R&B, and Soul — from timeless classics to your favorite jams. I bring your musical fantasies to life with every set.\n\nMy passion was born in the heart of Uptown Bronx, 1992, in my mom's basement — just me, my brother, a stack of records, and a dream. We'd roll up to neighborhood BBQs with crates in hand, sometimes uninvited, always ready to light up the block. That hustle turned into house parties, underground bars, and Bronx clubs, where we built our name from the ground up.\n\nEvery dollar we earned went right back into the culture — digging through crates at Moodies, NuLook, Jammys, and for those rare remixes, Rock and Soul in Manhattan.\n\nMusic became more than a job — it became my escape, my identity, my purpose.\n\nCatch me where the bass hits, and the vibes is right.",
+      specialties: ["Dancehall", "Reggae", "Soca", "R&B", "Soul"],
+      experience: "30+ years in the culture",
+      email: "tracy@primal4k.com",
+      phone: "7183040375"
     },
     "dj-teachdem": {
       name: "DJ Teachdem",
@@ -913,6 +914,13 @@ const Index = () => {
                     <Mail className="w-4 h-4 text-muted-foreground" />
                     <span>{dj.email}</span>
                   </div>
+                  
+                  {(dj as any).phone && (
+                    <div className="flex items-center gap-2 text-sm">
+                      <Phone className="w-4 h-4 text-muted-foreground" />
+                      <span>{(dj as any).phone}</span>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
