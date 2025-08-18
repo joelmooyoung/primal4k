@@ -7,8 +7,18 @@ import { useState } from 'react';
 import { useStreamMetadata } from '@/hooks/useStreamMetadata';
 
 const PersistentPlayer = () => {
-  const { currentStation, isPlaying, volume, isMuted, togglePlay, setVolume, toggleMute, getExternalLinks, getStreamUrl } = useAudio();
+  // Safely use audio context with error handling
+  let audioContext;
+  try {
+    audioContext = useAudio();
+  } catch (error) {
+    console.error('PersistentPlayer: Failed to get audio context:', error);
+    return null; // Don't render if AudioProvider is not available
+  }
+
+  const { currentStation, isPlaying, volume, isMuted, togglePlay, setVolume, toggleMute, getExternalLinks, getStreamUrl } = audioContext;
   const [isMinimized, setIsMinimized] = useState(true);
+  
   // Only fetch metadata when actually playing to avoid CORS errors
   const streamUrl = currentStation && isPlaying ? getStreamUrl(currentStation) : '';
   const { metadata } = useStreamMetadata(streamUrl);

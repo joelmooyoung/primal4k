@@ -31,7 +31,25 @@ const AudioPlayer = ({
   externalLinks 
 }: AudioPlayerProps) => {
   console.log('🎯 AudioPlayer render - received station prop:', stationProp);
-  // Use global audio context
+  
+  // Safely use global audio context with error handling
+  let audioContext;
+  try {
+    audioContext = useAudio();
+  } catch (error) {
+    console.error('AudioPlayer: Failed to get audio context:', error);
+    // Return a fallback UI when AudioProvider is not available
+    return (
+      <Card className="bg-gradient-card border-border/50 overflow-hidden">
+        <CardContent className="p-6">
+          <div className="text-center text-muted-foreground">
+            Loading audio player...
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   const { 
     isPlaying, 
     volume, 
@@ -41,7 +59,7 @@ const AudioPlayer = ({
     toggleMute,
     currentStation,
     setCurrentStation 
-  } = useAudio();
+  } = audioContext;
   
   // Use the station prop if provided, otherwise create one
   const station = stationProp || {

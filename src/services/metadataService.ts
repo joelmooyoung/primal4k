@@ -144,6 +144,7 @@ class MetadataService {
   }
 
   setCurrentStation(stationId: string) {
+    console.log('🎵 MetadataService: Setting current station to:', stationId);
     this.currentStationId = stationId;
     this.fetchMetadata(); // Immediately fetch metadata for new station
   }
