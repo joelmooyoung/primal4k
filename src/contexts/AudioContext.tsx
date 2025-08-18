@@ -216,11 +216,11 @@ export const AudioProvider = ({ children }: AudioProviderProps) => {
     if (station.type === 'twitch') return undefined;
     
     const playlistUrls = {
-      'primal-radio': 'https://fast.citrus3.com:2020/tunein/djgadaffiandfriends/stream/pls',
+      'primal-radio': 'https://s1.citrus3.com:2000/tunein/primal4k/stream/pls',
       'primal-radio-2': 'https://s1.citrus3.com:2000/tunein/primal4k/stream/pls'
     };
     
-    const playlistUrl = playlistUrls[station.id as keyof typeof playlistUrls] || playlistUrls['primal-radio'];
+    const playlistUrl = playlistUrls[station.id as keyof typeof playlistUrls] || playlistUrls['primal-radio-2'];
     return {
       winamp: playlistUrl,
       vlc: playlistUrl,

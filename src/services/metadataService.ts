@@ -121,9 +121,9 @@ function parseTimeToMinutes(timeStr: string): number {
 // Citrus3 station configurations
 const CITRUS3_STATIONS = {
   'primal-radio': {
-    stationName: "djgadaffiandfriends",
-    baseUrl: "https://fast.citrus3.com:2020",
-    apiUrl: "https://fast.citrus3.com:2020/json/stream/djgadaffiandfriends"
+    stationName: "primal4k",
+    baseUrl: "https://s1.citrus3.com:2000",
+    apiUrl: "https://s1.citrus3.com:2000/json/stream/primal4k"
   },
   'primal-radio-2': {
     stationName: "primal4k",
