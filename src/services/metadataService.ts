@@ -121,14 +121,14 @@ function parseTimeToMinutes(timeStr: string): number {
 // Azura station configurations
 const AZURA_STATIONS = {
   'primal-radio': {
-    stationShortcode: "primal4k",
-    baseUrl: "http://azura.primal4k.com",
-    apiUrl: "http://azura.primal4k.com/api/nowplaying_static/primal4k.json"
+    stationShortcode: "joelmooyoung",
+    baseUrl: "https://azura.primal4k.com",
+    apiUrl: "https://azura.primal4k.com/api/nowplaying/joelmooyoung"
   },
   'primal-radio-2': {
-    stationShortcode: "primal4k",
-    baseUrl: "http://azura.primal4k.com", 
-    apiUrl: "http://azura.primal4k.com/api/nowplaying_static/primal4k.json"
+    stationShortcode: "joelmooyoung",
+    baseUrl: "https://azura.primal4k.com", 
+    apiUrl: "https://azura.primal4k.com/api/nowplaying/joelmooyoung"
   }
 };
 
@@ -201,12 +201,18 @@ class MetadataService {
     // Get current show information based on schedule for this station
     const currentShow = await getCurrentShow(this.currentStationId);
     
-    // Parse the Azura API data structure
-    const songData = data.now_playing?.song || {};
+    // Parse the Azura API data structure - it's an array with the first item being the station data
+    const stationData = Array.isArray(data) ? data[0] : data;
+    const nowPlaying = stationData?.now_playing;
+    const songData = nowPlaying?.song || {};
+    const listeners = stationData?.listeners;
+    
     const artist = songData.artist || "Unknown Artist";
     const title = songData.title || "Live Stream";
     const album = songData.album || "Live Radio";
     const albumArt = songData.art || null;
+    
+    console.log('🎵 MetadataService: Parsed song data:', { artist, title, album, albumArt });
     
     // Check if we have a scheduled show (not the fallback)
     const hasScheduledShow = currentShow.show !== getDefaultShow(this.currentStationId).show;
@@ -240,11 +246,11 @@ class MetadataService {
         artist: finalArtist,
         album: album,
         albumArt: albumArt || `${stationConfig.baseUrl}/img/generic_song.jpg`,
-        duration: undefined,
-        genre: "Electronic"
+        duration: nowPlaying?.duration || undefined,
+        genre: songData.genre || "Electronic"
       },
-      listeners: data.listeners?.current || Math.floor(Math.random() * 150) + 50,
-      bitrate: "320 kbps",
+      listeners: listeners?.current || listeners?.total || Math.floor(Math.random() * 150) + 50,
+      bitrate: "192 kbps", // From the API response we can see it's 192kbps
       format: "MP3",
       djImage: djImage || undefined
     };
