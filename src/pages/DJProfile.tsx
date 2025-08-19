@@ -44,7 +44,7 @@ const DJProfile = () => {
     "neiima-dede": theMatrix,
     "dlc-daddy-lion": dlcLioncore,
     "dj-keu": djKeu,
-    "dj-tracy": "/lovable-uploads/46c761fe-8c5b-49c7-90bf-eb45f6d069f4.png",
+    "dj-tracy": "/lovable-uploads/672b3fe3-6592-486a-9c0a-719a6bc1a207.png",
     "dj-teachdem": djTeachdem,
     "dj-screech": djScreench,
     "dj-migrane": djMigrane,

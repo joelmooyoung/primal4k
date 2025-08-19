@@ -153,7 +153,7 @@ const DJs = () => {
       show: "The Tracy Show",
       time: "Various Times",
       description: "Bringing you the best music and entertainment",
-      image: "/placeholder.svg",
+      image: "/lovable-uploads/672b3fe3-6592-486a-9c0a-719a6bc1a207.png",
       isLive: false
     },
     {

@@ -276,7 +276,7 @@ const Index = () => {
       show: "The Tracy Show",
       time: "Various Times",
       description: "Spinning the best in Dancehall, Reggae, Soca, R&B, and Soul",
-      image: "/lovable-uploads/46c761fe-8c5b-49c7-90bf-eb45f6d069f4.png",
+      image: "/lovable-uploads/672b3fe3-6592-486a-9c0a-719a6bc1a207.png",
       isLive: false
     },
     {
