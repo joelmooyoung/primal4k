@@ -184,8 +184,38 @@ const TwitchEmbed = () => {
   );
 
   const renderAndroidIframe = () => {
+    // For PWA mode, skip iframe entirely and show fallback
+    if (isPWA) {
+      return (
+        <div className="aspect-video bg-gradient-to-br from-purple-900/20 to-blue-900/20 rounded-lg overflow-hidden flex flex-col items-center justify-center p-6 border border-purple-500/20">
+          <Tv className="w-12 h-12 text-purple-400 mb-4" />
+          <h3 className="text-lg font-semibold text-purple-300 mb-2 text-center">
+            PWA Mode - External Stream
+          </h3>
+          <p className="text-sm text-purple-200/80 text-center mb-4 max-w-sm">
+            PWA apps can't embed Twitch streams due to security restrictions. Click below to watch the live stream.
+          </p>
+          <Button
+            variant="outline"
+            asChild
+            className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10"
+          >
+            <a 
+              href={`https://www.twitch.tv/${twitchChannel}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2"
+            >
+              <Tv className="w-4 h-4" />
+              Watch on Twitch
+            </a>
+          </Button>
+        </div>
+      );
+    }
+
+    // For regular Android browsers, try iframe first
     const hostname = window.location.hostname;
-    // Build comprehensive parent list for PWA/Android context
     const parentDomains = [
       hostname,
       'localhost',
@@ -210,15 +240,12 @@ const TwitchEmbed = () => {
             style={{ borderRadius: "8px", minHeight: "300px", width: "100%" }}
             onError={() => setIframeError(true)}
             onLoad={() => {
-              // Check if iframe loaded successfully after a delay
               setTimeout(() => {
                 const iframe = document.querySelector('iframe[title="Twitch Stream"]') as HTMLIFrameElement;
                 if (iframe) {
                   try {
-                    // Try to access iframe content to detect CORS blocking
                     iframe.contentDocument;
                   } catch (error) {
-                    // CORS blocked - this is expected and normal
                     console.log('Twitch iframe loaded (CORS expected)');
                   }
                 }
@@ -229,13 +256,10 @@ const TwitchEmbed = () => {
           <div className="flex flex-col items-center justify-center h-full w-full">
             <AlertCircle className="w-12 h-12 text-purple-400 mb-4" />
             <h3 className="text-lg font-semibold text-purple-300 mb-2 text-center">
-              {isPWA ? "PWA Mode - External Stream" : "Android Compatibility Mode"}
+              Android Compatibility Mode
             </h3>
             <p className="text-sm text-purple-200/80 text-center mb-4 max-w-sm">
-              {isPWA 
-                ? "Live stream works best when opened directly in Twitch. Click below to watch."
-                : "Twitch embed has limited support on Android. Use the button below to watch the live stream."
-              }
+              Twitch embed has limited support on Android. Use the button below to watch the live stream.
             </p>
             <Button
               variant="outline"
