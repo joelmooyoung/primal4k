@@ -9,6 +9,9 @@ declare global {
     Twitch: any;
     twitchPlayer: any;
   }
+  interface Navigator {
+    standalone?: boolean;
+  }
 }
 
 const TwitchEmbed = () => {
@@ -20,6 +23,7 @@ const TwitchEmbed = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [debugInfo, setDebugInfo] = useState<string[]>([]);
   const [iframeError, setIframeError] = useState(false);
+  const [isPWA, setIsPWA] = useState(false);
 
   // Use ref to ensure container element is present for Twitch Player
   const containerRef = useRef<HTMLDivElement>(null);
@@ -30,7 +34,7 @@ const TwitchEmbed = () => {
     setHasError(value);
   };
 
-  // Detect platform
+  // Detect platform and PWA
   useEffect(() => {
     const userAgent = navigator.userAgent.toLowerCase();
     // More specific Android detection - must contain 'android' and NOT be Windows or macOS
@@ -41,8 +45,14 @@ const TwitchEmbed = () => {
                            !userAgent.includes('ipad');
     const isMobileDevice = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
     
+    // Detect PWA mode
+    const isPWAMode = window.matchMedia('(display-mode: standalone)').matches || 
+                      window.navigator.standalone || 
+                      document.referrer.includes('android-app://');
+    
     setIsAndroid(isAndroidDevice);
     setIsMobile(isMobileDevice);
+    setIsPWA(isPWAMode);
   }, []);
 
   useEffect(() => {
@@ -174,29 +184,58 @@ const TwitchEmbed = () => {
   );
 
   const renderAndroidIframe = () => {
-    const parentHostname = window.location.hostname;
+    const hostname = window.location.hostname;
+    // Build comprehensive parent list for PWA/Android context
+    const parentDomains = [
+      hostname,
+      'localhost',
+      '93d33477-c474-4a2d-8760-2925f3e19bcc.lovableproject.com',
+      'lovableproject.com'
+    ].filter(Boolean).join('&parent=');
+    
+    const iframeSrc = `https://player.twitch.tv/?channel=${twitchChannel}&parent=${parentDomains}`;
+    
     return (
       <div className="aspect-video bg-black rounded-lg overflow-hidden flex flex-col items-center justify-center">
         {!iframeError ? (
           <iframe
-            src={`https://player.twitch.tv/?channel=${twitchChannel}&parent=${parentHostname}`}
+            src={iframeSrc}
             title="Twitch Stream"
             height="100%"
             width="100%"
             allowFullScreen
             frameBorder="0"
             scrolling="no"
+            sandbox="allow-scripts allow-same-origin allow-presentation"
             style={{ borderRadius: "8px", minHeight: "300px", width: "100%" }}
             onError={() => setIframeError(true)}
+            onLoad={() => {
+              // Check if iframe loaded successfully after a delay
+              setTimeout(() => {
+                const iframe = document.querySelector('iframe[title="Twitch Stream"]') as HTMLIFrameElement;
+                if (iframe) {
+                  try {
+                    // Try to access iframe content to detect CORS blocking
+                    iframe.contentDocument;
+                  } catch (error) {
+                    // CORS blocked - this is expected and normal
+                    console.log('Twitch iframe loaded (CORS expected)');
+                  }
+                }
+              }, 2000);
+            }}
           />
         ) : (
           <div className="flex flex-col items-center justify-center h-full w-full">
             <AlertCircle className="w-12 h-12 text-purple-400 mb-4" />
             <h3 className="text-lg font-semibold text-purple-300 mb-2 text-center">
-              Android Compatibility Mode
+              {isPWA ? "PWA Mode - External Stream" : "Android Compatibility Mode"}
             </h3>
             <p className="text-sm text-purple-200/80 text-center mb-4 max-w-sm">
-              Twitch embed has limited support on Android. Use the button below to watch the live stream.
+              {isPWA 
+                ? "Live stream works best when opened directly in Twitch. Click below to watch."
+                : "Twitch embed has limited support on Android. Use the button below to watch the live stream."
+              }
             </p>
             <Button
               variant="outline"
@@ -255,7 +294,7 @@ const TwitchEmbed = () => {
             LiveStream
             {isAndroid && (
               <Badge variant="outline" className="text-xs border-orange-500/50 text-orange-400">
-                Android Mode
+                {isPWA ? "PWA Mode" : "Android Mode"}
               </Badge>
             )}
           </CardTitle>
