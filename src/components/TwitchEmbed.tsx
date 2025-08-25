@@ -46,7 +46,11 @@ const TwitchEmbed = () => {
   }, []);
 
   useEffect(() => {
-    if (isAndroid) return; // Android fallback logic
+    // On Android, clear any errors and don't load script
+    if (isAndroid) {
+      setHasErrorWithLog(false, 'Android device - using iframe mode');
+      return;
+    }
 
     // Load Twitch embed script for iOS and other platforms
     const script = document.createElement('script');
