@@ -20,7 +20,8 @@ const TwitchEmbed = () => {
   const [isAndroid, setIsAndroid] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [debugInfo, setDebugInfo] = useState<string[]>([]);
-  
+  const [iframeError, setIframeError] = useState(false);
+
   // Debug function to track hasError changes
   const setHasErrorWithLog = (value: boolean, reason: string) => {
     console.log(`🎥 Setting hasError to ${value} - Reason: ${reason}`);
@@ -43,7 +44,6 @@ const TwitchEmbed = () => {
     
     setIsAndroid(isAndroidDevice);
     setIsMobile(isMobileDevice);
-    
     console.log('🎥 Platform detection - UserAgent:', userAgent);
     console.log('🎥 Platform detection - Android:', isAndroidDevice, 'Mobile:', isMobileDevice);
   }, []);
@@ -51,8 +51,8 @@ const TwitchEmbed = () => {
   useEffect(() => {
     // On Android, skip the Twitch embed script as it's problematic in WebView
     if (isAndroid) {
-      console.log('🎥 Android detected - using fallback method');
-      setHasErrorWithLog(true, 'Android device detected'); // Show fallback immediately
+      console.log('🎥 Android detected - using fallback/iframe method');
+      setHasErrorWithLog(false, 'Android device detected, trying iframe');
       return;
     }
 
@@ -128,7 +128,7 @@ const TwitchEmbed = () => {
 
         window.twitchPlayer = new window.Twitch.Player('twitch-livestream-container', options);
         console.log('🎥 Twitch Player created successfully');
-        
+
         window.twitchPlayer.addEventListener(window.Twitch.Player.READY, () => {
           console.log('🎥 Twitch player READY event fired');
           setDebugInfo(prev => [...prev, 'READY event fired']);
@@ -171,7 +171,6 @@ const TwitchEmbed = () => {
               const currentTime = window.twitchPlayer.getCurrentTime();
               const duration = window.twitchPlayer.getDuration();
               const playbackState = playerState.playback;
-              console.log('🎥 Player metrics - time:', currentTime, 'duration:', duration, 'playback:', playbackState);
               
               // If we can get metrics, player is likely ready
               if (currentTime !== undefined || duration !== undefined) {
@@ -224,32 +223,51 @@ const TwitchEmbed = () => {
     </div>
   );
 
-  const renderAndroidFallback = () => (
-    <div className="aspect-video bg-gradient-to-br from-purple-900/20 to-blue-900/20 rounded-lg overflow-hidden flex flex-col items-center justify-center p-6 border border-purple-500/20">
-      <AlertCircle className="w-12 h-12 text-purple-400 mb-4" />
-      <h3 className="text-lg font-semibold text-purple-300 mb-2 text-center">
-        Android Compatibility Mode
-      </h3>
-      <p className="text-sm text-purple-200/80 text-center mb-4 max-w-sm">
-        Twitch embed has limited support on Android. Use the button below to watch the live stream.
-      </p>
-      <Button
-        variant="outline"
-        asChild
-        className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10"
-      >
-        <a 
-          href={`https://www.twitch.tv/${twitchChannel}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2"
-        >
-          <Tv className="w-4 h-4" />
-          Watch on Twitch
-        </a>
-      </Button>
-    </div>
-  );
+  const renderAndroidIframe = () => {
+    const parentHostname = window.location.hostname;
+    return (
+      <div className="aspect-video bg-black rounded-lg overflow-hidden flex flex-col items-center justify-center">
+        {!iframeError ? (
+          <iframe
+            src={`https://player.twitch.tv/?channel=${twitchChannel}&parent=${parentHostname}`}
+            title="Twitch Stream"
+            height="100%"
+            width="100%"
+            allowFullScreen
+            frameBorder="0"
+            scrolling="no"
+            style={{ borderRadius: "8px", minHeight: "300px", width: "100%" }}
+            onError={() => setIframeError(true)}
+          />
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full w-full">
+            <AlertCircle className="w-12 h-12 text-purple-400 mb-4" />
+            <h3 className="text-lg font-semibold text-purple-300 mb-2 text-center">
+              Android Compatibility Mode
+            </h3>
+            <p className="text-sm text-purple-200/80 text-center mb-4 max-w-sm">
+              Twitch embed has limited support on Android. Use the button below to watch the live stream.
+            </p>
+            <Button
+              variant="outline"
+              asChild
+              className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10"
+            >
+              <a 
+                href={`https://www.twitch.tv/${twitchChannel}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                <Tv className="w-4 h-4" />
+                Watch on Twitch
+              </a>
+            </Button>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   const renderErrorFallback = () => (
     <div className="aspect-video bg-gradient-to-br from-red-900/20 to-orange-900/20 rounded-lg overflow-hidden flex flex-col items-center justify-center p-6 border border-red-500/20">
@@ -316,7 +334,7 @@ const TwitchEmbed = () => {
           console.log('🎥 Render state - isAndroid:', isAndroid, 'hasError:', hasError, 'isScriptLoaded:', isScriptLoaded, 'isOffline:', isOffline);
           
           if (isAndroid) {
-            return renderAndroidFallback();
+            return renderAndroidIframe();
           } else if (hasError) {
             console.log('🎥 Rendering error fallback - hasError:', hasError, 'isScriptLoaded:', isScriptLoaded);
             return renderErrorFallback();
