@@ -184,37 +184,7 @@ const TwitchEmbed = () => {
   );
 
   const renderAndroidIframe = () => {
-    // For PWA mode, skip iframe entirely and show fallback
-    if (isPWA) {
-      return (
-        <div className="aspect-video bg-gradient-to-br from-purple-900/20 to-blue-900/20 rounded-lg overflow-hidden flex flex-col items-center justify-center p-6 border border-purple-500/20">
-          <Tv className="w-12 h-12 text-purple-400 mb-4" />
-          <h3 className="text-lg font-semibold text-purple-300 mb-2 text-center">
-            PWA Mode - External Stream
-          </h3>
-          <p className="text-sm text-purple-200/80 text-center mb-4 max-w-sm">
-            PWA apps can't embed Twitch streams due to security restrictions. Click below to watch the live stream.
-          </p>
-          <Button
-            variant="outline"
-            asChild
-            className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10"
-          >
-            <a 
-              href={`https://www.twitch.tv/${twitchChannel}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2"
-            >
-              <Tv className="w-4 h-4" />
-              Watch on Twitch
-            </a>
-          </Button>
-        </div>
-      );
-    }
-
-    // For regular Android browsers, try iframe first
+    // Try iframe for both PWA and regular Android browsers
     const hostname = window.location.hostname;
     const parentDomains = [
       hostname,
