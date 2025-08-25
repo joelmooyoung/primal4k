@@ -46,19 +46,20 @@ const TwitchEmbed = () => {
   }, []);
 
   useEffect(() => {
-    // On Android, clear any errors and don't load script
+    // Completely skip all Twitch logic on Android
     if (isAndroid) {
-      setHasErrorWithLog(false, 'Android device - using iframe mode');
+      setHasError(false);
+      setIsOffline(false);
       return;
     }
 
-    // Load Twitch embed script for iOS and other platforms
+    // Load Twitch embed script for non-Android platforms only
     const script = document.createElement('script');
     script.src = 'https://player.twitch.tv/js/embed/v1.js';
     script.onload = () => {
       setIsScriptLoaded(true);
-      // Wait until containerRef is set
-      if (containerRef.current) {
+      // Initialize player only after script loads and container exists
+      if (containerRef.current && window.Twitch) {
         const hostname = window.location.hostname;
         const parentDomains = [
           hostname,
@@ -269,16 +270,6 @@ const TwitchEmbed = () => {
       </CardHeader>
       
       <CardContent>
-        {/* Debug Panel - Visible on screen */}
-        <div className="mb-4 p-3 bg-yellow-100 border border-yellow-300 rounded text-black text-xs">
-          <strong>Debug Info:</strong><br />
-          isAndroid: {isAndroid.toString()}<br />
-          hasError: {hasError.toString()}<br />
-          isScriptLoaded: {isScriptLoaded.toString()}<br />
-          isOffline: {isOffline.toString()}<br />
-          Debug Log: {debugInfo.slice(-3).join(' | ')}
-        </div>
-
         {(() => {
           if (isAndroid) {
             return renderAndroidIframe();
