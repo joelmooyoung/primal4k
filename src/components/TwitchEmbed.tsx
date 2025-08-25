@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,6 @@ declare global {
 }
 
 const TwitchEmbed = () => {
-  console.log('🎥 TwitchEmbed component rendered');
   const twitchChannel = "joelgadaffi";
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
@@ -22,14 +21,14 @@ const TwitchEmbed = () => {
   const [debugInfo, setDebugInfo] = useState<string[]>([]);
   const [iframeError, setIframeError] = useState(false);
 
+  // Use ref to ensure container element is present for Twitch Player
+  const containerRef = useRef<HTMLDivElement>(null);
+
   // Debug function to track hasError changes
   const setHasErrorWithLog = (value: boolean, reason: string) => {
-    console.log(`🎥 Setting hasError to ${value} - Reason: ${reason}`);
     setDebugInfo(prev => [...prev, `hasError=${value}: ${reason}`]);
     setHasError(value);
   };
-  
-  console.log('🎥 TwitchEmbed - Channel:', twitchChannel, 'Script loaded:', isScriptLoaded, 'Offline:', isOffline, 'HasError:', hasError);
 
   // Detect platform
   useEffect(() => {
@@ -44,157 +43,103 @@ const TwitchEmbed = () => {
     
     setIsAndroid(isAndroidDevice);
     setIsMobile(isMobileDevice);
-    console.log('🎥 Platform detection - UserAgent:', userAgent);
-    console.log('🎥 Platform detection - Android:', isAndroidDevice, 'Mobile:', isMobileDevice);
   }, []);
 
   useEffect(() => {
-    // On Android, skip the Twitch embed script as it's problematic in WebView
-    if (isAndroid) {
-      console.log('🎥 Android detected - using fallback/iframe method');
-      setHasErrorWithLog(false, 'Android device detected, trying iframe');
-      return;
-    }
+    if (isAndroid) return; // Android fallback logic
 
-    console.log('🎥 Loading Twitch script for non-Android platform');
     // Load Twitch embed script for iOS and other platforms
     const script = document.createElement('script');
     script.src = 'https://player.twitch.tv/js/embed/v1.js';
     script.onload = () => {
-      console.log('🎥 Twitch script loaded successfully');
       setIsScriptLoaded(true);
-      initializeTwitchPlayer();
-    };
-    script.onerror = (error) => {
-      console.error('🎥 Failed to load Twitch script:', error);
-      setHasErrorWithLog(true, 'Script loading failed');
-    };
-    document.head.appendChild(script);
-
-    return () => {
-      console.log('🎥 Cleaning up Twitch player');
-      // Clean up Twitch player when component unmounts
-      if (window.twitchPlayer) {
-        try {
-          window.twitchPlayer.destroy();
-          window.twitchPlayer = null;
-        } catch (error) {
-          console.log('Error destroying Twitch player:', error);
-        }
-      }
-      // Only remove script if it exists
-      const existingScript = document.querySelector('script[src="https://player.twitch.tv/js/embed/v1.js"]');
-      if (existingScript) {
-        document.head.removeChild(existingScript);
-      }
-    };
-  }, [isAndroid]);
-
-  const initializeTwitchPlayer = () => {
-    console.log('🎥 initializeTwitchPlayer called - Twitch available:', !!window.Twitch, 'Existing player:', !!window.twitchPlayer);
-    
-    if (window.Twitch && !window.twitchPlayer) {
-      try {
+      // Wait until containerRef is set
+      if (containerRef.current) {
         const hostname = window.location.hostname;
         const parentDomains = [
           hostname,
           'localhost',
           '93d33477-c474-4a2d-8760-2925f3e19bcc.lovableproject.com'
         ];
-        
-        // Add lovableproject.com for any Lovable preview
-        if (hostname.includes('lovableproject.com')) {
-          parentDomains.push('lovableproject.com');
-        }
-        
-        console.log('🎥 Creating Twitch player with domains:', parentDomains);
-        
+        if (hostname.includes('lovableproject.com')) parentDomains.push('lovableproject.com');
         const options = {
           width: '100%',
           height: '100%',
           channel: twitchChannel,
           parent: parentDomains
         };
+        try {
+          window.twitchPlayer = new window.Twitch.Player(containerRef.current, options);
 
-        // Use the container div directly as the player target
-        const container = document.getElementById('twitch-livestream-container');
-        console.log('🎥 Container element found:', !!container);
-        
-        if (!container) {
-          console.error('🎥 Twitch container not found!');
-          setHasErrorWithLog(true, 'Container element not found');
-          return;
-        }
+          window.twitchPlayer.addEventListener(window.Twitch.Player.READY, () => {
+            setDebugInfo(prev => [...prev, 'READY event fired']);
+            window.twitchPlayer.setVolume(1);
+            window.twitchPlayer.setMuted(true);
+            setHasErrorWithLog(false, 'Player ready event fired');
+          });
 
-        window.twitchPlayer = new window.Twitch.Player('twitch-livestream-container', options);
-        console.log('🎥 Twitch Player created successfully');
-
-        window.twitchPlayer.addEventListener(window.Twitch.Player.READY, () => {
-          console.log('🎥 Twitch player READY event fired');
-          setDebugInfo(prev => [...prev, 'READY event fired']);
-          window.twitchPlayer.setVolume(1);
-          window.twitchPlayer.setMuted(true);
-          setHasErrorWithLog(false, 'Player ready event fired');
-        });
-
-        window.twitchPlayer.addEventListener(window.Twitch.Player.OFFLINE, () => {
-          console.log('🎥 Twitch player OFFLINE event fired');
-          setDebugInfo(prev => [...prev, 'OFFLINE event fired']);
-          setIsOffline(true);
-        });
-
-        window.twitchPlayer.addEventListener(window.Twitch.Player.ONLINE, () => {
-          console.log('🎥 Twitch player ONLINE event fired');
-          setDebugInfo(prev => [...prev, 'ONLINE event fired']);
-          setIsOffline(false);
-        });
-
-        window.twitchPlayer.addEventListener(window.Twitch.Player.ERROR, (error: any) => {
-          console.error('🎥 Twitch player ERROR event:', error);
-          setDebugInfo(prev => [...prev, `ERROR: ${JSON.stringify(error)}`]);
-          setHasErrorWithLog(true, `Player error event: ${JSON.stringify(error)}`);
-        });
-
-        // Add a timeout to detect if player never loads or check actual state
-        setTimeout(() => {
-          if (!window.twitchPlayer || window.twitchPlayer.getPlayerState() === undefined) {
-            console.log('🎥 Player timeout - forcing offline state');
-            setDebugInfo(prev => [...prev, 'Player timeout - no events fired']);
+          window.twitchPlayer.addEventListener(window.Twitch.Player.OFFLINE, () => {
+            setDebugInfo(prev => [...prev, 'OFFLINE event fired']);
             setIsOffline(true);
-          } else {
-            const playerState = window.twitchPlayer.getPlayerState();
-            console.log('🎥 Player state check:', playerState);
-            setDebugInfo(prev => [...prev, `Player state: ${playerState}`]);
-            
-            // Check if player is actually ready but events didn't fire
-            try {
-              const currentTime = window.twitchPlayer.getCurrentTime();
-              const duration = window.twitchPlayer.getDuration();
-              const playbackState = playerState.playback;
-              
-              // If we can get metrics, player is likely ready
-              if (currentTime !== undefined || duration !== undefined) {
-                console.log('🎥 Player appears ready - forcing ready state');
-                setHasErrorWithLog(false, 'Player ready via state check');
-                setIsOffline(false); // Player is ready, so not offline
-              } else {
-                console.log('🎥 Player state exists but not functional - setting offline');
+          });
+
+          window.twitchPlayer.addEventListener(window.Twitch.Player.ONLINE, () => {
+            setDebugInfo(prev => [...prev, 'ONLINE event fired']);
+            setIsOffline(false);
+          });
+
+          window.twitchPlayer.addEventListener(window.Twitch.Player.ERROR, (error: any) => {
+            setDebugInfo(prev => [...prev, `ERROR: ${JSON.stringify(error)}`]);
+            setHasErrorWithLog(true, `Player error event: ${JSON.stringify(error)}`);
+          });
+
+          // Add a timeout to detect if player never loads
+          setTimeout(() => {
+            if (!window.twitchPlayer || window.twitchPlayer.getPlayerState() === undefined) {
+              setDebugInfo(prev => [...prev, 'Player timeout - no events fired']);
+              setIsOffline(true);
+            } else {
+              const playerState = window.twitchPlayer.getPlayerState();
+              setDebugInfo(prev => [...prev, `Player state: ${playerState}`]);
+              try {
+                const currentTime = window.twitchPlayer.getCurrentTime();
+                const duration = window.twitchPlayer.getDuration();
+                if (currentTime !== undefined || duration !== undefined) {
+                  setHasErrorWithLog(false, 'Player ready via state check');
+                  setIsOffline(false);
+                } else {
+                  setIsOffline(true);
+                }
+              } catch (error) {
                 setIsOffline(true);
               }
-            } catch (error) {
-              console.log('🎥 Error checking player state:', error);
-              setIsOffline(true);
             }
-          }
-        }, 5000); // Reduced timeout to 5 seconds
-      } catch (error) {
-        console.error('🎥 Error initializing Twitch player:', error);
-        setHasErrorWithLog(true, `Player initialization exception: ${error}`);
+          }, 5000);
+        } catch (error) {
+          setHasErrorWithLog(true, `Player initialization exception: ${error}`);
+        }
+      } else {
+        setHasErrorWithLog(true, 'Container element not found (ref not attached)');
       }
-    } else {
-      console.log('🎥 Cannot initialize player - Twitch:', !!window.Twitch, 'Existing player:', !!window.twitchPlayer);
-    }
-  };
+    };
+    script.onerror = (error) => {
+      setHasErrorWithLog(true, 'Script loading failed');
+    };
+    document.head.appendChild(script);
+
+    return () => {
+      if (window.twitchPlayer) {
+        try {
+          window.twitchPlayer.destroy();
+          window.twitchPlayer = null;
+        } catch (error) {}
+      }
+      const existingScript = document.querySelector('script[src="https://player.twitch.tv/js/embed/v1.js"]');
+      if (existingScript) {
+        document.head.removeChild(existingScript);
+      }
+    };
+  }, [isAndroid]);
 
   const renderOfflineState = () => (
     <div className="aspect-video bg-gradient-to-br from-gray-900/20 to-gray-700/20 rounded-lg overflow-hidden flex flex-col items-center justify-center p-6 border border-gray-500/20">
@@ -331,21 +276,17 @@ const TwitchEmbed = () => {
         </div>
 
         {(() => {
-          console.log('🎥 Render state - isAndroid:', isAndroid, 'hasError:', hasError, 'isScriptLoaded:', isScriptLoaded, 'isOffline:', isOffline);
-          
           if (isAndroid) {
             return renderAndroidIframe();
           } else if (hasError) {
-            console.log('🎥 Rendering error fallback - hasError:', hasError, 'isScriptLoaded:', isScriptLoaded);
             return renderErrorFallback();
           } else if (isOffline) {
-            console.log('🎥 Rendering offline state');
             return renderOfflineState();
           } else {
-            console.log('🎥 Rendering normal player container');
             return (
               <div className="aspect-video bg-black rounded-lg overflow-hidden">
                 <div 
+                  ref={containerRef}
                   id="twitch-livestream-container" 
                   className="w-full h-full"
                 />
@@ -385,7 +326,7 @@ const TwitchEmbed = () => {
                 className="border-blue-500/50 text-blue-500 hover:bg-blue-500/10"
               >
                 <a 
-                  href="https://azura.primal4k.com/listen/primal4k"
+                  href="https://primal4k.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2"
