@@ -385,7 +385,7 @@ const TwitchEmbed = () => {
                 className="border-blue-500/50 text-blue-500 hover:bg-blue-500/10"
               >
                 <a 
-                  href="https://fast.citrus3.com:2020/public/dj_gadaffi_and_friends"
+                  href="https://azura.primal4k.com/listen/primal4k"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2"
