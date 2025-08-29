@@ -13,19 +13,20 @@ const MobileAppCTA = () => {
         </div>
         
         <h3 className="text-2xl font-bold mb-2 text-foreground">
-          📱 Get Our Mobile App!
+          📱 Get Our PWA App!
         </h3>
         
         <p className="text-muted-foreground mb-4 max-w-md mx-auto">
-          Install Primal4k to your phone for the best listening experience. 
-          Enjoy our radio stations anywhere, anytime.
+          Install the Primal4k Progressive Web App for the ultimate mobile experience. 
+          Stream live shows with offline capabilities and home screen access.
         </p>
         
         <div className="text-sm text-muted-foreground mb-6 max-w-lg mx-auto">
-          <p className="mb-2 font-medium">📱 Easy Installation:</p>
-          <p className="mb-1">• <strong>iPhone/iPad:</strong> Tap the share button and select "Add to Home Screen"</p>
-          <p className="mb-1">• <strong>Android:</strong> Tap the menu button and select "Add to Home Screen" or "Install App"</p>
-          <p>• Works offline and loads instantly from your home screen!</p>
+          <p className="mb-2 font-medium">📱 PWA Installation:</p>
+          <p className="mb-1">• <strong>iPhone/iPad:</strong> Open in Safari → Tap Share → "Add to Home Screen"</p>
+          <p className="mb-1">• <strong>Android:</strong> Open in Chrome → Tap Menu → "Add to Home Screen" or "Install App"</p>
+          <p className="mb-1">• <strong>Desktop:</strong> Look for the install icon in your browser's address bar</p>
+          <p>• Enjoy full-screen experience, push notifications, and instant loading!</p>
         </div>
         
         <Button 
@@ -33,13 +34,13 @@ const MobileAppCTA = () => {
           className="bg-gradient-primary hover:bg-gradient-primary/90 text-white font-semibold px-8 py-3 text-lg transform transition-all duration-300 hover:scale-105 hover:shadow-glow"
         >
           <a 
-            href="https://app.primal4k.com" 
+            href="https://mobile.primal4k.com" 
             target="_blank" 
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2"
           >
             <Download className="h-5 w-5" />
-            🚀 Install Primal4k App
+            🚀 Install Primal4k PWA
           </a>
         </Button>
       </CardContent>
