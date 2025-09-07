@@ -24,9 +24,9 @@ const App = () => {
   console.log('🏗️ App component render - Instance ID:', APP_INSTANCE_ID);
   
   useEffect(() => {
-    // PWA Install prompt handling
+    // PWA Install prompt handling with detailed logging
     const handleBeforeInstallPrompt = (e: Event) => {
-      console.log('🎯 PWA install prompt available!');
+      console.log('🎯 PWA install prompt available!', e);
       e.preventDefault();
       window.deferredPrompt = e;
     };
@@ -36,10 +36,40 @@ const App = () => {
       window.deferredPrompt = null;
     };
 
+    // Track user engagement for PWA installability
+    let startTime = Date.now();
+    let hasInteracted = false;
+    
+    const trackInteraction = () => {
+      if (!hasInteracted) {
+        hasInteracted = true;
+        console.log('✅ User interaction detected for PWA');
+      }
+    };
+    
+    const checkEngagement = () => {
+      const timeSpent = (Date.now() - startTime) / 1000;
+      console.log(`⏱️ Time spent: ${timeSpent}s, Has interacted: ${hasInteracted}`);
+      
+      if (timeSpent >= 30 && hasInteracted) {
+        console.log('🎯 PWA engagement criteria met! Waiting for install prompt...');
+      }
+    };
+
+    // Add interaction listeners
+    document.addEventListener('click', trackInteraction);
+    document.addEventListener('touchstart', trackInteraction);
+    
+    // Check engagement every 5 seconds
+    const engagementInterval = setInterval(checkEngagement, 5000);
+
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     window.addEventListener('appinstalled', handleAppInstalled);
 
     return () => {
+      document.removeEventListener('click', trackInteraction);
+      document.removeEventListener('touchstart', trackInteraction);
+      clearInterval(engagementInterval);
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
