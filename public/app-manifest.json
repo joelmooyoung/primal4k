@@ -2,7 +2,7 @@
   "name": "Primal4K Radio",
   "short_name": "Primal4K",
   "description": "Your ultimate destination for premium electronic music and DJ sets",
-  "start_url": "/?source=pwa",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#FF0000",
