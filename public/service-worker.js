@@ -1,9 +1,9 @@
 const CACHE_NAME = 'primal4k-mobile-cache-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
+  '/mobile.html',
+  '/manifest.json',
+  '/mobile.primal4k.com/icons/icon-192x192.png',
+  '/mobile.primal4k.com/icons/icon-512x512.png'
 ];
 
 self.addEventListener('install', event =>
