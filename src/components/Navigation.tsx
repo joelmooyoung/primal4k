@@ -104,7 +104,9 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
               size="sm"
               className="flex items-center gap-2 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground border-primary hover:from-primary-glow hover:to-primary"
               onClick={() => {
-                console.log('🔘 PWA Install button clicked from main site');
+                console.log('🔘 PWA Install button clicked - navigating to /app.html');
+                console.log('🌐 Current location:', window.location.href);
+                console.log('🎯 Navigating to PWA installation page...');
                 window.location.href = '/app.html';
               }}
             >
@@ -154,7 +156,7 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
                 size="lg"
                 className="w-full justify-start gap-3 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground border-primary hover:from-primary-glow hover:to-primary"
                 onClick={() => {
-                  console.log('🔘 PWA Install button clicked from main site (mobile)');
+                  console.log('🔘 PWA Install button clicked (mobile) - navigating to /app.html');
                   window.location.href = '/app.html';
                 }}
               >
