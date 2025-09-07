@@ -90,8 +90,13 @@
     </iframe>
 
     <script>
+      console.log('🔧 PWA Script Loading - Android Chrome Detection');
+      console.log('📱 User Agent:', navigator.userAgent);
+      console.log('🌐 Current URL:', window.location.href);
+      
       // Service Worker registration for PWA
       if ('serviceWorker' in navigator) {
+        console.log('✅ Service Worker supported');
         navigator.serviceWorker.register('/app-sw.js')
           .then(registration => {
             console.log('✅ Primal4k Service Worker Registered', registration);
@@ -100,11 +105,15 @@
           .catch(err => {
             console.error('❌ SW Registration Failed:', err);
           });
+      } else {
+        console.log('❌ Service Worker not supported');
       }
 
       // Handle install prompt
       let deferredPrompt;
       const installBtn = document.getElementById('install-btn');
+      
+      console.log('🔘 Install button element:', installBtn);
 
       // Check if already installed
       if (window.navigator.standalone === true) {
@@ -112,30 +121,40 @@
         installBtn.style.display = 'none';
       }
 
+      // Android Chrome install prompt
       window.addEventListener('beforeinstallprompt', (e) => {
-        console.log('📱 Install prompt available');
+        console.log('🎯 ANDROID: beforeinstallprompt event fired!');
+        console.log('📱 Install prompt available for Android Chrome');
         e.preventDefault();
         deferredPrompt = e;
         installBtn.style.display = 'block';
-        console.log('✅ Install button now visible');
+        installBtn.style.backgroundColor = '#00ff00'; // Green to show it's ready
+        console.log('✅ Install button now visible and ready');
       });
 
       installBtn.addEventListener('click', async () => {
         console.log('🔘 Install button clicked');
         if (deferredPrompt) {
+          console.log('📱 Showing install prompt');
           deferredPrompt.prompt();
           const { outcome } = await deferredPrompt.userChoice;
           console.log(`👤 User response to install prompt: ${outcome}`);
+          if (outcome === 'accepted') {
+            console.log('🎉 User accepted the install prompt');
+          } else {
+            console.log('❌ User dismissed the install prompt');
+          }
           deferredPrompt = null;
           installBtn.style.display = 'none';
         } else {
           console.log('❌ No deferred prompt available');
+          console.log('💡 Manual installation: Chrome Menu → Add to Home Screen');
         }
       });
 
       // Handle successful installation
       window.addEventListener('appinstalled', () => {
-        console.log('🎉 Primal4k App installed successfully');
+        console.log('🎉 Primal4k App installed successfully to home screen!');
         installBtn.style.display = 'none';
         deferredPrompt = null;
       });
@@ -154,6 +173,19 @@
           };
         }, 2000);
       }
+      
+      // Show manual install option after 5 seconds if no auto-prompt
+      setTimeout(() => {
+        if (!deferredPrompt && installBtn.style.display === 'none') {
+          console.log('⏰ No auto-prompt after 5s - showing manual install option');
+          installBtn.style.display = 'block';
+          installBtn.textContent = '📱 Install App (Manual)';
+          installBtn.style.backgroundColor = '#ff6600'; // Orange for manual
+          installBtn.onclick = () => {
+            alert('To install manually:\n\nChrome: Menu (⋮) → "Add to Home Screen"\nFirefox: Menu → "Install"\nSafari: Share → "Add to Home Screen"');
+          };
+        }
+      }, 5000);
 
       // Handle iframe loading
       const iframe = document.getElementById('app-frame');
