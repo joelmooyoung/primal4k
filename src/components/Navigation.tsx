@@ -106,7 +106,7 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
               onClick={() => {
                 console.log('🔘 PWA Install button clicked');
                 
-                // Trigger PWA install prompt
+                // Try automatic install first, but focus on manual instructions
                 if (window.deferredPrompt) {
                   console.log('✅ Showing PWA install prompt');
                   window.deferredPrompt.prompt();
@@ -119,8 +119,8 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
                     window.deferredPrompt = null;
                   });
                 } else {
-                  console.log('💡 No PWA prompt available - showing manual instructions');
-                  alert('📱 Install Primal4K:\n\n🤖 Android: Menu (⋮) → "Add to Home screen"\n🍎 iPhone: Share (⬆️) → "Add to Home Screen"');
+                  // Open dedicated installation page with detailed instructions
+                  window.open('/app.html', '_blank');
                 }
               }}
             >
@@ -172,7 +172,7 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
                 onClick={() => {
                   console.log('🔘 PWA Install button clicked (mobile)');
                   
-                  // Trigger PWA install prompt
+                  // Try automatic install first, but focus on manual instructions
                   if (window.deferredPrompt) {
                     console.log('✅ Showing PWA install prompt');
                     window.deferredPrompt.prompt();
@@ -185,8 +185,8 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
                       window.deferredPrompt = null;
                     });
                   } else {
-                    console.log('💡 No PWA prompt available - showing manual instructions');
-                    alert('📱 Install Primal4K:\n\n🤖 Android: Menu (⋮) → "Add to Home screen"\n🍎 iPhone: Share (⬆️) → "Add to Home Screen"');
+                    // Open dedicated installation page with detailed instructions
+                    window.open('/app.html', '_blank');
                   }
                   setIsOpen(false);
                 }}
