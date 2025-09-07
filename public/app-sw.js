@@ -1,61 +1,15 @@
-const CACHE_NAME = 'primal4k-radio-v1';
-const urlsToCache = [
-  '/',
-  '/app-manifest.json',
-  '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
-];
+const CACHE_NAME = 'primal4k-radio-v2';
 
 // Install event
 self.addEventListener('install', event => {
-  console.log('✅ Primal4K PWA Service Worker Installing');
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('✅ PWA Cache opened');
-        return cache.addAll(urlsToCache);
-      })
-      .then(() => {
-        console.log('✅ PWA Resources cached');
-        return self.skipWaiting();
-      })
-      .catch(error => {
-        console.error('❌ PWA Install failed:', error);
-      })
-  );
+  console.log('✅ Primal4K Service Worker Installing');
+  self.skipWaiting();
 });
 
 // Activate event
 self.addEventListener('activate', event => {
-  console.log('✅ Primal4K PWA Service Worker Activated');
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('🗑️ Deleting old PWA cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    }).then(() => {
-      console.log('✅ PWA Service Worker claimed clients');
-      return self.clients.claim();
-    })
-  );
-});
-
-// Fetch event - basic caching strategy
-self.addEventListener('fetch', event => {
-  // Cache essential PWA files
-  if (event.request.url.includes('/app-manifest.json') ||
-      event.request.url.includes('/lovable-uploads/')) {
-    event.respondWith(
-      caches.match(event.request)
-        .then(response => {
-          return response || fetch(event.request);
-        })
-    );
-  }
+  console.log('✅ Primal4K Service Worker Activated');
+  self.clients.claim();
 });
 
 // Push notification event

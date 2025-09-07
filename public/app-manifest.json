@@ -6,24 +6,19 @@
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#FF0000",
-  "orientation": "portrait-primary",
   "scope": "/",
-  "categories": ["music", "entertainment"],
-  "lang": "en",
-  "dir": "ltr",
-  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
