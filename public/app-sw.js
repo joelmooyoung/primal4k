@@ -1,71 +1,61 @@
-const CACHE_NAME = 'primal4k-2025-1-v1';
+const CACHE_NAME = 'primal4k-radio-v1';
 const urlsToCache = [
-  '/app.html',
+  '/',
   '/app-manifest.json',
   '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
 ];
 
 // Install event
 self.addEventListener('install', event => {
-  console.log('✅ Primal4k-2025-1 Service Worker Installing');
+  console.log('✅ Primal4K PWA Service Worker Installing');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('✅ Cache opened successfully');
+        console.log('✅ PWA Cache opened');
         return cache.addAll(urlsToCache);
       })
       .then(() => {
-        console.log('✅ All resources cached');
+        console.log('✅ PWA Resources cached');
         return self.skipWaiting();
       })
       .catch(error => {
-        console.error('❌ Service Worker install failed:', error);
+        console.error('❌ PWA Install failed:', error);
       })
   );
 });
 
 // Activate event
 self.addEventListener('activate', event => {
-  console.log('✅ Primal4k-2025-1 Service Worker Activated');
+  console.log('✅ Primal4K PWA Service Worker Activated');
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheName !== CACHE_NAME) {
-            console.log('🗑️ Deleting old cache:', cacheName);
+            console.log('🗑️ Deleting old PWA cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
     }).then(() => {
-      console.log('✅ Service Worker claimed clients');
+      console.log('✅ PWA Service Worker claimed clients');
       return self.clients.claim();
     })
   );
 });
 
-// Fetch event - let the main site handle most requests
+// Fetch event - basic caching strategy
 self.addEventListener('fetch', event => {
-  // Only cache our PWA shell files
-  if (event.request.url.includes('/app.html') || 
-      event.request.url.includes('/app-manifest.json') ||
-      event.request.url.includes('/app-sw.js')) {
+  // Cache essential PWA files
+  if (event.request.url.includes('/app-manifest.json') ||
+      event.request.url.includes('/lovable-uploads/')) {
     event.respondWith(
       caches.match(event.request)
         .then(response => {
-          if (response) {
-            console.log('📦 Serving from cache:', event.request.url);
-            return response;
-          }
-          console.log('🌐 Fetching from network:', event.request.url);
-          return fetch(event.request);
-        })
-        .catch(error => {
-          console.error('❌ Fetch failed:', error);
+          return response || fetch(event.request);
         })
     );
   }
-  // Let all other requests (main site) pass through normally
 });
 
 // Push notification event

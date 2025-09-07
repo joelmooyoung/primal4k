@@ -103,11 +103,25 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
               variant="outline"
               size="sm"
               className="flex items-center gap-2 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground border-primary hover:from-primary-glow hover:to-primary"
-              onClick={(e) => {
-                console.log('🔘 PWA Install button clicked - DIRECT TEST');
+              onClick={() => {
+                console.log('🔘 PWA Install button clicked');
                 
-                // Use same-window navigation instead of popup
-                window.location.assign('/app.html');
+                // Trigger PWA install prompt
+                if (window.deferredPrompt) {
+                  console.log('✅ Showing PWA install prompt');
+                  window.deferredPrompt.prompt();
+                  window.deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                      console.log('🎉 User accepted PWA install');
+                    } else {
+                      console.log('❌ User dismissed PWA install');
+                    }
+                    window.deferredPrompt = null;
+                  });
+                } else {
+                  console.log('💡 No PWA prompt available - showing manual instructions');
+                  alert('📱 Install Primal4K:\n\n🤖 Android: Menu (⋮) → "Add to Home screen"\n🍎 iPhone: Share (⬆️) → "Add to Home Screen"');
+                }
               }}
             >
               <Smartphone className="w-4 h-4" />
@@ -156,8 +170,25 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
                 size="lg"
                 className="w-full justify-start gap-3 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground border-primary hover:from-primary-glow hover:to-primary"
                 onClick={() => {
-                  console.log('🔘 PWA Install button clicked (mobile) - DIRECT TEST');
-                  window.location.assign('/app.html');
+                  console.log('🔘 PWA Install button clicked (mobile)');
+                  
+                  // Trigger PWA install prompt
+                  if (window.deferredPrompt) {
+                    console.log('✅ Showing PWA install prompt');
+                    window.deferredPrompt.prompt();
+                    window.deferredPrompt.userChoice.then((choiceResult: any) => {
+                      if (choiceResult.outcome === 'accepted') {
+                        console.log('🎉 User accepted PWA install');
+                      } else {
+                        console.log('❌ User dismissed PWA install');
+                      }
+                      window.deferredPrompt = null;
+                    });
+                  } else {
+                    console.log('💡 No PWA prompt available - showing manual instructions');
+                    alert('📱 Install Primal4K:\n\n🤖 Android: Menu (⋮) → "Add to Home screen"\n🍎 iPhone: Share (⬆️) → "Add to Home Screen"');
+                  }
+                  setIsOpen(false);
                 }}
               >
                 <Smartphone className="w-5 h-5" />

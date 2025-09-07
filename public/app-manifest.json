@@ -1,12 +1,12 @@
 {
-  "name": "Primal4k-2025-1",
-  "short_name": "Primal4k",
+  "name": "Primal4K Radio",
+  "short_name": "Primal4K",
   "description": "Your ultimate destination for premium electronic music and DJ sets",
-  "start_url": "/",
+  "start_url": "/?source=pwa",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#FF0000",
-  "orientation": "any",
+  "orientation": "portrait-primary",
   "scope": "/",
   "categories": ["music", "entertainment"],
   "lang": "en",
@@ -17,19 +17,13 @@
       "src": "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
       "src": "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png",
-      "sizes": "512x512", 
+      "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
   ]
 }
