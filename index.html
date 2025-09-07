@@ -4,8 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" type="image/png">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#FF0000">
     <title>Primal</title>
     <meta name="description" content="Primal4K Radio - Your ultimate destination for premium electronic music and DJ sets" />
     <meta name="author" content="Primal4K Radio" />
@@ -23,13 +21,5 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script>
-      // Service Worker registration for PWA
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-          .then(() => console.log('Service Worker Registered'))
-          .catch(err => console.error('SW Registration Failed:', err));
-      }
-    </script>
   </body>
 </html>
