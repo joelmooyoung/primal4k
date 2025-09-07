@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Primal4k Radio</title>
-  <link rel="manifest" href="manifest.json" />
+  <meta charset="UTF-8">
+  <title>Primal4k Mobile</title>
+  <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#FF0000">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
 
   <!-- OneSignal SDK -->
   <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
@@ -21,84 +24,38 @@
   </script>
 </head>
 <body>
-  <h1>Primal4k Radio</h1>
-  <div id="player-bar" style="position:fixed; bottom:0; left:0; right:0; background:#111; color:#fff; display:flex; align-items:center; padding:10px; font-family:sans-serif;">
-    <button id="playPauseBtn" style="margin-right:10px;">⏸️</button>
-    <span id="status">Connecting...</span>
-  </div>
+  <h1>Welcome to Primal4k Mobile</h1>
+  <p>Tap "Add to Home Screen" for instant access to live shows.</p>
+
+
+
+
+  <!-- Twitch Player -->
+  <iframe
+    src="https://player.twitch.tv/?channel=joelgadaffi&parent=mobile.primal4k.com"
+    width="100%"
+    height="480"
+    allowfullscreen>
+  </iframe>
+
+
+
 
   <script>
-    const streamUrl = "https://fast.citrus3.com:8014/;";
-    const audio = new Audio(streamUrl);
-    audio.autoplay = true;
-    audio.preload = "auto";
-    audio.crossOrigin = "anonymous";
-    audio.controls = false;
-
-    let retryCount = 0;
-    const status = document.getElementById("status");
-    const playPauseBtn = document.getElementById("playPauseBtn");
-
-    function playStream() {
-      audio.play().then(() => {
-        retryCount = 0;
-        status.textContent = "🔊 Live Now";
-        playPauseBtn.textContent = "⏸️";
-      }).catch(err => {
-        console.error("Play error:", err);
-        status.textContent = "⚠️ Reconnecting...";
-        scheduleReconnect();
-      });
-    }
-
-    function scheduleReconnect() {
-      if (retryCount < 5) {
-        retryCount++;
-        setTimeout(() => {
-          status.textContent = `🔄 Reconnect attempt ${retryCount}`;
-          playStream();
-        }, 2000 * retryCount);
-      } else {
-        status.textContent = "❌ Unable to connect";
-      }
-    }
-
-    audio.addEventListener("playing", () => {
-      status.textContent = "🔊 Live Now";
-      retryCount = 0;
-    });
-
-    ["stalled", "error", "ended"].forEach(evt => {
-      audio.addEventListener(evt, () => {
-        console.warn("Audio issue:", evt);
-        status.textContent = "⚠️ Stream dropped, retrying...";
-        scheduleReconnect();
-      });
-    });
-
-    playPauseBtn.addEventListener("click", () => {
-      if (audio.paused) {
-        playStream();
-      } else {
-        audio.pause();
-        playPauseBtn.textContent = "▶️";
-        status.textContent = "⏸️ Paused";
-      }
-    });
-
     // Service Worker registration
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./service-worker.js')
+      navigator.serviceWorker.register('/service-worker.js')
         .then(() => console.log('Service Worker Registered'))
         .catch(err => console.error('SW Registration Failed:', err));
     }
+
+
+
 
     // Optional add-to-home-screen prompt alert
     if (!window.matchMedia('(display-mode: standalone)').matches) {
       alert('Add this page to your home screen for full app experience!');
     }
-
-    playStream();
   </script>
 </body>
 </html>
