@@ -5,270 +5,168 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Primal4k-2025-1">
+    <meta name="apple-mobile-web-app-title" content="Primal4k">
     <link rel="icon" href="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" type="image/png">
     <link rel="apple-touch-icon" href="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png">
     <link rel="manifest" href="/app-manifest.json">
     <meta name="theme-color" content="#FF0000">
-    <title>Primal4k-2025-1</title>
-    <meta name="description" content="Primal4K Radio - Your ultimate destination for premium electronic music and DJ sets" />
-    <meta name="author" content="Primal4K Radio" />
-
-    <meta property="og:title" content="Primal4K Radio App" />
-    <meta property="og:description" content="Primal4K Radio - Your ultimate destination for premium electronic music and DJ sets" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <title>Install Primal4k App</title>
     
     <style>
       body, html {
         margin: 0;
         padding: 0;
         height: 100%;
-        overflow: hidden;
-        background: #000;
-      }
-      
-      #app-frame {
-        width: 100%;
-        height: 100vh;
-        border: none;
-        display: block;
-      }
-      
-      .loading {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: #ff0000;
+        background: linear-gradient(135deg, #000000, #333333);
         font-family: Arial, sans-serif;
-        font-size: 18px;
-        z-index: 1000;
-        text-align: center;
-      }
-      
-      .install-prompt {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #ff0000;
         color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-        cursor: pointer;
-        z-index: 2000;
-        display: none;
-        box-shadow: 0 4px 12px rgba(255,0,0,0.4);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
       }
       
-      .install-prompt:hover {
-        background: #cc0000;
+      .container {
+        text-align: center;
+        padding: 40px 20px;
+        max-width: 500px;
+      }
+      
+      .logo {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 30px;
+        border-radius: 20px;
+      }
+      
+      h1 {
+        color: #ff0000;
+        font-size: 2.5em;
+        margin-bottom: 20px;
+      }
+      
+      .install-btn {
+        background: linear-gradient(45deg, #ff0000, #cc0000);
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 10px;
+        font-size: 18px;
+        cursor: pointer;
+        margin: 20px 10px;
+        box-shadow: 0 4px 15px rgba(255,0,0,0.4);
+        transition: all 0.3s ease;
+      }
+      
+      .install-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255,0,0,0.6);
+      }
+      
+      .manual-steps {
+        background: rgba(255,255,255,0.1);
+        padding: 20px;
+        border-radius: 10px;
+        margin: 30px 0;
+        text-align: left;
+      }
+      
+      .manual-steps h3 {
+        color: #ff0000;
+        margin-top: 0;
+      }
+      
+      .manual-steps ol {
+        padding-left: 20px;
+      }
+      
+      .manual-steps li {
+        margin: 10px 0;
+        line-height: 1.5;
       }
     </style>
   </head>
 
   <body>
-    <div class="loading">
-      🎵 Loading Primal4k-2025-1...<br>
-      <small>Complete radio experience</small>
+    <div class="container">
+      <img 
+        src="/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png" 
+        alt="Primal4k Logo" 
+        class="logo"
+      >
+      
+      <h1>Install Primal4k</h1>
+      <p>Get the full app experience with offline access and notifications!</p>
+      
+      <button id="install-btn" class="install-btn" style="display: none;">
+        📱 Install App Now
+      </button>
+      
+      <div class="manual-steps">
+        <h3>📱 Manual Installation</h3>
+        <p><strong>Android Chrome:</strong></p>
+        <ol>
+          <li>Tap the menu (⋮) in Chrome</li>
+          <li>Select "Add to Home screen"</li>
+          <li>Tap "Add" to install</li>
+        </ol>
+        
+        <p><strong>iPhone Safari:</strong></p>
+        <ol>
+          <li>Tap the Share button (⬆️)</li>
+          <li>Scroll and tap "Add to Home Screen"</li>
+          <li>Tap "Add" to install</li>
+        </ol>
+      </div>
+      
+      <button onclick="window.location.href='/'" class="install-btn">
+        🏠 Back to Main Site
+      </button>
     </div>
-    
-    <div class="install-prompt" id="install-btn">
-      📱 Install App
-    </div>
-    
-      <iframe 
-        id="app-frame"
-        src="/?source=pwa&forceHideBadge=true"
-        allow="autoplay; microphone; camera; display-capture; fullscreen">
-      </iframe>
 
     <script>
-      console.log('🔧 PWA INSTALLATION PAGE LOADED!');
-      console.log('📱 User Agent:', navigator.userAgent);
-      console.log('🌐 Current URL:', window.location.href);
-      console.log('📋 Checking PWA Installation Criteria...');
+      console.log('🔧 PWA Installation Page Loaded Successfully!');
       
-      // Detect platform
-      const isAndroid = /Android/i.test(navigator.userAgent);
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      const isChrome = /Chrome/i.test(navigator.userAgent);
-      
-      console.log('📱 Platform Detection:', {
-        Android: isAndroid,
-        iOS: isIOS, 
-        Chrome: isChrome
-      });
-      
-      // Check if we're in a PWA
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        console.log('🎉 Already running as installed PWA!');
-      }
-      
-      // Service Worker registration for PWA
+      // Register service worker
       if ('serviceWorker' in navigator) {
-        console.log('✅ Service Worker supported');
         navigator.serviceWorker.register('/app-sw.js')
           .then(registration => {
-            console.log('✅ Primal4k Service Worker Registered', registration);
-            console.log('📱 PWA ready for installation');
-            
-            // Force update check
-            registration.update();
+            console.log('✅ Service Worker registered successfully:', registration);
           })
-          .catch(err => {
-            console.error('❌ SW Registration Failed:', err);
+          .catch(error => {
+            console.error('❌ Service Worker registration failed:', error);
           });
-      } else {
-        console.log('❌ Service Worker not supported');
       }
 
-      // Handle install prompt
+      // Handle PWA installation
       let deferredPrompt;
       const installBtn = document.getElementById('install-btn');
-      
-      console.log('🔘 Install button element:', installBtn);
 
-      // Check if already installed
-      if (window.navigator.standalone === true || 
-          window.matchMedia('(display-mode: standalone)').matches) {
-        console.log('📱 Already installed as PWA');
-        installBtn.style.display = 'none';
-      }
-
-      // Android Chrome install prompt
       window.addEventListener('beforeinstallprompt', (e) => {
-        console.log('🎯 BEFOREINSTALLPROMPT EVENT FIRED!');
-        console.log('📱 Install criteria met - PWA is installable');
+        console.log('🎯 PWA install prompt available!');
         e.preventDefault();
         deferredPrompt = e;
-        installBtn.style.display = 'block';
-        installBtn.style.backgroundColor = '#00ff00'; // Green to show it's ready
-        installBtn.textContent = '📱 Install Ready!';
-        console.log('✅ Install button activated and ready');
+        installBtn.style.display = 'inline-block';
       });
 
       installBtn.addEventListener('click', async () => {
         console.log('🔘 Install button clicked');
         if (deferredPrompt) {
-          console.log('📱 Showing install prompt to user');
           deferredPrompt.prompt();
           const { outcome } = await deferredPrompt.userChoice;
-          console.log(`👤 User install choice: ${outcome}`);
+          console.log(`User choice: ${outcome}`);
           if (outcome === 'accepted') {
-            console.log('🎉 User ACCEPTED installation!');
-          } else {
-            console.log('❌ User DISMISSED installation');
+            console.log('🎉 PWA installation accepted!');
           }
           deferredPrompt = null;
-        } else {
-          console.log('❌ No install prompt available');
-          console.log('💡 Try: Chrome Menu (⋮) → Add to Home Screen');
-          alert('Manual Installation:\n\n1. Chrome: Menu (⋮) → "Add to Home Screen"\n2. Look for address bar install icon\n3. Or try refreshing this page');
+          installBtn.style.display = 'none';
         }
       });
 
-      // Handle successful installation
       window.addEventListener('appinstalled', (e) => {
-        console.log('🎉 PWA SUCCESSFULLY INSTALLED TO HOME SCREEN!');
-        console.log('📱 App should now appear in device app drawer/home screen');
+        console.log('🎉 PWA successfully installed!');
+        alert('🎉 Primal4k app installed! Check your home screen.');
         installBtn.style.display = 'none';
-        deferredPrompt = null;
-        
-        // Show success message
-        setTimeout(() => {
-          alert('🎉 Primal4k app installed! Check your home screen or app drawer.');
-        }, 1000);
-      });
-
-      // iOS Safari fallback
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      const isInStandaloneMode = window.navigator.standalone === true;
-      
-      if (isIOS && !isInStandaloneMode) {
-        console.log('📱 iOS detected - manual installation required');
-        setTimeout(() => {
-          installBtn.style.display = 'block';
-          installBtn.textContent = '📱 Add to Home Screen (iOS)';
-          installBtn.style.backgroundColor = '#007AFF';
-          installBtn.onclick = () => {
-            alert('📱 iOS Installation:\n\n1. Tap Share button (⬆️) in Safari\n2. Scroll and tap "Add to Home Screen"\n3. Tap "Add" to install\n\nThe app icon will appear on your home screen!');
-          };
-        }, 2000);
-      }
-      
-      // Debug: Show install button after delay for testing
-      setTimeout(() => {
-        if (!deferredPrompt && installBtn.style.display === 'none') {
-          console.log('⏰ No auto-prompt - enabling manual install option');
-          installBtn.style.display = 'block';
-          installBtn.textContent = '📱 Install Manually';
-          installBtn.style.backgroundColor = '#ff6600';
-        }
-      }, 3000);
-      
-      // Additional PWA checks
-      setTimeout(() => {
-        console.log('🔍 PWA Installation Check:');
-        console.log('- Service Worker:', 'serviceWorker' in navigator ? '✅' : '❌');
-        console.log('- Manifest:', document.querySelector('link[rel="manifest"]') ? '✅' : '❌');
-        console.log('- HTTPS:', location.protocol === 'https:' ? '✅' : '❌');
-        console.log('- Display mode:', window.matchMedia('(display-mode: standalone)').matches ? 'Standalone ✅' : 'Browser');
-      }, 1000);
-
-      // Handle iframe loading
-      const iframe = document.getElementById('app-frame');
-      const loading = document.querySelector('.loading');
-      
-      iframe.onload = () => {
-        loading.style.display = 'none';
-        console.log('✅ Main site loaded in app');
-      };
-      
-      // Fallback to hide loading after 5 seconds
-      setTimeout(() => {
-        loading.style.display = 'none';
-      }, 5000);
-
-      // Handle app-like behavior
-      window.addEventListener('load', () => {
-        // Prevent context menu for app-like feel
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        
-        // Handle keyboard shortcuts for app-like experience
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'F12' || 
-              (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-              (e.ctrlKey && e.shiftKey && e.key === 'C')) {
-            e.preventDefault();
-          }
-        });
-      });
-
-      // Auto-show install button after delay if available
-      setTimeout(() => {
-        if (deferredPrompt) {
-          installBtn.style.display = 'block';
-        }
-      }, 3000);
-    </script>
-    
-    <!-- OneSignal SDK for notifications -->
-    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
-    <script>
-      window.OneSignal = window.OneSignal || [];
-      OneSignal.push(function() {
-        OneSignal.init({
-          appId: "d651859b-b89b-4271-83b0-d944f07d9671",
-          notifyButton: { enable: true },
-          allowLocalhostAsSecureOrigin: true
-        });
       });
     </script>
   </body>
