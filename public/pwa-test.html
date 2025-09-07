@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primal4K PWA Test</title>
+    <link rel="manifest" href="/app-manifest.json">
+    <meta name="theme-color" content="#FF0000">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #000;
+            color: #fff;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #00ff00; color: #000; }
+        .error { background: #ff0000; }
+        .info { background: #0066ff; }
+        button {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px 5px;
+        }
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Primal4K PWA Test Page</h1>
+    
+    <div id="status-container">
+        <div class="status info">Testing PWA functionality...</div>
+    </div>
+
+    <button id="install-btn" style="display: none;">📱 Install PWA</button>
+    <button id="test-sw-btn">🔧 Test Service Worker</button>
+    <button onclick="window.location.href='/'">🏠 Back to Main Site</button>
+
+    <h3>📋 Test Results:</h3>
+    <ul id="test-results"></ul>
+
+    <script>
+        const statusContainer = document.getElementById('status-container');
+        const installBtn = document.getElementById('install-btn');
+        const testResults = document.getElementById('test-results');
+        let deferredPrompt;
+
+        function addResult(message, type = 'info') {
+            const li = document.createElement('li');
+            li.textContent = message;
+            li.style.color = type === 'success' ? '#00ff00' : type === 'error' ? '#ff0000' : '#ffffff';
+            testResults.appendChild(li);
+        }
+
+        function addStatus(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = message;
+            statusContainer.appendChild(div);
+        }
+
+        // Test 1: Check if PWA APIs are available
+        addResult('🔍 Checking PWA API availability...');
+        
+        if ('serviceWorker' in navigator) {
+            addResult('✅ Service Worker API available', 'success');
+        } else {
+            addResult('❌ Service Worker API not available', 'error');
+        }
+
+        if ('beforeinstallprompt' in window || navigator.standalone !== undefined) {
+            addResult('✅ PWA installation API available', 'success');
+        } else {
+            addResult('⚠️ PWA installation API not available (may still work)', 'info');
+        }
+
+        // Test 2: Try to register service worker
+        document.getElementById('test-sw-btn').addEventListener('click', async () => {
+            addResult('🔧 Testing service worker registration...');
+            
+            try {
+                const registration = await navigator.serviceWorker.register('/app-sw.js');
+                addResult('✅ Service Worker registered successfully!', 'success');
+                addStatus('✅ Service Worker is working!', 'success');
+                console.log('SW registered:', registration);
+            } catch (error) {
+                addResult(`❌ Service Worker registration failed: ${error.message}`, 'error');
+                addStatus('❌ Service Worker failed to register', 'error');
+                console.error('SW registration failed:', error);
+            }
+        });
+
+        // Test 3: Check for beforeinstallprompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            addResult('🎯 PWA install prompt detected!', 'success');
+            addStatus('🎯 PWA is installable!', 'success');
+            
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'inline-block';
+        });
+
+        // Test 4: Install button handler
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                addResult('🚀 Triggering PWA installation...');
+                
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                if (outcome === 'accepted') {
+                    addResult('✅ PWA installation accepted!', 'success');
+                    addStatus('✅ PWA installed successfully!', 'success');
+                } else {
+                    addResult('❌ PWA installation dismissed', 'error');
+                }
+                
+                deferredPrompt = null;
+                installBtn.style.display = 'none';
+            }
+        });
+
+        // Test 5: Check manifest loading
+        fetch('/app-manifest.json')
+            .then(response => {
+                if (response.ok) {
+                    addResult('✅ Manifest file loads successfully', 'success');
+                    return response.json();
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            })
+            .then(manifest => {
+                addResult(`✅ Manifest parsed: ${manifest.name}`, 'success');
+                console.log('Manifest:', manifest);
+            })
+            .catch(error => {
+                addResult(`❌ Manifest loading failed: ${error.message}`, 'error');
+            });
+
+        // Test 6: Check service worker file
+        fetch('/app-sw.js')
+            .then(response => {
+                if (response.ok) {
+                    addResult('✅ Service Worker file loads successfully', 'success');
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            })
+            .catch(error => {
+                addResult(`❌ Service Worker file loading failed: ${error.message}`, 'error');
+            });
+
+        // Initial status
+        setTimeout(() => {
+            if (deferredPrompt) {
+                addStatus('🎯 PWA is ready to install!', 'success');
+            } else {
+                addStatus('⚠️ PWA install prompt not yet available. Try refreshing or wait a moment.', 'info');
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
