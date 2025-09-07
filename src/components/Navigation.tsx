@@ -104,26 +104,10 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
               size="sm"
               className="flex items-center gap-2 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground border-primary hover:from-primary-glow hover:to-primary"
               onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
+                console.log('🔘 PWA Install button clicked - DIRECT TEST');
                 
-                console.log('🔘 PWA Install button clicked - TEST');
-                alert('Button clicked! Testing navigation...');
-                
-                // Simple test navigation
-                setTimeout(() => {
-                  try {
-                    const newWindow = window.open('/app.html', '_blank');
-                    if (!newWindow) {
-                      alert('❌ Popup blocked - try allowing popups for this site');
-                    } else {
-                      console.log('✅ Window opened successfully');
-                    }
-                  } catch (error) {
-                    console.error('❌ Window open failed:', error);
-                    alert('❌ Failed to open window: ' + error.message);
-                  }
-                }, 100);
+                // Use same-window navigation instead of popup
+                window.location.assign('/app.html');
               }}
             >
               <Smartphone className="w-4 h-4" />
@@ -172,8 +156,8 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
                 size="lg"
                 className="w-full justify-start gap-3 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground border-primary hover:from-primary-glow hover:to-primary"
                 onClick={() => {
-                  console.log('🔘 PWA Install button clicked (mobile) - navigating to /app.html');
-                  window.location.href = '/app.html';
+                  console.log('🔘 PWA Install button clicked (mobile) - DIRECT TEST');
+                  window.location.assign('/app.html');
                 }}
               >
                 <Smartphone className="w-5 h-5" />
