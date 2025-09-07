@@ -2,7 +2,7 @@
   "name": "Primal4k-2025-1",
   "short_name": "Primal4k",
   "description": "Your ultimate destination for premium electronic music and DJ sets",
-  "start_url": "/app.html",
+  "start_url": "/?source=pwa",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#FF0000",
