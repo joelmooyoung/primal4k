@@ -25,6 +25,7 @@
         padding: 0;
         height: 100%;
         overflow: hidden;
+        background: #000;
       }
       
       #app-frame {
@@ -43,41 +44,108 @@
         font-family: Arial, sans-serif;
         font-size: 18px;
         z-index: 1000;
+        text-align: center;
+      }
+      
+      .install-prompt {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #ff0000;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        cursor: pointer;
+        z-index: 2000;
+        display: none;
+        box-shadow: 0 4px 12px rgba(255,0,0,0.4);
+      }
+      
+      .install-prompt:hover {
+        background: #cc0000;
       }
     </style>
   </head>
 
   <body>
-    <div class="loading">Loading Primal4K Radio...</div>
+    <div class="loading">
+      🎵 Loading Primal4K Radio...<br>
+      <small>Complete radio experience</small>
+    </div>
+    
+    <div class="install-prompt" id="install-btn">
+      📱 Install App
+    </div>
+    
     <iframe 
       id="app-frame"
       src="https://primal4k.com?forceHideBadge=true&app=true"
-      onload="document.querySelector('.loading').style.display='none'"
-      allow="autoplay; microphone; camera; display-capture">
+      allow="autoplay; microphone; camera; display-capture; fullscreen">
     </iframe>
 
     <script>
       // Service Worker registration for PWA
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/app-sw.js')
-          .then(() => console.log('Primal4K App Service Worker Registered'))
-          .catch(err => console.error('App SW Registration Failed:', err));
+          .then(registration => {
+            console.log('✅ Primal4K App Service Worker Registered', registration);
+          })
+          .catch(err => {
+            console.error('❌ App SW Registration Failed:', err);
+          });
       }
+
+      // Handle install prompt
+      let deferredPrompt;
+      const installBtn = document.getElementById('install-btn');
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        console.log('📱 Install prompt available');
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.style.display = 'block';
+      });
+
+      installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          console.log(`👤 User response to install prompt: ${outcome}`);
+          deferredPrompt = null;
+          installBtn.style.display = 'none';
+        }
+      });
+
+      // Handle successful installation
+      window.addEventListener('appinstalled', () => {
+        console.log('🎉 Primal4K App installed successfully');
+        installBtn.style.display = 'none';
+        deferredPrompt = null;
+      });
+
+      // Handle iframe loading
+      const iframe = document.getElementById('app-frame');
+      const loading = document.querySelector('.loading');
+      
+      iframe.onload = () => {
+        loading.style.display = 'none';
+        console.log('✅ Main site loaded in app');
+      };
+      
+      // Fallback to hide loading after 5 seconds
+      setTimeout(() => {
+        loading.style.display = 'none';
+      }, 5000);
 
       // Handle app-like behavior
       window.addEventListener('load', () => {
-        // Hide loading after iframe loads
-        const iframe = document.getElementById('app-frame');
-        iframe.onload = () => {
-          document.querySelector('.loading').style.display = 'none';
-        };
-        
         // Prevent context menu for app-like feel
         document.addEventListener('contextmenu', e => e.preventDefault());
         
-        // Handle keyboard shortcuts
+        // Handle keyboard shortcuts for app-like experience
         document.addEventListener('keydown', (e) => {
-          // Disable F12, Ctrl+Shift+I, etc. for app-like experience
           if (e.key === 'F12' || 
               (e.ctrlKey && e.shiftKey && e.key === 'I') ||
               (e.ctrlKey && e.shiftKey && e.key === 'C')) {
@@ -86,12 +154,12 @@
         });
       });
 
-      // Handle install prompt
-      let deferredPrompt;
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-      });
+      // Auto-show install button after delay if available
+      setTimeout(() => {
+        if (deferredPrompt) {
+          installBtn.style.display = 'block';
+        }
+      }, 3000);
     </script>
     
     <!-- OneSignal SDK for notifications -->

@@ -1,39 +1,34 @@
 {
   "name": "Primal4K Radio - Premium Electronic Music",
-  "short_name": "Primal4K Radio",
-  "description": "Your ultimate destination for premium electronic music and DJ sets - Full desktop experience",
+  "short_name": "Primal4K",
+  "description": "Your ultimate destination for premium electronic music and DJ sets",
   "start_url": "/app.html",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#FF0000",
   "orientation": "any",
   "scope": "/",
-  "categories": ["music", "entertainment", "multimedia"],
+  "categories": ["music", "entertainment"],
+  "lang": "en",
+  "dir": "ltr",
   "icons": [
     {
       "src": "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any"
     },
     {
       "src": "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png",
       "sizes": "512x512", 
       "type": "image/png",
-      "purpose": "maskable any"
-    }
-  ],
-  "screenshots": [
+      "purpose": "any"
+    },
     {
       "src": "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png",
-      "sizes": "1280x720",
+      "sizes": "192x192",
       "type": "image/png",
-      "form_factor": "wide"
+      "purpose": "maskable"
     }
-  ],
-  "display_override": ["window-controls-overlay", "standalone"],
-  "edge_side_panel": {},
-  "launch_handler": {
-    "client_mode": "navigate-existing"
-  }
+  ]
 }
