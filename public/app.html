@@ -94,10 +94,11 @@
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/app-sw.js')
           .then(registration => {
-            console.log('✅ Primal4K App Service Worker Registered', registration);
+            console.log('✅ Primal4k Service Worker Registered', registration);
+            console.log('📱 PWA ready for installation');
           })
           .catch(err => {
-            console.error('❌ App SW Registration Failed:', err);
+            console.error('❌ SW Registration Failed:', err);
           });
       }
 
@@ -105,29 +106,54 @@
       let deferredPrompt;
       const installBtn = document.getElementById('install-btn');
 
+      // Check if already installed
+      if (window.navigator.standalone === true) {
+        console.log('📱 Already installed as PWA');
+        installBtn.style.display = 'none';
+      }
+
       window.addEventListener('beforeinstallprompt', (e) => {
         console.log('📱 Install prompt available');
         e.preventDefault();
         deferredPrompt = e;
         installBtn.style.display = 'block';
+        console.log('✅ Install button now visible');
       });
 
       installBtn.addEventListener('click', async () => {
+        console.log('🔘 Install button clicked');
         if (deferredPrompt) {
           deferredPrompt.prompt();
           const { outcome } = await deferredPrompt.userChoice;
           console.log(`👤 User response to install prompt: ${outcome}`);
           deferredPrompt = null;
           installBtn.style.display = 'none';
+        } else {
+          console.log('❌ No deferred prompt available');
         }
       });
 
       // Handle successful installation
       window.addEventListener('appinstalled', () => {
-        console.log('🎉 Primal4K App installed successfully');
+        console.log('🎉 Primal4k App installed successfully');
         installBtn.style.display = 'none';
         deferredPrompt = null;
       });
+
+      // iOS Safari fallback - show install instructions
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const isInStandaloneMode = window.navigator.standalone === true;
+      
+      if (isIOS && !isInStandaloneMode) {
+        console.log('📱 iOS detected - manual installation required');
+        setTimeout(() => {
+          installBtn.style.display = 'block';
+          installBtn.textContent = '📱 Add to Home Screen';
+          installBtn.onclick = () => {
+            alert('To install this app on iOS:\n\n1. Tap the Share button in Safari\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" to install');
+          };
+        }, 2000);
+      }
 
       // Handle iframe loading
       const iframe = document.getElementById('app-frame');
