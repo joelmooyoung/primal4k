@@ -34,9 +34,7 @@ const MobileAppCTA = () => {
           className="bg-gradient-primary hover:bg-gradient-primary/90 text-white font-semibold px-8 py-3 text-lg transform transition-all duration-300 hover:scale-105 hover:shadow-glow"
         >
           <a 
-            href="https://primal4k.com/pwa.html" 
-            target="_blank" 
-            rel="noopener noreferrer"
+            href="/" 
             className="inline-flex items-center gap-2"
           >
             <Download className="h-5 w-5" />
