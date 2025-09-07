@@ -104,10 +104,19 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
               size="sm"
               className="flex items-center gap-2 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground border-primary hover:from-primary-glow hover:to-primary"
               onClick={() => {
+                // Visual confirmation
+                alert('🔘 Install button clicked! Navigating to PWA page...');
                 console.log('🔘 PWA Install button clicked - navigating to /app.html');
                 console.log('🌐 Current location:', window.location.href);
                 console.log('🎯 Navigating to PWA installation page...');
-                window.location.href = '/app.html';
+                
+                // Try direct navigation
+                try {
+                  window.location.href = '/app.html';
+                } catch (error) {
+                  console.error('❌ Navigation error:', error);
+                  alert('❌ Navigation failed: ' + error.message);
+                }
               }}
             >
               <Smartphone className="w-4 h-4" />
