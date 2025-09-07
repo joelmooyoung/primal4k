@@ -90,9 +90,15 @@
       </iframe>
 
     <script>
-      console.log('🔧 PWA Script Loading - Android Chrome Detection');
+      console.log('🔧 PWA Script Loading - Debug Mode Active');
       console.log('📱 User Agent:', navigator.userAgent);
       console.log('🌐 Current URL:', window.location.href);
+      console.log('📋 Checking PWA Installation Criteria...');
+      
+      // Check if we're in a PWA
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        console.log('🎉 Already running as installed PWA!');
+      }
       
       // Service Worker registration for PWA
       if ('serviceWorker' in navigator) {
@@ -101,6 +107,9 @@
           .then(registration => {
             console.log('✅ Primal4k Service Worker Registered', registration);
             console.log('📱 PWA ready for installation');
+            
+            // Force update check
+            registration.update();
           })
           .catch(err => {
             console.error('❌ SW Registration Failed:', err);
@@ -116,50 +125,58 @@
       console.log('🔘 Install button element:', installBtn);
 
       // Check if already installed
-      if (window.navigator.standalone === true) {
+      if (window.navigator.standalone === true || 
+          window.matchMedia('(display-mode: standalone)').matches) {
         console.log('📱 Already installed as PWA');
         installBtn.style.display = 'none';
       }
 
       // Android Chrome install prompt
       window.addEventListener('beforeinstallprompt', (e) => {
-        console.log('🎯 ANDROID: beforeinstallprompt event fired!');
-        console.log('📱 Install prompt available for Android Chrome');
+        console.log('🎯 BEFOREINSTALLPROMPT EVENT FIRED!');
+        console.log('📱 Install criteria met - PWA is installable');
         e.preventDefault();
         deferredPrompt = e;
         installBtn.style.display = 'block';
         installBtn.style.backgroundColor = '#00ff00'; // Green to show it's ready
-        console.log('✅ Install button now visible and ready');
+        installBtn.textContent = '📱 Install Ready!';
+        console.log('✅ Install button activated and ready');
       });
 
       installBtn.addEventListener('click', async () => {
         console.log('🔘 Install button clicked');
         if (deferredPrompt) {
-          console.log('📱 Showing install prompt');
+          console.log('📱 Showing install prompt to user');
           deferredPrompt.prompt();
           const { outcome } = await deferredPrompt.userChoice;
-          console.log(`👤 User response to install prompt: ${outcome}`);
+          console.log(`👤 User install choice: ${outcome}`);
           if (outcome === 'accepted') {
-            console.log('🎉 User accepted the install prompt');
+            console.log('🎉 User ACCEPTED installation!');
           } else {
-            console.log('❌ User dismissed the install prompt');
+            console.log('❌ User DISMISSED installation');
           }
           deferredPrompt = null;
-          installBtn.style.display = 'none';
         } else {
-          console.log('❌ No deferred prompt available');
-          console.log('💡 Manual installation: Chrome Menu → Add to Home Screen');
+          console.log('❌ No install prompt available');
+          console.log('💡 Try: Chrome Menu (⋮) → Add to Home Screen');
+          alert('Manual Installation:\n\n1. Chrome: Menu (⋮) → "Add to Home Screen"\n2. Look for address bar install icon\n3. Or try refreshing this page');
         }
       });
 
       // Handle successful installation
-      window.addEventListener('appinstalled', () => {
-        console.log('🎉 Primal4k App installed successfully to home screen!');
+      window.addEventListener('appinstalled', (e) => {
+        console.log('🎉 PWA SUCCESSFULLY INSTALLED TO HOME SCREEN!');
+        console.log('📱 App should now appear in device app drawer/home screen');
         installBtn.style.display = 'none';
         deferredPrompt = null;
+        
+        // Show success message
+        setTimeout(() => {
+          alert('🎉 Primal4k app installed! Check your home screen or app drawer.');
+        }, 1000);
       });
 
-      // iOS Safari fallback - show install instructions
+      // iOS Safari fallback
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
       const isInStandaloneMode = window.navigator.standalone === true;
       
@@ -167,25 +184,32 @@
         console.log('📱 iOS detected - manual installation required');
         setTimeout(() => {
           installBtn.style.display = 'block';
-          installBtn.textContent = '📱 Add to Home Screen';
+          installBtn.textContent = '📱 Add to Home Screen (iOS)';
+          installBtn.style.backgroundColor = '#007AFF';
           installBtn.onclick = () => {
-            alert('To install this app on iOS:\n\n1. Tap the Share button in Safari\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" to install');
+            alert('📱 iOS Installation:\n\n1. Tap Share button (⬆️) in Safari\n2. Scroll and tap "Add to Home Screen"\n3. Tap "Add" to install\n\nThe app icon will appear on your home screen!');
           };
         }, 2000);
       }
       
-      // Show manual install option after 5 seconds if no auto-prompt
+      // Debug: Show install button after delay for testing
       setTimeout(() => {
         if (!deferredPrompt && installBtn.style.display === 'none') {
-          console.log('⏰ No auto-prompt after 5s - showing manual install option');
+          console.log('⏰ No auto-prompt - enabling manual install option');
           installBtn.style.display = 'block';
-          installBtn.textContent = '📱 Install App (Manual)';
-          installBtn.style.backgroundColor = '#ff6600'; // Orange for manual
-          installBtn.onclick = () => {
-            alert('To install manually:\n\nChrome: Menu (⋮) → "Add to Home Screen"\nFirefox: Menu → "Install"\nSafari: Share → "Add to Home Screen"');
-          };
+          installBtn.textContent = '📱 Install Manually';
+          installBtn.style.backgroundColor = '#ff6600';
         }
-      }, 5000);
+      }, 3000);
+      
+      // Additional PWA checks
+      setTimeout(() => {
+        console.log('🔍 PWA Installation Check:');
+        console.log('- Service Worker:', 'serviceWorker' in navigator ? '✅' : '❌');
+        console.log('- Manifest:', document.querySelector('link[rel="manifest"]') ? '✅' : '❌');
+        console.log('- HTTPS:', location.protocol === 'https:' ? '✅' : '❌');
+        console.log('- Display mode:', window.matchMedia('(display-mode: standalone)').matches ? 'Standalone ✅' : 'Browser');
+      }, 1000);
 
       // Handle iframe loading
       const iframe = document.getElementById('app-frame');
