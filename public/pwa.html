@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Primal4k Mobile</title>
-  <link rel="manifest" href="/mobile/manifest.json">
+  <link rel="manifest" href="/pwa-manifest.json">
   <meta name="theme-color" content="#FF0000">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -26,7 +26,7 @@
 
   <!-- Twitch Player -->
   <iframe
-    src="https://player.twitch.tv/?channel=joelgadaffi&parent=lovable.app"
+    src="https://player.twitch.tv/?channel=joelgadaffi&parent=lovable.app&parent=primal4k.com"
     width="100%"
     height="480"
     allowfullscreen>
@@ -35,7 +35,7 @@
   <script>
     // Service Worker registration
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/mobile/service-worker.js')
+      navigator.serviceWorker.register('/pwa-sw.js')
         .then(() => console.log('Service Worker Registered'))
         .catch(err => console.error('SW Registration Failed:', err));
     }

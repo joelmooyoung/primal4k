@@ -1,9 +1,8 @@
 const CACHE_NAME = 'primal4k-mobile-cache-v1';
 const urlsToCache = [
-  '/mobile/',
-  '/mobile/index.html',
-  '/mobile/icons/icon-192x192.png',
-  '/mobile/icons/icon-512x512.png'
+  '/pwa.html',
+  '/pwa-manifest.json',
+  '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
 ];
 
 self.addEventListener('install', event =>
@@ -22,10 +21,10 @@ self.addEventListener('push', event => {
 
   const options = {
     body: data.body || 'A live show is now on air!',
-    icon: data.icon || '/mobile/icons/icon-192x192.png',
+    icon: data.icon || '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png',
     image: data.image,
-    badge: data.badge || '/mobile/icons/icon-192x192.png',
-    data: { url: data.url || '/mobile/' }
+    badge: data.badge || '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png',
+    data: { url: data.url || '/pwa.html' }
   };
 
   event.waitUntil(
