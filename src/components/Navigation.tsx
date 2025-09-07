@@ -103,7 +103,10 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
               variant="outline"
               size="sm"
               className="flex items-center gap-2 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground border-primary hover:from-primary-glow hover:to-primary"
-              onClick={() => window.open('/app.html', '_blank')}
+              onClick={() => {
+                console.log('🔘 PWA Install button clicked from main site');
+                window.location.href = '/app.html';
+              }}
             >
               <Smartphone className="w-4 h-4" />
               Install App
@@ -150,7 +153,10 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
                 variant="outline"
                 size="lg"
                 className="w-full justify-start gap-3 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground border-primary hover:from-primary-glow hover:to-primary"
-                onClick={() => window.open('/app.html', '_blank')}
+                onClick={() => {
+                  console.log('🔘 PWA Install button clicked from main site (mobile)');
+                  window.location.href = '/app.html';
+                }}
               >
                 <Smartphone className="w-5 h-5" />
                 Install App
