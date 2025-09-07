@@ -85,15 +85,26 @@
     
       <iframe 
         id="app-frame"
-        src="https://primal4k.com?source=pwa&forceHideBadge=true"
+        src="/?source=pwa&forceHideBadge=true"
         allow="autoplay; microphone; camera; display-capture; fullscreen">
       </iframe>
 
     <script>
-      console.log('🔧 PWA Script Loading - Debug Mode Active');
+      console.log('🔧 PWA INSTALLATION PAGE LOADED!');
       console.log('📱 User Agent:', navigator.userAgent);
       console.log('🌐 Current URL:', window.location.href);
       console.log('📋 Checking PWA Installation Criteria...');
+      
+      // Detect platform
+      const isAndroid = /Android/i.test(navigator.userAgent);
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const isChrome = /Chrome/i.test(navigator.userAgent);
+      
+      console.log('📱 Platform Detection:', {
+        Android: isAndroid,
+        iOS: isIOS, 
+        Chrome: isChrome
+      });
       
       // Check if we're in a PWA
       if (window.matchMedia('(display-mode: standalone)').matches) {
