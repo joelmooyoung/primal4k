@@ -103,25 +103,27 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
               variant="outline"
               size="sm"
               className="flex items-center gap-2 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground border-primary hover:from-primary-glow hover:to-primary"
-              onClick={() => {
-                console.log('🔘 PWA Install button clicked');
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 
-                // Test if app.html is accessible
-                fetch('/app.html')
-                  .then(response => {
-                    console.log('📄 app.html fetch status:', response.status);
-                    if (response.ok) {
-                      console.log('✅ app.html is accessible, navigating...');
-                      window.open('/app.html', '_blank');
+                console.log('🔘 PWA Install button clicked - TEST');
+                alert('Button clicked! Testing navigation...');
+                
+                // Simple test navigation
+                setTimeout(() => {
+                  try {
+                    const newWindow = window.open('/app.html', '_blank');
+                    if (!newWindow) {
+                      alert('❌ Popup blocked - try allowing popups for this site');
                     } else {
-                      console.error('❌ app.html not accessible:', response.status);
-                      alert('❌ PWA installation page not found. Status: ' + response.status);
+                      console.log('✅ Window opened successfully');
                     }
-                  })
-                  .catch(error => {
-                    console.error('❌ Failed to access app.html:', error);
-                    alert('❌ Failed to access PWA installation page: ' + error.message);
-                  });
+                  } catch (error) {
+                    console.error('❌ Window open failed:', error);
+                    alert('❌ Failed to open window: ' + error.message);
+                  }
+                }, 100);
               }}
             >
               <Smartphone className="w-4 h-4" />
