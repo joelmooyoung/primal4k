@@ -3,12 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Primal4k Mobile</title>
-  <link rel="manifest" href="/manifest.json">
+  <link rel="manifest" href="/mobile/manifest.json">
   <meta name="theme-color" content="#FF0000">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-
 
   <!-- OneSignal SDK -->
   <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
@@ -27,9 +24,6 @@
   <h1>Welcome to Primal4k Mobile</h1>
   <p>Tap "Add to Home Screen" for instant access to live shows.</p>
 
-
-
-
   <!-- Twitch Player -->
   <iframe
     src="https://player.twitch.tv/?channel=joelgadaffi&parent=mobile.primal4k.com"
@@ -38,19 +32,13 @@
     allowfullscreen>
   </iframe>
 
-
-
-
   <script>
     // Service Worker registration
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js')
+      navigator.serviceWorker.register('/mobile/service-worker.js')
         .then(() => console.log('Service Worker Registered'))
         .catch(err => console.error('SW Registration Failed:', err));
     }
-
-
-
 
     // Optional add-to-home-screen prompt alert
     if (!window.matchMedia('(display-mode: standalone)').matches) {
