@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Music, Radio, MessageCircle, Calendar, Menu, X, Home, Users, Phone } from "lucide-react";
+import { Music, Radio, MessageCircle, Calendar, Menu, X, Home, Users, Phone, Smartphone } from "lucide-react";
 import PrimalText3D from "@/components/PrimalText3D";
 
 interface NavigationProps {
@@ -97,6 +97,17 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
                 </Button>
               );
             })}
+            
+            {/* PWA Install Button */}
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground border-primary hover:from-primary-glow hover:to-primary"
+              onClick={() => window.open('/app.html', '_blank')}
+            >
+              <Smartphone className="w-4 h-4" />
+              Install App
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -133,6 +144,17 @@ const Navigation = ({ onNavigate, activeSection = 'home' }: NavigationProps) => 
                   </Button>
                 );
               })}
+              
+              {/* PWA Install Button - Mobile */}
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full justify-start gap-3 bg-gradient-to-r from-primary to-primary-glow text-primary-foreground border-primary hover:from-primary-glow hover:to-primary"
+                onClick={() => window.open('/app.html', '_blank')}
+              >
+                <Smartphone className="w-5 h-5" />
+                Install App
+              </Button>
             </div>
           </div>
         )}
