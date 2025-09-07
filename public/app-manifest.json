@@ -1,13 +1,14 @@
 {
-  "name": "Primal4K Mobile - Live DJ Streams",
-  "short_name": "Primal4K Mobile",
-  "description": "Mobile app for Primal4K Radio with live DJ streams and premium electronic music",
-  "start_url": "/mobile.html",
+  "name": "Primal4K Radio - Premium Electronic Music",
+  "short_name": "Primal4K Radio",
+  "description": "Your ultimate destination for premium electronic music and DJ sets - Full desktop experience",
+  "start_url": "/app.html",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#FF0000",
-  "orientation": "portrait-primary",
+  "orientation": "any",
   "scope": "/",
+  "categories": ["music", "entertainment", "multimedia"],
   "icons": [
     {
       "src": "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png",
@@ -22,12 +23,17 @@
       "purpose": "maskable any"
     }
   ],
-  "categories": ["music", "entertainment"],
   "screenshots": [
     {
       "src": "/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png",
       "sizes": "1280x720",
-      "type": "image/png"
+      "type": "image/png",
+      "form_factor": "wide"
     }
-  ]
+  ],
+  "display_override": ["window-controls-overlay", "standalone"],
+  "edge_side_panel": {},
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
 }

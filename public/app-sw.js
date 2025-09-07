@@ -1,7 +1,7 @@
-const CACHE_NAME = 'primal4k-mobile-v1';
+const CACHE_NAME = 'primal4k-app-v1';
 const urlsToCache = [
-  '/mobile.html',
-  '/mobile-manifest.json',
+  '/app.html',
+  '/app-manifest.json',
   '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
 ];
 
@@ -29,26 +29,20 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch event with network-first strategy for live content
+// Fetch event - let the main site handle most requests
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        // If network request is successful, update cache and return response
-        if (response && response.status === 200) {
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME)
-            .then(cache => {
-              cache.put(event.request, responseToCache);
-            });
-        }
-        return response;
-      })
-      .catch(() => {
-        // If network fails, try to serve from cache
-        return caches.match(event.request);
-      })
-  );
+  // Only cache our PWA shell files
+  if (event.request.url.includes('/app.html') || 
+      event.request.url.includes('/app-manifest.json') ||
+      event.request.url.includes('/app-sw.js')) {
+    event.respondWith(
+      caches.match(event.request)
+        .then(response => {
+          return response || fetch(event.request);
+        })
+    );
+  }
+  // Let all other requests (main site) pass through normally
 });
 
 // Push notification event
@@ -58,29 +52,29 @@ self.addEventListener('push', event => {
     try {
       data = event.data.json();
     } catch (e) {
-      data = { title: 'Primal4K Live!', body: event.data.text() };
+      data = { title: 'Primal4K Radio Live!', body: event.data.text() };
     }
   }
 
   const options = {
-    body: data.body || 'A live DJ set is now streaming!',
+    body: data.body || 'A live show is now on air!',
     icon: data.icon || '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png',
     image: data.image,
     badge: data.badge || '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png',
-    data: { url: data.url || '/mobile.html' },
+    data: { url: data.url || '/app.html' },
     vibrate: [200, 100, 200],
-    tag: 'primal4k-mobile-notification',
+    tag: 'primal4k-app-notification',
     actions: [
       {
         action: 'open',
-        title: 'Listen Now',
+        title: 'Open Primal4K',
         icon: '/lovable-uploads/3896f961-2f23-4243-86dc-f164bdc87c87.png'
       }
     ]
   };
 
   event.waitUntil(
-    self.registration.showNotification(data.title || 'Primal4K Mobile Live!', options)
+    self.registration.showNotification(data.title || 'Primal4K Radio Live!', options)
   );
 });
 
@@ -91,15 +85,15 @@ self.addEventListener('notificationclick', event => {
   if (event.action === 'open' || !event.action) {
     event.waitUntil(
       clients.matchAll({ type: 'window' }).then(clientList => {
-        // Check if mobile app is already open
+        // Check if app is already open
         for (const client of clientList) {
-          if (client.url.includes('/mobile.html') && 'focus' in client) {
+          if (client.url.includes('/app.html') && 'focus' in client) {
             return client.focus();
           }
         }
-        // Open mobile app if not open
+        // Open app if not open
         if (clients.openWindow) {
-          return clients.openWindow('/mobile.html');
+          return clients.openWindow('/app.html');
         }
       })
     );
