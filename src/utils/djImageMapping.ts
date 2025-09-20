@@ -35,6 +35,7 @@ export const djImageMap: Record<string, string> = {
   "DJ Screech": djScreench,
   "DJ Badbin": djBadbin,
   "DJ Smooth Daddy": djSmoothDaddy,
+  "DJ Tracy Virgo": "/placeholder.svg", // Add image for DJ Tracy Virgo when available
   
   // Hosts and personalities
   "Jean Marie": jeanMarie,
