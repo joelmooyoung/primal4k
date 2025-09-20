@@ -226,38 +226,43 @@ class MetadataService {
     let finalTitle: string;
     let djImage: string | null = null;
     
-    if (isLive && liveStreamerName) {
-      // Priority 1: Use the actual live DJ info
-      console.log('🎵 MetadataService: Live DJ detected:', liveStreamerName);
+    // Check if there's a scheduled show
+    const hasScheduledShow = currentShow.show !== getDefaultShow(this.currentStationId).show;
+    
+    // Determine if we have a substitution (live DJ different from scheduled)
+    const isSubstitution = isLive && liveStreamerName && hasScheduledShow && 
+                          liveStreamerName !== currentShow.host;
+    
+    if (isLive && liveStreamerName && (isSubstitution || !hasScheduledShow)) {
+      // Priority 1: Use the actual live DJ info (either substitution or no scheduled show)
+      console.log('🎵 MetadataService: Live DJ detected:', liveStreamerName, 
+                  isSubstitution ? '(substituting for scheduled show)' : '(no scheduled show)');
       finalArtist = liveStreamerName;
       
       // Try to get DJ image for the live streamer
       djImage = getDJImageForHost(liveStreamerName);
       console.log('🎵 MetadataService: DJ image for live streamer:', djImage);
       
-      // For live streams, show "Live Stream" as title instead of confusing track data
+      // For live streams, show "Live Stream" as title
       finalTitle = "Live Stream";
-    } else {
-      console.log('🎵 MetadataService: No live DJ, falling back to scheduled show');
-      // Priority 2: Fall back to scheduled show info
-      const hasScheduledShow = currentShow.show !== getDefaultShow(this.currentStationId).show;
+    } else if (hasScheduledShow) {
+      console.log('🎵 MetadataService: Using scheduled show info');
+      // Priority 2: Use scheduled show info (live DJ matches scheduled or no live DJ detected)
+      finalArtist = currentShow.host;
+      finalTitle = currentShow.show;
+      djImage = getDJImageForHost(currentShow.host);
       
-      if (hasScheduledShow) {
-        finalArtist = currentShow.host;
-        finalTitle = currentShow.show;
-        djImage = getDJImageForHost(currentShow.host);
-        
-        // If we have specific track info from the stream, append it to the show title
-        if (artist !== "Unknown Artist" && title !== "Live Stream") {
-          finalTitle = `${currentShow.show} - ${artist} - ${title}`;
-        } else if (title !== "Live Stream") {
-          finalTitle = `${currentShow.show} - ${title}`;
-        }
-      } else {
-        // Priority 3: No scheduled show - use actual song info if available
-        finalArtist = artist !== "Unknown Artist" ? artist : "Primal4k.com";
-        finalTitle = title !== "Live Stream" ? title : "Primal4K";
+      // If we have specific track info from the stream, append it to the show title
+      if (artist !== "Unknown Artist" && title !== "Live Stream") {
+        finalTitle = `${currentShow.show} - ${artist} - ${title}`;
+      } else if (title !== "Live Stream") {
+        finalTitle = `${currentShow.show} - ${title}`;
       }
+    } else {
+      console.log('🎵 MetadataService: No scheduled show, using fallback');
+      // Priority 3: No scheduled show and no live DJ - use actual song info if available
+      finalArtist = artist !== "Unknown Artist" ? artist : "Primal4k.com";
+      finalTitle = title !== "Live Stream" ? title : "Primal4K";
     }
     
     console.log('🎵 MetadataService: Final result - Artist:', finalArtist, 'Title:', finalTitle, 'DJ Image:', djImage);
