@@ -217,6 +217,8 @@ class MetadataService {
     const isLive = liveData?.is_live === true;
     const liveStreamerName = liveData?.streamer_name;
     
+    console.log('🎵 MetadataService: Live check - isLive:', isLive, 'streamerName:', liveStreamerName);
+    
     // Get current show information based on schedule for this station
     const currentShow = await getCurrentShow(this.currentStationId);
     
@@ -231,16 +233,12 @@ class MetadataService {
       
       // Try to get DJ image for the live streamer
       djImage = getDJImageForHost(liveStreamerName);
+      console.log('🎵 MetadataService: DJ image for live streamer:', djImage);
       
-      // If we have specific track info, include it in the title
-      if (artist !== "Unknown Artist" && title !== "Live Stream") {
-        finalTitle = `${artist} - ${title}`;
-      } else if (title !== "Live Stream") {
-        finalTitle = title;
-      } else {
-        finalTitle = "Live Stream";
-      }
+      // For live streams, show "Live Stream" as title instead of confusing track data
+      finalTitle = "Live Stream";
     } else {
+      console.log('🎵 MetadataService: No live DJ, falling back to scheduled show');
       // Priority 2: Fall back to scheduled show info
       const hasScheduledShow = currentShow.show !== getDefaultShow(this.currentStationId).show;
       
@@ -261,6 +259,8 @@ class MetadataService {
         finalTitle = title !== "Live Stream" ? title : "Primal4K";
       }
     }
+    
+    console.log('🎵 MetadataService: Final result - Artist:', finalArtist, 'Title:', finalTitle, 'DJ Image:', djImage);
 
     return {
       currentTrack: {
